@@ -9,12 +9,21 @@ package boletos;
  *
  * @author ruan
  */
-public class Janela extends javax.swing.JFrame {
-
+public class janela extends javax.swing.JFrame {
+    String nomeCedente,cnpjCedente;
+    String nomeSacado,cpfSacado,ufSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
+           bairroSacado;
+    String nomeSacadoAvalista,cpfSacadoAvalista,ufSacadoAvalista,cepSacadoAvalista,
+           numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
+    String banco,numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
+    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite,
+           valor,desconto,mora,acrescimo,valorCobrado;
+    String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
+           instrucao7,instrucao8;
     /**
      * Creates new form janela
      */
-    public Janela() {
+    public janela() {
         initComponents();
     }
 
@@ -916,220 +925,189 @@ public class Janela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        String nomeCedente = jTextField1.getText();
+        nomeCedente = jTextField1.getText();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        String cnpjCedente = jTextField2.getText();
+        cnpjCedente = jTextField2.getText();
     }//GEN-LAST:event_jTextField2ActionPerformed
     
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String nomeSacado = jTextField3.getText();
+        nomeSacado = jTextField3.getText();
     }
     
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String cpfSacado = jTextField4.getText();
+        cpfSacado = jTextField4.getText();
     }
     
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String ufSacado = jTextField5.getText();
+        ufSacado = jTextField5.getText();
     }
     
     private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String cepSacado = jTextField6.getText();
+        cepSacado = jTextField6.getText();
     }
     
     private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String numeroSacado = jTextField7.getText();
+        numeroSacado = jTextField7.getText();
     }
     
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String logradouroSacado = jTextField8.getText();
+        logradouroSacado = jTextField8.getText();
     }
     
     private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String localidadeSacado = jTextField9.getText();
+        localidadeSacado = jTextField9.getText();
     }
     
     private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String bairroSacado = jTextField10.getText();
+        bairroSacado = jTextField10.getText();
     }
     
     private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String nomeSacadoAvalista = jTextField11.getText();
+        nomeSacadoAvalista = jTextField11.getText();
     }
     
     private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String cpfSacadoAvalista = jTextField12.getText();
+        cpfSacadoAvalista = jTextField12.getText();
     }
     
     private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String ufSacadoAvalista = jTextField13.getText();
+        ufSacadoAvalista = jTextField13.getText();
     }
     
     private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String cepSacadoAvalista = jTextField14.getText();
+        cepSacadoAvalista = jTextField14.getText();
     }
     
     private void jTextField15ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String numeroSacadoAvalista = jTextField15.getText();
+        numeroSacadoAvalista = jTextField15.getText();
     }
     
     private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String logradouroSacadoAvalista = jTextField16.getText();
+        logradouroSacadoAvalista = jTextField16.getText();
     }
     
     private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String localidadeSacadoAvalista = jTextField17.getText();
+        localidadeSacadoAvalista = jTextField17.getText();
     }
     
     private void jTextField18ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String bairroSacadoAvalista = jTextField18.getText();
+        bairroSacadoAvalista = jTextField18.getText();
     }
     
     private void jTextField19ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String banco = jTextField19.getText();
+        banco = jTextField19.getText();
     }
     
     private void jTextField20ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String numeroConta = jTextField20.getText();
+        numeroConta = jTextField20.getText();
     }
     
     private void jTextField21ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String tipoCarteira = jTextField21.getText();
+        tipoCarteira = jTextField21.getText();
     }
     
     private void jTextField22ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String nomeAgenciaBanco = jTextField22.getText();
+        nomeAgenciaBanco = jTextField22.getText();
     }
     
     private void jTextField23ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String numeroAgenciaBanco = jTextField23.getText();
+        numeroAgenciaBanco = jTextField23.getText();
     }
     
     private void jTextField24ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String numeroDocumento = jTextField24.getText();
+        numeroDocumento = jTextField24.getText();
     }
     
     private void jTextField25ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String nossoNumero = jTextField25.getText();
+        nossoNumero = jTextField25.getText();
     }
     
     private void jTextField26ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String digitoNossoNumero = jTextField26.getText();
+        digitoNossoNumero = jTextField26.getText();
     }
     
     private void jTextField27ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String dataDocumento = jTextField27.getText();
+        dataDocumento = jTextField27.getText();
     }
     
     private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String dataVencimento = jTextField28.getText();
+        dataVencimento = jTextField28.getText();
     }
     
     private void jTextField29ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String tipoDocumento = jTextField29.getText();
+        tipoDocumento = jTextField29.getText();
     }
     
     private void jTextField30ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String aceite = jTextField30.getText();
+        aceite = jTextField30.getText();
     }
     
     private void jTextField31ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String valor = jTextField31.getText();
+        valor = jTextField31.getText();
     }
     
     private void jTextField32ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String desconto = jTextField32.getText();
+        desconto = jTextField32.getText();
     }
     
     private void jTextField33ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String mora = jTextField33.getText();
+        mora = jTextField33.getText();
     }
     
     private void jTextField34ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String acrescimo = jTextField34.getText();
+        acrescimo = jTextField34.getText();
     }
     
     private void jTextField35ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String valorCobrado = jTextField35.getText();
+        valorCobrado = jTextField35.getText();
     }
    
     private void jTextField36ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String localPagamento = jTextField36.getText();
+        localPagamento = jTextField36.getText();
     }
     
     private void jTextField37ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucaoSacado = jTextField37.getText();
+        instrucaoSacado = jTextField37.getText();
     }
     
     private void jTextField38ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao1 = jTextField38.getText();
+        instrucao1 = jTextField38.getText();
     }
     
     private void jTextField39ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao2 = jTextField39.getText();
+        instrucao2 = jTextField39.getText();
     }
     
     private void jTextField40ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao3 = jTextField40.getText();
+        instrucao3 = jTextField40.getText();
     }
     
     private void jTextField41ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao4 = jTextField41.getText();
+        instrucao4 = jTextField41.getText();
     }
     
     private void jTextField42ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao5 = jTextField42.getText();
+        instrucao5 = jTextField42.getText();
     }
     
     private void jTextField43ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao6 = jTextField43.getText();
+        instrucao6 = jTextField43.getText();
     }
     
     private void jTextField44ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao7 = jTextField44.getText();
+        instrucao7 = jTextField44.getText();
     }
     
     private void jTextField45ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        String instrucao8 = jTextField45.getText();
+        instrucao8 = jTextField45.getText();
     }
     
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Janela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Janela().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
