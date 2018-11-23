@@ -5,11 +5,37 @@
  */
 package boletos;
 
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.jrimum.bopepo.BancosSuportados;
+import org.jrimum.bopepo.Boleto;
+import org.jrimum.bopepo.view.BoletoViewer;
+import org.jrimum.domkee.comum.pessoa.endereco.CEP;
+import org.jrimum.domkee.comum.pessoa.endereco.Endereco;
+import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa;
+import org.jrimum.domkee.financeiro.banco.febraban.Agencia;
+import org.jrimum.domkee.financeiro.banco.febraban.Carteira;
+import org.jrimum.domkee.financeiro.banco.febraban.Cedente;
+import org.jrimum.domkee.financeiro.banco.febraban.ContaBancaria;
+import org.jrimum.domkee.financeiro.banco.febraban.NumeroDaConta;
+import org.jrimum.domkee.financeiro.banco.febraban.Sacado;
+import org.jrimum.domkee.financeiro.banco.febraban.SacadorAvalista;
+import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo;
+import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
+
+
+
+
+
 /**
  *
  * @author ruan
  */
 public class janela extends javax.swing.JFrame {
+    
     String nomeCedente,cnpjCedente;
     String nomeSacado,cpfSacado,ufSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
            bairroSacado;
@@ -26,6 +52,26 @@ public class janela extends javax.swing.JFrame {
     public janela() {
         initComponents();
     }
+    
+    
+            /**
+         * Exibe o arquivo na tela.
+         * 
+         * @param arquivoBoleto
+         */
+        private static void mostreBoletoNaTela(File arquivoBoleto) {
+
+                java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+                
+                try {
+                        desktop.open(arquivoBoleto);
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+    
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -145,10 +191,12 @@ public class janela extends javax.swing.JFrame {
         jTextField43 = new javax.swing.JTextField();
         jTextField44 = new javax.swing.JTextField();
         jTextField45 = new javax.swing.JTextField();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jLabel12.setText("jLabel12");
 
@@ -210,7 +258,7 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(251, Short.MAX_VALUE))
+                .addContainerGap(279, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cedente", jPanel1);
@@ -274,12 +322,13 @@ public class janela extends javax.swing.JFrame {
                                     .addComponent(jTextField4)
                                     .addComponent(jTextField3)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(161, 161, 161)
-                                        .addComponent(jLabel11))))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel7)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(161, 161, 161)
+                                                .addComponent(jLabel11)))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(13, 13, 13)
                                 .addComponent(jLabel10)
@@ -342,7 +391,7 @@ public class janela extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
                             .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Sacado", jPanel2);
@@ -469,7 +518,7 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel28)
                     .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -574,7 +623,7 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel35)
                     .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Conta Bancária", jPanel4);
@@ -739,7 +788,7 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel48))
                     .addComponent(jTextField30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Título", jPanel5);
@@ -787,11 +836,6 @@ public class janela extends javax.swing.JFrame {
         jTextField39.setText("jTextField39");
 
         jTextField40.setText("jTextField40");
-        jTextField40.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField40ActionPerformed(evt);
-            }
-        });
 
         jTextField41.setText("jTextField41");
 
@@ -905,7 +949,7 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel60)
                     .addComponent(jTextField41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Boleto", jPanel6);
@@ -917,7 +961,17 @@ public class janela extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Gerar Boleto");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Gerar PDF");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -936,13 +990,109 @@ public class janela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        cnpjCedente = jTextField2.getText();
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         nomeCedente = jTextField1.getText();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        cnpjCedente = jTextField2.getText();
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
+
+            /*
+             * INFORMANDO DADOS SOBRE O SACADO.
+             */
+            Sacado sacado = new Sacado(this.nomeSacado, this.cpfSacado);
+
+            // Informando o endereço do sacado.
+            Endereco enderecoSac = new Endereco();
+            enderecoSac.setUF(UnidadeFederativa.RN);//janela.ufSacado
+            enderecoSac.setLocalidade(this.localidadeSacado);
+            enderecoSac.setCep(new CEP(this.cepSacado));
+            enderecoSac.setBairro(this.bairroSacado);
+            enderecoSac.setLogradouro(this.logradouroSacado);
+            enderecoSac.setNumero(this.numeroSacado);
+            sacado.addEndereco(enderecoSac);
+
+            /*
+             * INFORMANDO DADOS SOBRE O SACADOR AVALISTA.
+             */
+            SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.cpfSacadoAvalista);
+
+            // Informando o endereço do sacador avalista.
+            Endereco enderecoSacAval = new Endereco();
+            enderecoSacAval.setUF(UnidadeFederativa.DF);//janela.ufSacadoAvalista
+            enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
+            enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
+            enderecoSacAval.setBairro(this.bairroSacadoAvalista);
+            enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
+            enderecoSacAval.setNumero(this.numeroSacadoAvalista);
+            sacadorAvalista.addEndereco(enderecoSacAval);
+
+            /*
+             * INFORMANDO OS DADOS SOBRE O TÍTULO.
+             */
+
+            // Informando dados sobre a conta bancária do título.
+            ContaBancaria contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
+            contaBancaria.setNumeroDaConta(new NumeroDaConta(123456, "0"));
+            contaBancaria.setCarteira(new Carteira(30));
+            contaBancaria.setAgencia(new Agencia(1234, "1"));
+
+            Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+            titulo.setNumeroDoDocumento("123456");
+            titulo.setNossoNumero("99345678912");
+            titulo.setDigitoDoNossoNumero("5");
+            titulo.setValor(BigDecimal.valueOf(0.23));
+            titulo.setDataDoDocumento(new Date());
+            titulo.setDataDoVencimento(new Date());
+            titulo.setTipoDeDocumento(TipoDeTitulo.DM_DUPLICATA_MERCANTIL);
+            titulo.setAceite(titulo.getAceite().A);
+            titulo.setDesconto(new BigDecimal(0.05));
+            titulo.setDeducao(BigDecimal.ZERO);
+            titulo.setMora(BigDecimal.ZERO);
+            titulo.setAcrecimo(BigDecimal.ZERO);
+            titulo.setValorCobrado(BigDecimal.ZERO);
+
+            /*
+             * INFORMANDO OS DADOS SOBRE O BOLETO.
+             */
+            Boleto boleto = new Boleto(titulo);
+
+            boleto.setLocalPagamento("Pagável preferencialmente na Rede X ou em " +
+                            "qualquer Banco até o Vencimento.");
+            boleto.setInstrucaoAoSacado("Senhor sacado, sabemos sim que o valor " +
+                            "cobrado não é o esperado, aproveite o DESCONTÃO!");
+            boleto.setInstrucao1("PARA PAGAMENTO 1 até Hoje não cobrar nada!");
+            boleto.setInstrucao2("PARA PAGAMENTO 2 até Amanhã Não cobre!");
+            boleto.setInstrucao3("PARA PAGAMENTO 3 até Depois de amanhã, OK, não cobre.");
+            boleto.setInstrucao4("PARA PAGAMENTO 4 até 04/xx/xxxx de 4 dias atrás COBRAR O VALOR DE: R$ 01,00");
+            boleto.setInstrucao5("PARA PAGAMENTO 5 até 05/xx/xxxx COBRAR O VALOR DE: R$ 02,00");
+            boleto.setInstrucao6("PARA PAGAMENTO 6 até 06/xx/xxxx COBRAR O VALOR DE: R$ 03,00");
+            boleto.setInstrucao7("PARA PAGAMENTO 7 até xx/xx/xxxx COBRAR O VALOR QUE VOCÊ QUISER!");
+            boleto.setInstrucao8("APÓS o Vencimento, Pagável Somente na Rede X.");
+            
+            /*
+             * GERANDO O BOLETO BANCÁRIO.
+             */
+            // Instanciando um objeto "BoletoViewer", classe responsável pela
+            // geração do boleto bancário.
+            BoletoViewer boletoViewer = new BoletoViewer(boleto);
+
+            // Gerando o arquivo. No caso o arquivo mencionado será salvo na mesma
+            // pasta do projeto. Outros exemplos:
+            // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
+            // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
+            File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
+
+            // Mostrando o boleto gerado na tela.
+            mostreBoletoNaTela(arquivoPdf);
+            
+            
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {                                            
         nomeSacado = jTextField3.getText();
@@ -1182,6 +1332,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1190,6 +1341,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
