@@ -1,3 +1,9 @@
+# UML
+
+- [ ] Corrigir multiplicidade de pessoa -> endereço
+
+
+
 # Finalizar básico
 
 - [ ] Alterar Conta Bancária, Título e Boleto para receber teclado
@@ -12,7 +18,10 @@
 
 ## Data
 
-- [ ] Armazenar data
+- [ ] Armazenar data   
+- [ ] Bloquear criação de boletos com datas que já passaram   
+- [ ] Tratar exceções de datas inválidas  
+- [ ] Bloquear criação de boletos com data de vencimento antes da data de emissão ( o Bopepo já faz isso sozinho? Testar )  
 
 ## Estado
 
