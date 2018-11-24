@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
@@ -51,6 +52,101 @@ public class janela extends javax.swing.JFrame {
      */
     public janela() {
         initComponents();
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+        
+       jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+       
+       jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+       
+       jTextField6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField6ActionPerformed(evt);
+            }
+        });
+       
+       jTextField7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField7ActionPerformed(evt);
+            }
+        });
+       
+        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField8ActionPerformed(evt);
+            }
+        });
+        
+        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField9ActionPerformed(evt);
+            }
+        });
+        
+        jTextField10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField10ActionPerformed(evt);
+            }
+        });
+        
+       jTextField11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField11ActionPerformed(evt);
+            }
+        });
+       
+       jTextField12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField12ActionPerformed(evt);
+            }
+        });
+       
+       jTextField13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField13ActionPerformed(evt);
+            }
+        });
+        
+       jTextField14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField14ActionPerformed(evt);
+            }
+        });
+       
+       jTextField15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField15ActionPerformed(evt);
+            }
+        });
+       
+        jTextField16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField16ActionPerformed(evt);
+            }
+        });
+        
+       jTextField17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField17ActionPerformed(evt);
+            }
+        });
+       
+       jTextField18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField18ActionPerformed(evt);
+            }
+        });
     }
     
     
@@ -998,9 +1094,99 @@ public class janela extends javax.swing.JFrame {
         nomeCedente = jTextField1.getText();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        nomeSacado = jTextField3.getText();
+    }
+    
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        cpfSacado = jTextField4.getText();
+    }
+    
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        ufSacado = jTextField5.getText();
+    }
+    
+    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        cepSacado = jTextField6.getText();
+    }
+    
+    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        numeroSacado = jTextField7.getText();
+    }
+    
+    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        logradouroSacado = jTextField8.getText();
+    }
+    
+    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        localidadeSacado = jTextField9.getText();
+    }
+    
+    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        bairroSacado = jTextField10.getText();
+    }
+    
+    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        nomeSacadoAvalista = jTextField11.getText();
+    }
+    
+    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        cpfSacadoAvalista = jTextField12.getText();
+    }
+    
+    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        ufSacadoAvalista = jTextField13.getText();
+    }
+    
+    private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        cepSacadoAvalista = jTextField14.getText();
+    }
+    
+    private void jTextField15ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        numeroSacadoAvalista = jTextField15.getText();
+    }
+    
+    private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        logradouroSacadoAvalista = jTextField16.getText();
+    }
+    
+    private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        localidadeSacadoAvalista = jTextField17.getText();
+    }
+    
+    private void jTextField18ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        bairroSacadoAvalista = jTextField18.getText();
+    }
+
+    
+    private void jTextField40ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        instrucao3 = jTextField40.getText();
+    }
+    
+   
+    
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
+            String string = new String();
+            string += "Cedente\n";
+            string += String.format("Nome: %s cpnj: %s", this.nomeCedente, this.cnpjCedente);
+            
+            string += "\nSacado\n";
+            string += String.format("Nome: %s cpnj: %s", this.nomeSacado, this.cpfSacado);
+          
+            string += "\nEndereço";
+            string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
+                    UnidadeFederativa.RN, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
+            string += "\nSacadorAvalista\n";
+            string += String.format("Nome: %s cpnj: %s", this.nomeSacadoAvalista, this.cpfSacadoAvalista);
+          
+            string += "\nEndereço";
+            string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
+                    UnidadeFederativa.RN, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
+            JOptionPane.showMessageDialog(null, string);
+            
+        
+        
+            Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
 
             /*
              * INFORMANDO DADOS SOBRE O SACADO.
@@ -1094,177 +1280,6 @@ public class janela extends javax.swing.JFrame {
             
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        nomeSacado = jTextField3.getText();
-    }
-    
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cpfSacado = jTextField4.getText();
-    }
-    
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        ufSacado = jTextField5.getText();
-    }
-    
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cepSacado = jTextField6.getText();
-    }
-    
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroSacado = jTextField7.getText();
-    }
-    
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        logradouroSacado = jTextField8.getText();
-    }
-    
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        localidadeSacado = jTextField9.getText();
-    }
-    
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        bairroSacado = jTextField10.getText();
-    }
-    
-    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        nomeSacadoAvalista = jTextField11.getText();
-    }
-    
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cpfSacadoAvalista = jTextField12.getText();
-    }
-    
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        ufSacadoAvalista = jTextField13.getText();
-    }
-    
-    private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cepSacadoAvalista = jTextField14.getText();
-    }
-    
-    private void jTextField15ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroSacadoAvalista = jTextField15.getText();
-    }
-    
-    private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        logradouroSacadoAvalista = jTextField16.getText();
-    }
-    
-    private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        localidadeSacadoAvalista = jTextField17.getText();
-    }
-    
-    private void jTextField18ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        bairroSacadoAvalista = jTextField18.getText();
-    }
-    
-    private void jTextField19ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        banco = jTextField19.getText();
-    }
-    
-    private void jTextField20ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroConta = jTextField20.getText();
-    }
-    
-    private void jTextField21ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        tipoCarteira = jTextField21.getText();
-    }
-    
-    private void jTextField22ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        nomeAgenciaBanco = jTextField22.getText();
-    }
-    
-    private void jTextField23ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroAgenciaBanco = jTextField23.getText();
-    }
-    
-    private void jTextField24ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroDocumento = jTextField24.getText();
-    }
-    
-    private void jTextField25ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        nossoNumero = jTextField25.getText();
-    }
-    
-    private void jTextField26ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        digitoNossoNumero = jTextField26.getText();
-    }
-    
-    private void jTextField27ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        dataDocumento = jTextField27.getText();
-    }
-    
-    private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        dataVencimento = jTextField28.getText();
-    }
-    
-    private void jTextField29ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        tipoDocumento = jTextField29.getText();
-    }
-    
-    private void jTextField30ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        aceite = jTextField30.getText();
-    }
-    
-    private void jTextField31ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        valor = jTextField31.getText();
-    }
-    
-    private void jTextField32ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        desconto = jTextField32.getText();
-    }
-    
-    private void jTextField33ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        mora = jTextField33.getText();
-    }
-    
-    private void jTextField34ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        acrescimo = jTextField34.getText();
-    }
-    
-    private void jTextField35ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        valorCobrado = jTextField35.getText();
-    }
-   
-    private void jTextField36ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        localPagamento = jTextField36.getText();
-    }
-    
-    private void jTextField37ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucaoSacado = jTextField37.getText();
-    }
-    
-    private void jTextField38ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao1 = jTextField38.getText();
-    }
-    
-    private void jTextField39ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao2 = jTextField39.getText();
-    }
-    
-    private void jTextField40ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao3 = jTextField40.getText();
-    }
-    
-    private void jTextField41ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao4 = jTextField41.getText();
-    }
-    
-    private void jTextField42ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao5 = jTextField42.getText();
-    }
-    
-    private void jTextField43ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao6 = jTextField43.getText();
-    }
-    
-    private void jTextField44ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao7 = jTextField44.getText();
-    }
-    
-    private void jTextField45ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao8 = jTextField45.getText();
-    }
     
     /**
      * @param args the command line arguments
