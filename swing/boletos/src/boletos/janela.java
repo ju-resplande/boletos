@@ -43,8 +43,8 @@ public class janela extends javax.swing.JFrame {
     String nomeSacadoAvalista,cpfSacadoAvalista,ufSacadoAvalista,cepSacadoAvalista,
            numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
     String banco,numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
-    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite,
-           valor,desconto,mora,acrescimo,valorCobrado;
+    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite;          
+    String valor,desconto,mora,acrescimo,valorCobrado;
     String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
            instrucao7,instrucao8;
     /**
@@ -52,101 +52,6 @@ public class janela extends javax.swing.JFrame {
      */
     public janela() {
         initComponents();
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-        
-       jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-       
-       jTextField5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
-            }
-        });
-       
-       jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
-            }
-        });
-       
-       jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
-            }
-        });
-       
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
-            }
-        });
-        
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
-            }
-        });
-        
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
-            }
-        });
-        
-       jTextField11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField11ActionPerformed(evt);
-            }
-        });
-       
-       jTextField12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField12ActionPerformed(evt);
-            }
-        });
-       
-       jTextField13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField13ActionPerformed(evt);
-            }
-        });
-        
-       jTextField14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField14ActionPerformed(evt);
-            }
-        });
-       
-       jTextField15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField15ActionPerformed(evt);
-            }
-        });
-       
-        jTextField16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField16ActionPerformed(evt);
-            }
-        });
-        
-       jTextField17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField17ActionPerformed(evt);
-            }
-        });
-       
-       jTextField18.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField18ActionPerformed(evt);
-            }
-        });
     }
     
     
@@ -305,9 +210,9 @@ public class janela extends javax.swing.JFrame {
 
         jTextField1.setText("jTextField1");
         jTextField1.setToolTipText("Nome do Cedente");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
             }
         });
 
@@ -315,9 +220,9 @@ public class janela extends javax.swing.JFrame {
 
         jTextField2.setText("jTextField2");
         jTextField2.setToolTipText("CNPJ do Cedente");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
             }
         });
 
@@ -354,7 +259,7 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(279, Short.MAX_VALUE))
+                .addContainerGap(284, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cedente", jPanel1);
@@ -365,10 +270,20 @@ public class janela extends javax.swing.JFrame {
         jLabel5.setText("Nome");
 
         jTextField3.setText("jTextField3");
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+        });
 
         jLabel6.setText("CPF");
 
         jTextField4.setText("jTextField4");
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel7.setText("Endereço do Sacado");
@@ -376,6 +291,11 @@ public class janela extends javax.swing.JFrame {
         jLabel8.setText("UF");
 
         jTextField5.setText("jTextField5");
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField5KeyReleased(evt);
+            }
+        });
 
         jLabel9.setText("Localidade");
 
@@ -388,14 +308,39 @@ public class janela extends javax.swing.JFrame {
         jLabel14.setText("Número");
 
         jTextField6.setText("jTextField6");
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField6KeyReleased(evt);
+            }
+        });
 
         jTextField7.setText("jTextField7");
+        jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField7KeyReleased(evt);
+            }
+        });
 
         jTextField8.setText("jTextField8");
+        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField8KeyReleased(evt);
+            }
+        });
 
         jTextField9.setText("jTextField9");
+        jTextField9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField9KeyReleased(evt);
+            }
+        });
 
         jTextField10.setText("jTextField10");
+        jTextField10.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField10KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -408,23 +353,22 @@ public class janela extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
                                     .addComponent(jLabel14)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(jLabel5)))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(15, 15, 15)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel6)))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField4)
                                     .addComponent(jTextField3)
+                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel7)
-                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(161, 161, 161)
-                                                .addComponent(jLabel11)))
-                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(161, 161, 161)
+                                        .addComponent(jLabel11))))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(13, 13, 13)
                                 .addComponent(jLabel10)
@@ -435,8 +379,7 @@ public class janela extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
-                                    .addComponent(jTextField8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE))))
+                                    .addComponent(jTextField8)))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(222, 222, 222)
                         .addComponent(jLabel4))
@@ -447,7 +390,7 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jLabel9)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -487,7 +430,7 @@ public class janela extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel14)
                             .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addGap(92, 92, 92))
         );
 
         jTabbedPane1.addTab("Sacado", jPanel2);
@@ -515,20 +458,60 @@ public class janela extends javax.swing.JFrame {
         jLabel28.setText("Número");
 
         jTextField11.setText("jTextField11");
+        jTextField11.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField11KeyReleased(evt);
+            }
+        });
 
         jTextField12.setText("jTextField12");
+        jTextField12.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField12KeyReleased(evt);
+            }
+        });
 
         jTextField13.setText("jTextField13");
+        jTextField13.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField13KeyReleased(evt);
+            }
+        });
 
         jTextField14.setText("jTextField14");
+        jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField14KeyReleased(evt);
+            }
+        });
 
         jTextField15.setText("jTextField15");
+        jTextField15.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField15KeyReleased(evt);
+            }
+        });
 
         jTextField16.setText("jTextField16");
+        jTextField16.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField16KeyReleased(evt);
+            }
+        });
 
         jTextField17.setText("jTextField17");
+        jTextField17.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField17KeyReleased(evt);
+            }
+        });
 
         jTextField18.setText("jTextField18");
+        jTextField18.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField18KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -752,10 +735,25 @@ public class janela extends javax.swing.JFrame {
         jLabel48.setText("Valor Cobrado");
 
         jTextField24.setText("jTextField24");
+        jTextField24.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField24KeyReleased(evt);
+            }
+        });
 
         jTextField25.setText("jTextField25");
+        jTextField25.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField25KeyReleased(evt);
+            }
+        });
 
         jTextField26.setText("jTextField26");
+        jTextField26.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField26KeyReleased(evt);
+            }
+        });
 
         jTextField27.setText("jTextField27");
 
@@ -766,8 +764,18 @@ public class janela extends javax.swing.JFrame {
         jTextField30.setText("jTextField30");
 
         jTextField31.setText("jTextField31");
+        jTextField31.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField31KeyReleased(evt);
+            }
+        });
 
         jTextField32.setText("jTextField32");
+        jTextField32.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField32KeyReleased(evt);
+            }
+        });
 
         jTextField33.setText("jTextField33");
 
@@ -1086,84 +1094,6 @@ public class janela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        cnpjCedente = jTextField2.getText();
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        nomeCedente = jTextField1.getText();
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        nomeSacado = jTextField3.getText();
-    }
-    
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cpfSacado = jTextField4.getText();
-    }
-    
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        ufSacado = jTextField5.getText();
-    }
-    
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cepSacado = jTextField6.getText();
-    }
-    
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroSacado = jTextField7.getText();
-    }
-    
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        logradouroSacado = jTextField8.getText();
-    }
-    
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        localidadeSacado = jTextField9.getText();
-    }
-    
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        bairroSacado = jTextField10.getText();
-    }
-    
-    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        nomeSacadoAvalista = jTextField11.getText();
-    }
-    
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cpfSacadoAvalista = jTextField12.getText();
-    }
-    
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        ufSacadoAvalista = jTextField13.getText();
-    }
-    
-    private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        cepSacadoAvalista = jTextField14.getText();
-    }
-    
-    private void jTextField15ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        numeroSacadoAvalista = jTextField15.getText();
-    }
-    
-    private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        logradouroSacadoAvalista = jTextField16.getText();
-    }
-    
-    private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        localidadeSacadoAvalista = jTextField17.getText();
-    }
-    
-    private void jTextField18ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        bairroSacadoAvalista = jTextField18.getText();
-    }
-
-    
-    private void jTextField40ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        instrucao3 = jTextField40.getText();
-    }
-    
-   
     
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
             String string = new String();
@@ -1229,15 +1159,15 @@ public class janela extends javax.swing.JFrame {
             contaBancaria.setAgencia(new Agencia(1234, "1"));
 
             Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
-            titulo.setNumeroDoDocumento("123456");
-            titulo.setNossoNumero("99345678912");
-            titulo.setDigitoDoNossoNumero("5");
-            titulo.setValor(BigDecimal.valueOf(0.23));
+            titulo.setNumeroDoDocumento(this.numeroDocumento);
+            titulo.setNossoNumero(this.nossoNumero);
+            titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
+            titulo.setValor(BigDecimal.valueOf(Double.parseDouble(this.valor)));
             titulo.setDataDoDocumento(new Date());
             titulo.setDataDoVencimento(new Date());
             titulo.setTipoDeDocumento(TipoDeTitulo.DM_DUPLICATA_MERCANTIL);
             titulo.setAceite(titulo.getAceite().A);
-            titulo.setDesconto(new BigDecimal(0.05));
+            titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
             titulo.setDeducao(BigDecimal.ZERO);
             titulo.setMora(BigDecimal.ZERO);
             titulo.setAcrecimo(BigDecimal.ZERO);
@@ -1279,6 +1209,98 @@ public class janela extends javax.swing.JFrame {
             
             
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+       nomeCedente = jTextField1.getText();
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+       cnpjCedente = jTextField2.getText(); 
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+       nomeSacado = jTextField3.getText();
+    }//GEN-LAST:event_jTextField3KeyReleased
+
+    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+         cpfSacado = jTextField4.getText();
+    }//GEN-LAST:event_jTextField4KeyReleased
+
+    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
+        ufSacado = jTextField5.getText();
+    }//GEN-LAST:event_jTextField5KeyReleased
+
+    private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
+        cepSacado = jTextField6.getText();
+    }//GEN-LAST:event_jTextField6KeyReleased
+
+    private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
+       numeroSacado = jTextField7.getText();
+    }//GEN-LAST:event_jTextField7KeyReleased
+
+    private void jTextField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField9KeyReleased
+         localidadeSacado = jTextField9.getText();
+    }//GEN-LAST:event_jTextField9KeyReleased
+
+    private void jTextField8KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyReleased
+        logradouroSacado = jTextField8.getText();
+    }//GEN-LAST:event_jTextField8KeyReleased
+
+    private void jTextField10KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField10KeyReleased
+        bairroSacado = jTextField10.getText();
+    }//GEN-LAST:event_jTextField10KeyReleased
+
+    private void jTextField11KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField11KeyReleased
+        nomeSacadoAvalista = jTextField11.getText();
+    }//GEN-LAST:event_jTextField11KeyReleased
+
+    private void jTextField12KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField12KeyReleased
+        cpfSacadoAvalista = jTextField12.getText();
+    }//GEN-LAST:event_jTextField12KeyReleased
+
+    private void jTextField13KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField13KeyReleased
+        ufSacadoAvalista = jTextField13.getText();
+    }//GEN-LAST:event_jTextField13KeyReleased
+
+    private void jTextField14KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField14KeyReleased
+        cepSacadoAvalista = jTextField14.getText();
+    }//GEN-LAST:event_jTextField14KeyReleased
+
+    private void jTextField18KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField18KeyReleased
+         bairroSacadoAvalista = jTextField18.getText();
+    }//GEN-LAST:event_jTextField18KeyReleased
+
+    private void jTextField16KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField16KeyReleased
+        logradouroSacadoAvalista = jTextField16.getText();
+    }//GEN-LAST:event_jTextField16KeyReleased
+
+    private void jTextField17KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField17KeyReleased
+        localidadeSacadoAvalista = jTextField17.getText();
+    }//GEN-LAST:event_jTextField17KeyReleased
+
+    private void jTextField15KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField15KeyReleased
+        numeroSacadoAvalista = jTextField15.getText();
+    }//GEN-LAST:event_jTextField15KeyReleased
+
+    private void jTextField24KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField24KeyReleased
+         numeroDocumento = jTextField24.getText();
+    }//GEN-LAST:event_jTextField24KeyReleased
+
+    private void jTextField25KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField25KeyReleased
+         nossoNumero = jTextField25.getText();
+    }//GEN-LAST:event_jTextField25KeyReleased
+
+    private void jTextField26KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField26KeyReleased
+        digitoNossoNumero = jTextField26.getText();
+    }//GEN-LAST:event_jTextField26KeyReleased
+
+    private void jTextField31KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField31KeyReleased
+        valor = jTextField31.getText();
+    }//GEN-LAST:event_jTextField31KeyReleased
+
+    private void jTextField32KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField32KeyReleased
+        desconto = jTextField32.getText();
+    }//GEN-LAST:event_jTextField32KeyReleased
 
     
     /**
