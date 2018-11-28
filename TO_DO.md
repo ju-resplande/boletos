@@ -5,7 +5,7 @@
 
 
 # Finalizar básico
-
+- [ ] Criar variável dedução e criar lugar na janela e por para receber teclado
 - [ ] Alterar Conta Bancária, Título e Boleto para receber teclado
 - [ ] Usar variáveis locais em janela
 - [ ] criar campos com função KeyRealeased para armazenar essas variveis
@@ -13,27 +13,25 @@
 ## UF
 
 - [ ] Armazenar UF
-- [ ] Utilizar combobox no lugar de textfield para escolher ufs
+- [x] Utilizar combobox no lugar de textfield para escolher ufs
 - [ ] Imune a inserção de ufs inexistentes
+- [x] Inicialmente deixar selecionado em "Escolha estado"
+- [ ] Ver se o usuário escolheu ou não
 
 ## Data
 
-- [ ] Armazenar data   
+- [ ] Armazenar data
+- [ ] Utilizar combobox para datas
 - [ ] Bloquear criação de boletos com datas que já passaram   
 - [ ] Tratar exceções de datas inválidas  
 - [ ] Bloquear criação de boletos com data de vencimento antes da data de emissão ( o Bopepo já faz isso sozinho? Testar )  
-
-## Estado
-
-- [ ] Inicialmente deixar selecionado em "Escolha estado"
-- [ ] Ver se o usuário escolheu ou não
 
 ## Bancos
 
 - [ ] Escolha de Bancos
 - [ ] Colocar ComboBox ou RadioButton para escolher os bancos
 - [ ] Arquivo bancos suportados possui as macros
-- [ ] Inicialmente deixar nenhum opçãp selecionada
+- [ ] Inicialmente deixar nenhuma opção selecionada
 - [ ] Ver se o usuário escolheu ou não
 
 ## etc
@@ -54,6 +52,7 @@
 - [ ] Colocar mensagem em caixa de texto (showInputDialog) modo erro OU colocar a mensagem na própria frame do lado e deixar o campo em vermelho
 
 ## Inserção
+- [ ] As variáveis doubles só podem ser positivas? 
 - [ ] IllegalArgumentException em inteiros e doubles
 
 # Melhorar:
@@ -61,3 +60,4 @@
 - [ ] Melhorar Alinhamento
 - [ ] Fazer um ítem "sobre" no menu
 - [x] O que fazer com o ítem file do menu?   
+- [ ] Configurar o menu file para receber arquivo
