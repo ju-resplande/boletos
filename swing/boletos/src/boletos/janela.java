@@ -741,6 +741,11 @@ public class janela extends javax.swing.JFrame {
         jTextField26.setText("jTextField26");
 
         jTextField27.setText("jTextField27");
+        jTextField27.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField27KeyReleased(evt);
+            }
+        });
 
         jTextField28.setText("jTextField28");
 
@@ -749,14 +754,39 @@ public class janela extends javax.swing.JFrame {
         jTextField30.setText("jTextField30");
 
         jTextField31.setText("jTextField31");
+        jTextField31.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField31KeyReleased(evt);
+            }
+        });
 
         jTextField32.setText("jTextField32");
+        jTextField32.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField32KeyReleased(evt);
+            }
+        });
 
         jTextField33.setText("jTextField33");
+        jTextField33.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField33KeyReleased(evt);
+            }
+        });
 
         jTextField34.setText("jTextField34");
+        jTextField34.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField34KeyReleased(evt);
+            }
+        });
 
         jTextField35.setText("jTextField35");
+        jTextField35.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField35KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1137,7 +1167,7 @@ public class janela extends javax.swing.JFrame {
             titulo.setNumeroDoDocumento(this.numeroDocumento);
             titulo.setNossoNumero(this.nossoNumero);
             titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
-            titulo.setValor(BigDecimal.valueOf(Double.parseDouble(this.valor)));
+            titulo.setValor(new BigDecimal (Double.parseDouble(this.valor)));
             titulo.setDataDoDocumento(new Date());
             titulo.setDataDoVencimento(new Date());
             titulo.setTipoDeDocumento(TipoDeTitulo.DM_DUPLICATA_MERCANTIL);
@@ -1256,6 +1286,30 @@ public class janela extends javax.swing.JFrame {
     private void jTextField25KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField25KeyReleased
          nossoNumero = jTextField25.getText();
     }//GEN-LAST:event_jTextField25KeyReleased
+
+    private void jTextField31KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField31KeyReleased
+         valor = jTextField31.getText();
+    }//GEN-LAST:event_jTextField31KeyReleased
+
+    private void jTextField32KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField32KeyReleased
+         desconto = jTextField32.getText();
+    }//GEN-LAST:event_jTextField32KeyReleased
+
+    private void jTextField33KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField33KeyReleased
+        mora = jTextField33.getText();
+    }//GEN-LAST:event_jTextField33KeyReleased
+
+    private void jTextField34KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField34KeyReleased
+        acrescimo = jTextField34.getText();
+    }//GEN-LAST:event_jTextField34KeyReleased
+
+    private void jTextField35KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField35KeyReleased
+        valorCobrado = jTextField35.getText();
+    }//GEN-LAST:event_jTextField35KeyReleased
+
+    private void jTextField27KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField27KeyReleased
+       dataDocumento = jTextField27.getText();
+    }//GEN-LAST:event_jTextField27KeyReleased
 
     
     /**

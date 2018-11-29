@@ -1153,6 +1153,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="jTextField27"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField27KeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField28">
               <Properties>
@@ -1173,26 +1176,41 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="jTextField31"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField31KeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField32">
               <Properties>
                 <Property name="text" type="java.lang.String" value="jTextField32"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField32KeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField33">
               <Properties>
                 <Property name="text" type="java.lang.String" value="jTextField33"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField33KeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField34">
               <Properties>
                 <Property name="text" type="java.lang.String" value="jTextField34"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField34KeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField35">
               <Properties>
                 <Property name="text" type="java.lang.String" value="jTextField35"/>
               </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField35KeyReleased"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
