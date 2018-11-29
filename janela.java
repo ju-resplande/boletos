@@ -8,7 +8,11 @@ package boletos;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import org.jrimum.bopepo.BancosSuportados;
@@ -18,6 +22,7 @@ import org.jrimum.domkee.comum.pessoa.endereco.CEP;
 import org.jrimum.domkee.comum.pessoa.endereco.Endereco;
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa;
 import org.jrimum.domkee.financeiro.banco.febraban.Agencia;
+import org.jrimum.domkee.financeiro.banco.febraban.Banco;
 import org.jrimum.domkee.financeiro.banco.febraban.Carteira;
 import org.jrimum.domkee.financeiro.banco.febraban.Cedente;
 import org.jrimum.domkee.financeiro.banco.febraban.ContaBancaria;
@@ -40,11 +45,11 @@ public class janela extends javax.swing.JFrame {
     String nomeCedente,cnpjCedente;
     String nomeSacado,cpfSacado,ufSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
            bairroSacado;
-    String nomeSacadoAvalista,cpfSacadoAvalista,ufSacadoAvalista,cepSacadoAvalista,
+    String nomeSacadoAvalista,ufSacadoAvalista,cpfSacadoAvalista,cepSacadoAvalista,
            numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
     String banco,numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
-    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite,
-           valor,desconto,mora,acrescimo,valorCobrado;
+    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite;          
+    String valor,desconto,mora,acrescimo,valorCobrado;
     String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
            instrucao7,instrucao8;
     /**
@@ -99,7 +104,6 @@ public class janela extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -110,6 +114,7 @@ public class janela extends javax.swing.JFrame {
         jTextField8 = new javax.swing.JTextField();
         jTextField9 = new javax.swing.JTextField();
         jTextField10 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
@@ -124,12 +129,12 @@ public class janela extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jTextField11 = new javax.swing.JTextField();
         jTextField12 = new javax.swing.JTextField();
-        jTextField13 = new javax.swing.JTextField();
         jTextField14 = new javax.swing.JTextField();
         jTextField15 = new javax.swing.JTextField();
         jTextField16 = new javax.swing.JTextField();
         jTextField17 = new javax.swing.JTextField();
         jTextField18 = new javax.swing.JTextField();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
@@ -242,7 +247,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                             .addComponent(jTextField2))))
                 .addContainerGap())
         );
@@ -290,13 +295,6 @@ public class janela extends javax.swing.JFrame {
 
         jLabel8.setText("UF");
 
-        jTextField5.setText("jTextField5");
-        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField5KeyReleased(evt);
-            }
-        });
-
         jLabel9.setText("Localidade");
 
         jLabel10.setText("CEP");
@@ -342,6 +340,13 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -351,6 +356,17 @@ public class janela extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel13)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                                    .addComponent(jTextField8)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel14)
@@ -362,34 +378,23 @@ public class janela extends javax.swing.JFrame {
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(161, 161, 161)
-                                        .addComponent(jLabel11))))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
-                                    .addComponent(jTextField8)))))
+                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(113, 113, 113)
+                                        .addComponent(jLabel9)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextField3)
+                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel7)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(161, 161, 161)
+                                            .addComponent(jLabel11)))))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(222, 222, 222)
-                        .addComponent(jLabel4))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(118, 118, 118)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel4)))
                 .addGap(0, 0, 0))
         );
         jPanel2Layout.setVerticalGroup(
@@ -409,10 +414,10 @@ public class janela extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -471,13 +476,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField13.setText("jTextField13");
-        jTextField13.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField13KeyReleased(evt);
-            }
-        });
-
         jTextField14.setText("jTextField14");
         jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -513,6 +511,13 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -535,7 +540,7 @@ public class janela extends javax.swing.JFrame {
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
                                     .addGroup(jPanel7Layout.createSequentialGroup()
                                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel22)
@@ -546,8 +551,8 @@ public class janela extends javax.swing.JFrame {
                                                         .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(jLabel27))
-                                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(jLabel24))
                                                     .addGroup(jPanel7Layout.createSequentialGroup()
@@ -583,8 +588,8 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel23)
                     .addComponent(jLabel24)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
@@ -597,7 +602,7 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel28)
                     .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -616,7 +621,7 @@ public class janela extends javax.swing.JFrame {
         jLabel29.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel29.setText("Dados da Conta Bancária");
 
-        jLabel30.setText("Banco");
+        jLabel30.setText("Banco (Código)");
 
         jLabel31.setText("Número da Conta");
 
@@ -660,7 +665,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jTextField20)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 30, Short.MAX_VALUE))))
+                                .addGap(0, 44, Short.MAX_VALUE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jLabel33))
@@ -735,28 +740,88 @@ public class janela extends javax.swing.JFrame {
         jLabel48.setText("Valor Cobrado");
 
         jTextField24.setText("jTextField24");
+        jTextField24.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField24KeyReleased(evt);
+            }
+        });
 
         jTextField25.setText("jTextField25");
+        jTextField25.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField25KeyReleased(evt);
+            }
+        });
 
         jTextField26.setText("jTextField26");
+        jTextField26.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField26KeyReleased(evt);
+            }
+        });
 
         jTextField27.setText("jTextField27");
+        jTextField27.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField27KeyReleased(evt);
+            }
+        });
 
         jTextField28.setText("jTextField28");
+        jTextField28.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField28KeyReleased(evt);
+            }
+        });
 
         jTextField29.setText("jTextField29");
+        jTextField29.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField29KeyReleased(evt);
+            }
+        });
 
         jTextField30.setText("jTextField30");
+        jTextField30.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField30KeyReleased(evt);
+            }
+        });
 
         jTextField31.setText("jTextField31");
+        jTextField31.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField31KeyReleased(evt);
+            }
+        });
 
         jTextField32.setText("jTextField32");
+        jTextField32.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField32KeyReleased(evt);
+            }
+        });
 
         jTextField33.setText("jTextField33");
+        jTextField33.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField33KeyReleased(evt);
+            }
+        });
 
         jTextField34.setText("jTextField34");
+        jTextField34.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField34KeyReleased(evt);
+            }
+        });
 
         jTextField35.setText("jTextField35");
+        jTextField35.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField35KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -907,24 +972,74 @@ public class janela extends javax.swing.JFrame {
         jLabel60.setText("8");
 
         jTextField36.setText("jTextField36");
+        jTextField36.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField36KeyReleased(evt);
+            }
+        });
 
         jTextField37.setText("jTextField37");
+        jTextField37.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField37KeyReleased(evt);
+            }
+        });
 
         jTextField38.setText("jTextField38");
+        jTextField38.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField38KeyReleased(evt);
+            }
+        });
 
         jTextField39.setText("jTextField39");
+        jTextField39.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField39KeyReleased(evt);
+            }
+        });
 
         jTextField40.setText("jTextField40");
+        jTextField40.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField40KeyReleased(evt);
+            }
+        });
 
         jTextField41.setText("jTextField41");
+        jTextField41.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField41KeyReleased(evt);
+            }
+        });
 
         jTextField42.setText("jTextField42");
+        jTextField42.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField42KeyReleased(evt);
+            }
+        });
 
         jTextField43.setText("jTextField43");
+        jTextField43.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField43KeyReleased(evt);
+            }
+        });
 
         jTextField44.setText("jTextField44");
+        jTextField44.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField44KeyReleased(evt);
+            }
+        });
 
         jTextField45.setText("jTextField45");
+        jTextField45.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField45KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -947,7 +1062,7 @@ public class janela extends javax.swing.JFrame {
                                         .addComponent(jTextField37))))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jLabel50)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                                 .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(20, 20, 20))
                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -1080,13 +1195,19 @@ public class janela extends javax.swing.JFrame {
           
             string += "\nEndereço";
             string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
-                    UnidadeFederativa.RN, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
+                    ufSacado, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
             string += "\nSacadorAvalista\n";
             string += String.format("Nome: %s cpnj: %s", this.nomeSacadoAvalista, this.cpfSacadoAvalista);
           
             string += "\nEndereço";
             string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
                     UnidadeFederativa.RN, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
+            
+            string += "\nTitulo";
+            string += String.format("Nosso Número" + this.nossoNumero + this.digitoNossoNumero);
+            
+            string += "\nInstruções";
+            string += this.instrucao8;
             JOptionPane.showMessageDialog(null, string);
             
         
@@ -1100,7 +1221,7 @@ public class janela extends javax.swing.JFrame {
 
             // Informando o endereço do sacado.
             Endereco enderecoSac = new Endereco();
-            enderecoSac.setUF(UnidadeFederativa.RN);//janela.ufSacado
+            enderecoSac.setUF(UnidadeFederativa.valueOfSigla(this.ufSacado));
             enderecoSac.setLocalidade(this.localidadeSacado);
             enderecoSac.setCep(new CEP(this.cepSacado));
             enderecoSac.setBairro(this.bairroSacado);
@@ -1115,7 +1236,7 @@ public class janela extends javax.swing.JFrame {
 
             // Informando o endereço do sacador avalista.
             Endereco enderecoSacAval = new Endereco();
-            enderecoSacAval.setUF(UnidadeFederativa.DF);//janela.ufSacadoAvalista
+            enderecoSacAval.setUF(UnidadeFederativa.valueOf(this.ufSacadoAvalista));
             enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
             enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
             enderecoSacAval.setBairro(this.bairroSacadoAvalista);
@@ -1128,43 +1249,56 @@ public class janela extends javax.swing.JFrame {
              */
 
             // Informando dados sobre a conta bancária do título.
-            ContaBancaria contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
-            contaBancaria.setNumeroDaConta(new NumeroDaConta(123456, "0"));
-            contaBancaria.setCarteira(new Carteira(30));
-            contaBancaria.setAgencia(new Agencia(1234, "1"));
-
+            ContaBancaria contaBancaria = null;
+            if(Banco.isCodigoDeCompensacaoOK(this.banco)){
+                contaBancaria = new ContaBancaria(BancosSuportados.suportados.get(this.banco).create());
+                contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(this.numeroConta)));
+                contaBancaria.setCarteira(new Carteira(Integer.parseInt(this.tipoCarteira)));
+                contaBancaria.setAgencia(new Agencia(Integer.parseInt(this.numeroAgenciaBanco), this.nomeAgenciaBanco));
+            }else{
+                //exception banco inválido
+            }
             Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
-            titulo.setNumeroDoDocumento("123456");
-            titulo.setNossoNumero("99345678912");
-            titulo.setDigitoDoNossoNumero("5");
-            titulo.setValor(BigDecimal.valueOf(0.23));
-            titulo.setDataDoDocumento(new Date());
-            titulo.setDataDoVencimento(new Date());
-            titulo.setTipoDeDocumento(TipoDeTitulo.DM_DUPLICATA_MERCANTIL);
-            titulo.setAceite(titulo.getAceite().A);
-            titulo.setDesconto(new BigDecimal(0.05));
+            titulo.setNumeroDoDocumento(this.numeroDocumento);
+            titulo.setNossoNumero(this.nossoNumero);
+            titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
+            titulo.setValor(BigDecimal.valueOf(Double.parseDouble(this.valor)));
+            //formato de data
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            //entender essa exceção
+            try {
+                titulo.setDataDoDocumento(new Date(format.parse(this.dataDocumento).getTime()));
+            } catch (ParseException ex) {
+                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                titulo.setDataDoVencimento(new Date(format.parse(this.dataVencimento).getTime()));
+            } catch (ParseException ex) {
+                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            titulo.setTipoDeDocumento(TipoDeTitulo.valueOf(this.tipoDocumento));
+            titulo.setAceite(Titulo.Aceite.valueOf(this.aceite));
+            titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
             titulo.setDeducao(BigDecimal.ZERO);
-            titulo.setMora(BigDecimal.ZERO);
-            titulo.setAcrecimo(BigDecimal.ZERO);
-            titulo.setValorCobrado(BigDecimal.ZERO);
+            titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
+            titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
+            titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
 
             /*
              * INFORMANDO OS DADOS SOBRE O BOLETO.
              */
             Boleto boleto = new Boleto(titulo);
 
-            boleto.setLocalPagamento("Pagável preferencialmente na Rede X ou em " +
-                            "qualquer Banco até o Vencimento.");
-            boleto.setInstrucaoAoSacado("Senhor sacado, sabemos sim que o valor " +
-                            "cobrado não é o esperado, aproveite o DESCONTÃO!");
-            boleto.setInstrucao1("PARA PAGAMENTO 1 até Hoje não cobrar nada!");
-            boleto.setInstrucao2("PARA PAGAMENTO 2 até Amanhã Não cobre!");
-            boleto.setInstrucao3("PARA PAGAMENTO 3 até Depois de amanhã, OK, não cobre.");
-            boleto.setInstrucao4("PARA PAGAMENTO 4 até 04/xx/xxxx de 4 dias atrás COBRAR O VALOR DE: R$ 01,00");
-            boleto.setInstrucao5("PARA PAGAMENTO 5 até 05/xx/xxxx COBRAR O VALOR DE: R$ 02,00");
-            boleto.setInstrucao6("PARA PAGAMENTO 6 até 06/xx/xxxx COBRAR O VALOR DE: R$ 03,00");
-            boleto.setInstrucao7("PARA PAGAMENTO 7 até xx/xx/xxxx COBRAR O VALOR QUE VOCÊ QUISER!");
-            boleto.setInstrucao8("APÓS o Vencimento, Pagável Somente na Rede X.");
+            boleto.setLocalPagamento("Pagável preferencialmente na Rede" +this.localPagamento+ "ou em qualquer Banco até o Vencimento.");
+            boleto.setInstrucaoAoSacado(this.instrucaoSacado);
+            boleto.setInstrucao1(this.instrucao1);
+            boleto.setInstrucao2(this.instrucao2);
+            boleto.setInstrucao3(this.instrucao3);
+            boleto.setInstrucao4(this.instrucao4);
+            boleto.setInstrucao5(this.instrucao5);
+            boleto.setInstrucao6(this.instrucao6);
+            boleto.setInstrucao7(this.instrucao7);
+            boleto.setInstrucao8(this.instrucao8);
             
             /*
              * GERANDO O BOLETO BANCÁRIO.
@@ -1201,10 +1335,6 @@ public class janela extends javax.swing.JFrame {
          cpfSacado = jTextField4.getText();
     }//GEN-LAST:event_jTextField4KeyReleased
 
-    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
-        ufSacado = jTextField5.getText();
-    }//GEN-LAST:event_jTextField5KeyReleased
-
     private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
         cepSacado = jTextField6.getText();
     }//GEN-LAST:event_jTextField6KeyReleased
@@ -1233,10 +1363,6 @@ public class janela extends javax.swing.JFrame {
         cpfSacadoAvalista = jTextField12.getText();
     }//GEN-LAST:event_jTextField12KeyReleased
 
-    private void jTextField13KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField13KeyReleased
-        ufSacadoAvalista = jTextField13.getText();
-    }//GEN-LAST:event_jTextField13KeyReleased
-
     private void jTextField14KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField14KeyReleased
         cepSacadoAvalista = jTextField14.getText();
     }//GEN-LAST:event_jTextField14KeyReleased
@@ -1257,6 +1383,102 @@ public class janela extends javax.swing.JFrame {
         numeroSacadoAvalista = jTextField15.getText();
     }//GEN-LAST:event_jTextField15KeyReleased
 
+    private void jTextField24KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField24KeyReleased
+        numeroDocumento = jTextField24.getText();
+    }//GEN-LAST:event_jTextField24KeyReleased
+
+    private void jTextField25KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField25KeyReleased
+        nossoNumero = jTextField25.getText();
+    }//GEN-LAST:event_jTextField25KeyReleased
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        ufSacado = jComboBox1.getSelectedItem().toString();
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        ufSacadoAvalista = jComboBox2.getSelectedItem().toString();
+    }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jTextField26KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField26KeyReleased
+        digitoNossoNumero = jTextField26.getText();
+    }//GEN-LAST:event_jTextField26KeyReleased
+
+    private void jTextField27KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField27KeyReleased
+        dataDocumento = jTextField27.getText();
+    }//GEN-LAST:event_jTextField27KeyReleased
+
+    private void jTextField28KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField28KeyReleased
+        dataVencimento = jTextField28.getText();
+    }//GEN-LAST:event_jTextField28KeyReleased
+
+    private void jTextField29KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField29KeyReleased
+        tipoDocumento = jTextField29.getText();
+    }//GEN-LAST:event_jTextField29KeyReleased
+
+    private void jTextField30KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField30KeyReleased
+        aceite = jTextField30.getText();
+    }//GEN-LAST:event_jTextField30KeyReleased
+
+    private void jTextField31KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField31KeyReleased
+        valor = jTextField31.getText();
+    }//GEN-LAST:event_jTextField31KeyReleased
+
+    private void jTextField32KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField32KeyReleased
+        desconto = jTextField32.getText();
+    }//GEN-LAST:event_jTextField32KeyReleased
+
+    private void jTextField33KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField33KeyReleased
+        mora = jTextField34.getText();
+    }//GEN-LAST:event_jTextField33KeyReleased
+
+    private void jTextField34KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField34KeyReleased
+        acrescimo = jTextField34.getText();
+    }//GEN-LAST:event_jTextField34KeyReleased
+
+    private void jTextField35KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField35KeyReleased
+        valorCobrado = jTextField35.getText();
+    }//GEN-LAST:event_jTextField35KeyReleased
+
+    private void jTextField36KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField36KeyReleased
+        localPagamento = jTextField36.getText();
+    }//GEN-LAST:event_jTextField36KeyReleased
+
+    private void jTextField37KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField37KeyReleased
+        instrucaoSacado = jTextField37.getText();
+    }//GEN-LAST:event_jTextField37KeyReleased
+
+    private void jTextField38KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField38KeyReleased
+        instrucao1 = jTextField38.getText();
+    }//GEN-LAST:event_jTextField38KeyReleased
+
+    private void jTextField39KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField39KeyReleased
+        instrucao2 = jTextField39.getText();
+    }//GEN-LAST:event_jTextField39KeyReleased
+
+    private void jTextField40KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField40KeyReleased
+        instrucao3 = jTextField40.getText();
+    }//GEN-LAST:event_jTextField40KeyReleased
+
+    private void jTextField41KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField41KeyReleased
+        instrucao4 = jTextField41.getText();
+    }//GEN-LAST:event_jTextField41KeyReleased
+
+    private void jTextField42KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField42KeyReleased
+        instrucao5 = jTextField42.getText();
+    }//GEN-LAST:event_jTextField42KeyReleased
+
+    private void jTextField43KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField43KeyReleased
+        instrucao6 = jTextField43.getText();
+    }//GEN-LAST:event_jTextField43KeyReleased
+
+    private void jTextField44KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField44KeyReleased
+        instrucao7 = jTextField44.getText();
+    }//GEN-LAST:event_jTextField44KeyReleased
+
+    private void jTextField45KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField45KeyReleased
+        instrucao8 = jTextField45.getText();
+    }//GEN-LAST:event_jTextField45KeyReleased
+
     
     /**
      * @param args the command line arguments
@@ -1264,6 +1486,8 @@ public class janela extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1338,7 +1562,6 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
@@ -1374,7 +1597,6 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField43;
     private javax.swing.JTextField jTextField44;
     private javax.swing.JTextField jTextField45;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
