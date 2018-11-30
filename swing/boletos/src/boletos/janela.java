@@ -221,7 +221,7 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("CNPJ");
+        jLabel3.setText("CPF/CNPJ");
 
         jTextField2.setText("jTextField2");
         jTextField2.setToolTipText("CNPJ do Cedente");
@@ -247,8 +247,10 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
-                            .addComponent(jTextField2))))
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -281,7 +283,7 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("CPF");
+        jLabel6.setText("CPF ou CNPJ");
 
         jTextField4.setText("jTextField4");
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -386,12 +388,16 @@ public class janela extends javax.swing.JFrame {
                                         .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jTextField3)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7)
                                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(161, 161, 161)
-                                            .addComponent(jLabel11)))))))
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(161, 161, 161)
+                                                    .addComponent(jLabel11))
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addGap(0, 0, Short.MAX_VALUE)))))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(222, 222, 222)
                         .addComponent(jLabel4)))
@@ -445,7 +451,7 @@ public class janela extends javax.swing.JFrame {
 
         jLabel20.setText("Nome");
 
-        jLabel21.setText("CPF");
+        jLabel21.setText("CPF ou CNPJ");
 
         jLabel22.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel22.setText("Endereço do Sacado Avalista");
@@ -535,12 +541,9 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel23))
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField12))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
+                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
                                     .addGroup(jPanel7Layout.createSequentialGroup()
                                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel22)
@@ -563,7 +566,11 @@ public class janela extends javax.swing.JFrame {
                                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jTextField16)
                                             .addComponent(jTextField17)
-                                            .addComponent(jTextField15)))))))
+                                            .addComponent(jTextField15)))))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(183, 183, 183)
                         .addComponent(jLabel19)))
@@ -665,7 +672,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jTextField20)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 44, Short.MAX_VALUE))))
+                                .addGap(0, 91, Short.MAX_VALUE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jLabel33))
@@ -957,24 +964,74 @@ public class janela extends javax.swing.JFrame {
         jLabel60.setText("8");
 
         jTextField36.setText("jTextField36");
+        jTextField36.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField36KeyReleased(evt);
+            }
+        });
 
         jTextField37.setText("jTextField37");
+        jTextField37.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField37KeyReleased(evt);
+            }
+        });
 
         jTextField38.setText("jTextField38");
+        jTextField38.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField38KeyReleased(evt);
+            }
+        });
 
         jTextField39.setText("jTextField39");
+        jTextField39.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField39KeyReleased(evt);
+            }
+        });
 
         jTextField40.setText("jTextField40");
+        jTextField40.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField40KeyReleased(evt);
+            }
+        });
 
         jTextField41.setText("jTextField41");
+        jTextField41.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField41KeyReleased(evt);
+            }
+        });
 
         jTextField42.setText("jTextField42");
+        jTextField42.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField42KeyReleased(evt);
+            }
+        });
 
         jTextField43.setText("jTextField43");
+        jTextField43.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField43KeyReleased(evt);
+            }
+        });
 
         jTextField44.setText("jTextField44");
+        jTextField44.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField44KeyReleased(evt);
+            }
+        });
 
         jTextField45.setText("jTextField45");
+        jTextField45.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField45KeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -997,7 +1054,7 @@ public class janela extends javax.swing.JFrame {
                                         .addComponent(jTextField37))))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jLabel50)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                                 .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(20, 20, 20))
                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -1217,18 +1274,16 @@ public class janela extends javax.swing.JFrame {
              */
             Boleto boleto = new Boleto(titulo);
 
-            boleto.setLocalPagamento("Pagável preferencialmente na Rede X ou em " +
-                            "qualquer Banco até o Vencimento.");
-            boleto.setInstrucaoAoSacado("Senhor sacado, sabemos sim que o valor " +
-                            "cobrado não é o esperado, aproveite o DESCONTÃO!");
-            boleto.setInstrucao1("PARA PAGAMENTO 1 até Hoje não cobrar nada!");
-            boleto.setInstrucao2("PARA PAGAMENTO 2 até Amanhã Não cobre!");
-            boleto.setInstrucao3("PARA PAGAMENTO 3 até Depois de amanhã, OK, não cobre.");
-            boleto.setInstrucao4("PARA PAGAMENTO 4 até 04/xx/xxxx de 4 dias atrás COBRAR O VALOR DE: R$ 01,00");
-            boleto.setInstrucao5("PARA PAGAMENTO 5 até 05/xx/xxxx COBRAR O VALOR DE: R$ 02,00");
-            boleto.setInstrucao6("PARA PAGAMENTO 6 até 06/xx/xxxx COBRAR O VALOR DE: R$ 03,00");
-            boleto.setInstrucao7("PARA PAGAMENTO 7 até xx/xx/xxxx COBRAR O VALOR QUE VOCÊ QUISER!");
-            boleto.setInstrucao8("APÓS o Vencimento, Pagável Somente na Rede X.");
+            boleto.setLocalPagamento(localPagamento);
+            boleto.setInstrucaoAoSacado(instrucaoSacado);
+            boleto.setInstrucao1(instrucao1);
+            boleto.setInstrucao2(instrucao2);
+            boleto.setInstrucao3(instrucao3);
+            boleto.setInstrucao4(instrucao4);
+            boleto.setInstrucao5(instrucao5);
+            boleto.setInstrucao6(instrucao6);
+            boleto.setInstrucao7(instrucao7);
+            boleto.setInstrucao8(instrucao8);
             
             /*
              * GERANDO O BOLETO BANCÁRIO.
@@ -1462,6 +1517,46 @@ public class janela extends javax.swing.JFrame {
         else if (jComboBox2.getSelectedItem() == "TO")
             ufSacadoAval = UnidadeFederativa.TO;
     }//GEN-LAST:event_jComboBox2ActionPerformed
+
+    private void jTextField36KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField36KeyReleased
+       localPagamento = jTextField36.getText();
+    }//GEN-LAST:event_jTextField36KeyReleased
+
+    private void jTextField37KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField37KeyReleased
+       instrucaoSacado = jTextField37.getText();
+    }//GEN-LAST:event_jTextField37KeyReleased
+
+    private void jTextField38KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField38KeyReleased
+        instrucao1 = jTextField38.getText();
+    }//GEN-LAST:event_jTextField38KeyReleased
+
+    private void jTextField39KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField39KeyReleased
+       instrucao2 = jTextField39.getText();
+    }//GEN-LAST:event_jTextField39KeyReleased
+
+    private void jTextField40KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField40KeyReleased
+       instrucao3 = jTextField40.getText();
+    }//GEN-LAST:event_jTextField40KeyReleased
+
+    private void jTextField41KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField41KeyReleased
+       instrucao4 = jTextField41.getText();
+    }//GEN-LAST:event_jTextField41KeyReleased
+
+    private void jTextField42KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField42KeyReleased
+        instrucao5 = jTextField42.getText();
+    }//GEN-LAST:event_jTextField42KeyReleased
+
+    private void jTextField43KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField43KeyReleased
+        instrucao6 = jTextField43.getText();
+    }//GEN-LAST:event_jTextField43KeyReleased
+
+    private void jTextField44KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField44KeyReleased
+        instrucao7 = jTextField44.getText();
+    }//GEN-LAST:event_jTextField44KeyReleased
+
+    private void jTextField45KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField45KeyReleased
+       instrucao8 = jTextField45.getText();
+    }//GEN-LAST:event_jTextField45KeyReleased
 
     
     /**
