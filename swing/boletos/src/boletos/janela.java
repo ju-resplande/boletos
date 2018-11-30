@@ -42,15 +42,16 @@ import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
 public class janela extends javax.swing.JFrame {
     
     String nomeCedente,cnpjCedente;
-    String nomeSacado,cpfSacado,ufSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
+    String nomeSacado,cpfSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
            bairroSacado;
-    String nomeSacadoAvalista,cpfSacadoAvalista,ufSacadoAvalista,cepSacadoAvalista,
+    String nomeSacadoAvalista,cpfSacadoAvalista,cepSacadoAvalista,
            numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
     String banco,numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
     String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite;          
     String valor,desconto,mora,acrescimo,valorCobrado;
     String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
            instrucao7,instrucao8;
+    UnidadeFederativa ufSacado, ufSacadoAval;
     /**
      * Creates new form janela
      */
@@ -340,6 +341,11 @@ public class janela extends javax.swing.JFrame {
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -506,6 +512,11 @@ public class janela extends javax.swing.JFrame {
         });
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1139,7 +1150,7 @@ public class janela extends javax.swing.JFrame {
 
             // Informando o endereço do sacado.
             Endereco enderecoSac = new Endereco();
-            enderecoSac.setUF(UnidadeFederativa.RN);//janela.ufSacado
+            enderecoSac.setUF(this.ufSacado);//janela.ufSacado
             enderecoSac.setLocalidade(this.localidadeSacado);
             enderecoSac.setCep(new CEP(this.cepSacado));
             enderecoSac.setBairro(this.bairroSacado);
@@ -1154,7 +1165,7 @@ public class janela extends javax.swing.JFrame {
 
             // Informando o endereço do sacador avalista.
             Endereco enderecoSacAval = new Endereco();
-            enderecoSacAval.setUF(UnidadeFederativa.DF);//janela.ufSacadoAvalista
+            enderecoSacAval.setUF(this.ufSacadoAval);//janela.ufSacadoAvalista
             enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
             enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
             enderecoSacAval.setBairro(this.bairroSacadoAvalista);
@@ -1337,6 +1348,120 @@ public class janela extends javax.swing.JFrame {
     private void jTextField28KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField28KeyReleased
        dataVencimento = jTextField28.getText();
     }//GEN-LAST:event_jTextField28KeyReleased
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        if (jComboBox1.getSelectedItem() == "AC")
+            ufSacado = UnidadeFederativa.AC;
+        else if (jComboBox1.getSelectedItem() == "AL")
+            ufSacado = UnidadeFederativa.AL;
+        else if (jComboBox1.getSelectedItem() == "AP")
+            ufSacado = UnidadeFederativa.AP;
+        else if (jComboBox1.getSelectedItem() == "AM")
+            ufSacado = UnidadeFederativa.AM;
+        else if (jComboBox1.getSelectedItem() == "BA")
+            ufSacado = UnidadeFederativa.BA;
+        else if (jComboBox1.getSelectedItem() == "CE")
+            ufSacado = UnidadeFederativa.CE;
+        else if (jComboBox1.getSelectedItem() == "DF")
+            ufSacado = UnidadeFederativa.DF;
+        else if (jComboBox1.getSelectedItem() == "ES")
+            ufSacado = UnidadeFederativa.ES;
+        else if (jComboBox1.getSelectedItem() == "GO")
+            ufSacado = UnidadeFederativa.GO;
+        else if (jComboBox1.getSelectedItem() == "MA")
+            ufSacado = UnidadeFederativa.MA;
+        else if (jComboBox1.getSelectedItem() == "MT")
+            ufSacado = UnidadeFederativa.MT;
+        else if (jComboBox1.getSelectedItem() == "MS")
+            ufSacado = UnidadeFederativa.MS;
+        else if (jComboBox1.getSelectedItem() == "MG")
+            ufSacado = UnidadeFederativa.MG;
+        else if (jComboBox1.getSelectedItem() == "PA")
+            ufSacado = UnidadeFederativa.PA;
+        else if (jComboBox1.getSelectedItem() == "PR")
+            ufSacado = UnidadeFederativa.PR;
+        else if (jComboBox1.getSelectedItem() == "PE")
+            ufSacado = UnidadeFederativa.PE;
+        else if (jComboBox1.getSelectedItem() == "PI")
+            ufSacado = UnidadeFederativa.PI;
+        else if (jComboBox1.getSelectedItem() == "CE")
+            ufSacado = UnidadeFederativa.CE;
+        else if (jComboBox1.getSelectedItem() == "RJ")
+            ufSacado = UnidadeFederativa.RJ;
+        else if (jComboBox1.getSelectedItem() == "RN")
+            ufSacado = UnidadeFederativa.RN;
+        else if (jComboBox1.getSelectedItem() == "RS")
+            ufSacado = UnidadeFederativa.RS;
+        else if (jComboBox1.getSelectedItem() == "RO")
+            ufSacado = UnidadeFederativa.RO;
+        else if (jComboBox1.getSelectedItem() == "RR")
+            ufSacado = UnidadeFederativa.RR;
+        else if (jComboBox1.getSelectedItem() == "SC")
+            ufSacado = UnidadeFederativa.SC;
+        else if (jComboBox1.getSelectedItem() == "SP")
+            ufSacado = UnidadeFederativa.SP;
+        else if (jComboBox1.getSelectedItem() == "SE")
+            ufSacado = UnidadeFederativa.SE;
+        else if (jComboBox1.getSelectedItem() == "TO")
+            ufSacado = UnidadeFederativa.TO;
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        if (jComboBox2.getSelectedItem() == "AC")
+            ufSacadoAval = UnidadeFederativa.AC;
+        else if (jComboBox2.getSelectedItem() == "AL")
+            ufSacadoAval = UnidadeFederativa.AL;
+        else if (jComboBox2.getSelectedItem() == "AP")
+            ufSacadoAval = UnidadeFederativa.AP;
+        else if (jComboBox2.getSelectedItem() == "AM")
+            ufSacadoAval = UnidadeFederativa.AM;
+        else if (jComboBox2.getSelectedItem() == "BA")
+            ufSacadoAval = UnidadeFederativa.BA;
+        else if (jComboBox2.getSelectedItem() == "CE")
+            ufSacadoAval = UnidadeFederativa.CE;
+        else if (jComboBox2.getSelectedItem() == "DF")
+            ufSacadoAval = UnidadeFederativa.DF;
+        else if (jComboBox2.getSelectedItem() == "ES")
+            ufSacadoAval = UnidadeFederativa.ES;
+        else if (jComboBox2.getSelectedItem() == "GO")
+            ufSacadoAval = UnidadeFederativa.GO;
+        else if (jComboBox2.getSelectedItem() == "MA")
+            ufSacadoAval = UnidadeFederativa.MA;
+        else if (jComboBox2.getSelectedItem() == "MT")
+            ufSacadoAval = UnidadeFederativa.MT;
+        else if (jComboBox2.getSelectedItem() == "MS")
+            ufSacadoAval = UnidadeFederativa.MS;
+        else if (jComboBox2.getSelectedItem() == "MG")
+            ufSacadoAval = UnidadeFederativa.MG;
+        else if (jComboBox2.getSelectedItem() == "PA")
+            ufSacadoAval = UnidadeFederativa.PA;
+        else if (jComboBox2.getSelectedItem() == "PR")
+            ufSacadoAval = UnidadeFederativa.PR;
+        else if (jComboBox2.getSelectedItem() == "PE")
+            ufSacadoAval = UnidadeFederativa.PE;
+        else if (jComboBox2.getSelectedItem() == "PI")
+            ufSacadoAval = UnidadeFederativa.PI;
+        else if (jComboBox2.getSelectedItem() == "CE")
+            ufSacadoAval = UnidadeFederativa.CE;
+        else if (jComboBox2.getSelectedItem() == "RJ")
+            ufSacadoAval = UnidadeFederativa.RJ;
+        else if (jComboBox2.getSelectedItem() == "RN")
+            ufSacadoAval = UnidadeFederativa.RN;
+        else if (jComboBox2.getSelectedItem() == "RS")
+            ufSacadoAval = UnidadeFederativa.RS;
+        else if (jComboBox2.getSelectedItem() == "RO")
+            ufSacadoAval = UnidadeFederativa.RO;
+        else if (jComboBox2.getSelectedItem() == "RR")
+            ufSacadoAval = UnidadeFederativa.RR;
+        else if (jComboBox2.getSelectedItem() == "SC")
+            ufSacadoAval = UnidadeFederativa.SC;
+        else if (jComboBox2.getSelectedItem() == "SP")
+            ufSacadoAval = UnidadeFederativa.SP;
+        else if (jComboBox2.getSelectedItem() == "SE")
+            ufSacadoAval = UnidadeFederativa.SE;
+        else if (jComboBox2.getSelectedItem() == "TO")
+            ufSacadoAval = UnidadeFederativa.TO;
+    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     
     /**
