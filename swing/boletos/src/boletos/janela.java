@@ -1658,23 +1658,23 @@ public class janela extends javax.swing.JFrame {
         else  if (jComboBox4.getSelectedItem() == "Banco Bradesco")
                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
         
-        else  if (jComboBox2.getSelectedItem() == "Banco Itaú")
+        else  if (jComboBox4.getSelectedItem() == "Banco Itaú")
                  contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
-        else  if (jComboBox2.getSelectedItem() == "Banco ABN AMRO")
+        else  if (jComboBox4.getSelectedItem() == "Banco ABN AMRO")
                  contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
-        else  if (jComboBox2.getSelectedItem() == "Banco Mercantil do Brasil")
+        else  if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil")
                  contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
-        else  if (jComboBox2.getSelectedItem() == "HSBC")
+        else  if (jComboBox4.getSelectedItem() == "HSBC")
                   contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
-        else  if (jComboBox2.getSelectedItem() == "Unibanco")
+        else  if (jComboBox4.getSelectedItem() == "Unibanco")
                  contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
-        else  if (jComboBox2.getSelectedItem() == "Banco Safra")
+        else  if (jComboBox4.getSelectedItem() == "Banco Safra")
                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
-        else  if (jComboBox2.getSelectedItem() == "Banco Rural")
+        else  if (jComboBox4.getSelectedItem() == "Banco Rural")
                  contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
-        else  if (jComboBox2.getSelectedItem() == "Banco Sicredi")
+        else  if (jComboBox4.getSelectedItem() == "Banco Sicredi")
                  contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
-        else  if (jComboBox2.getSelectedItem() == "Bancoob")
+        else  if (jComboBox4.getSelectedItem() == "Bancoob")
                contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
