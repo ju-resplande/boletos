@@ -22,6 +22,7 @@ import org.jrimum.domkee.comum.pessoa.endereco.CEP;
 import org.jrimum.domkee.comum.pessoa.endereco.Endereco;
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa;
 import org.jrimum.domkee.financeiro.banco.febraban.Agencia;
+import org.jrimum.domkee.financeiro.banco.febraban.Banco;
 import org.jrimum.domkee.financeiro.banco.febraban.Carteira;
 import org.jrimum.domkee.financeiro.banco.febraban.Cedente;
 import org.jrimum.domkee.financeiro.banco.febraban.ContaBancaria;
@@ -46,13 +47,14 @@ public class janela extends javax.swing.JFrame {
            bairroSacado;
     String nomeSacadoAvalista,cpfSacadoAvalista,cepSacadoAvalista,
            numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
-    String banco,numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
+    String numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
     String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,aceite;          
     String valor,desconto,mora,acrescimo,valorCobrado;
     String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
            instrucao7,instrucao8;
     UnidadeFederativa ufSacado, ufSacadoAval;
     TipoDeTitulo tipoDocumento;
+    ContaBancaria contaBancaria;
     
     /**
      * Creates new form janela
@@ -145,11 +147,11 @@ public class janela extends javax.swing.JFrame {
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
-        jTextField19 = new javax.swing.JTextField();
         jTextField20 = new javax.swing.JTextField();
         jTextField21 = new javax.swing.JTextField();
         jTextField22 = new javax.swing.JTextField();
         jTextField23 = new javax.swing.JTextField();
+        jComboBox4 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -169,13 +171,13 @@ public class janela extends javax.swing.JFrame {
         jTextField26 = new javax.swing.JTextField();
         jTextField27 = new javax.swing.JTextField();
         jTextField28 = new javax.swing.JTextField();
-        jTextField30 = new javax.swing.JTextField();
         jTextField31 = new javax.swing.JTextField();
         jTextField32 = new javax.swing.JTextField();
         jTextField33 = new javax.swing.JTextField();
         jTextField34 = new javax.swing.JTextField();
         jTextField35 = new javax.swing.JTextField();
         jComboBox3 = new javax.swing.JComboBox<>();
+        jToggleButton1 = new javax.swing.JToggleButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
@@ -637,8 +639,6 @@ public class janela extends javax.swing.JFrame {
 
         jLabel35.setText("Número");
 
-        jTextField19.setText("jTextField19");
-
         jTextField20.setText("jTextField20");
 
         jTextField21.setText("jTextField21");
@@ -646,6 +646,13 @@ public class janela extends javax.swing.JFrame {
         jTextField22.setText("jTextField22");
 
         jTextField23.setText("jTextField23");
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Banco do Brasil", "Banco do Nordeste do Brasil", "Banco do Estado do Espírito Santo", "Banco Santander", "Banco do Estado do Rio Grande do Sul", "Banco Intermedium", "Caixa Econômica Federal", "Nossa Caixa", "Banco Bradesco", "Banco Itaú", "Banco ABN AMRO", "Mercantil do Brasil", "HSBC", "Unibanco", "Banco Safra", "Banco Rural", "Banco Sincredi", "BANCOOB" }));
+        jComboBox4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -664,10 +671,11 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel30))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField19)
                             .addComponent(jTextField20)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 104, Short.MAX_VALUE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
@@ -689,9 +697,9 @@ public class janela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel29)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel30)
-                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
@@ -710,7 +718,7 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel35)
                     .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Conta Bancária", jPanel4);
@@ -772,8 +780,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField30.setText("jTextField30");
-
         jTextField31.setText("jTextField31");
         jTextField31.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -816,6 +822,9 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jToggleButton1.setSelected(true);
+        jToggleButton1.setText("jToggleButton1");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -847,16 +856,13 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel44))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField30, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jTextField28)
-                                .addComponent(jTextField27)
-                                .addComponent(jTextField26))
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jTextField28)
+                        .addComponent(jTextField27)
+                        .addComponent(jTextField26))
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToggleButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel48)
@@ -923,12 +929,13 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jLabel47)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel44)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel44)
+                        .addComponent(jToggleButton1))
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel48))
-                    .addComponent(jTextField30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(78, Short.MAX_VALUE))
+                        .addComponent(jLabel48)))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Título", jPanel5);
@@ -1242,7 +1249,6 @@ public class janela extends javax.swing.JFrame {
              */
 
             // Informando dados sobre a conta bancária do título.
-            ContaBancaria contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
             contaBancaria.setNumeroDaConta(new NumeroDaConta(123456, "0"));
             contaBancaria.setCarteira(new Carteira(30));
             contaBancaria.setAgencia(new Agencia(1234, "1"));
@@ -1252,7 +1258,7 @@ public class janela extends javax.swing.JFrame {
             titulo.setNossoNumero(this.nossoNumero);
             titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
             titulo.setValor(new BigDecimal (Double.parseDouble(this.valor)));
-            titulo.setTipoDeDocumento(TipoDeTitulo.DM_DUPLICATA_MERCANTIL);
+            titulo.setTipoDeDocumento(this.tipoDocumento);
             titulo.setAceite(titulo.getAceite().A);
             titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
             titulo.setDeducao(BigDecimal.ZERO);
@@ -1566,71 +1572,111 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField45KeyReleased
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-         if (jComboBox2.getSelectedItem() == "Cheque")
+         if (jComboBox3.getSelectedItem() == "Cheque")
              tipoDocumento = TipoDeTitulo.CH_CHEQUE;
-         else if (jComboBox2.getSelectedItem() == "Duplicata Mercantil")
+         else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil")
             tipoDocumento = TipoDeTitulo.DM_DUPLICATA_MERCANTIL;
-         else if (jComboBox2.getSelectedItem() == "Duplicata Mercantil para Indicação")
+         else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação")
             tipoDocumento = TipoDeTitulo.DMI_DUPLICATA_MERCANTIL_PARA_INDICACAO;
-         else if (jComboBox2.getSelectedItem() == "Duplicata de Serviço")
+         else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço")
             tipoDocumento = TipoDeTitulo.DS_DUPLICATA_DE_SERVICO;
-         else if (jComboBox2.getSelectedItem() == "Duplicata de Serviço para Indicação")
+         else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação")
             tipoDocumento = TipoDeTitulo.DSI_DUPLICATA_DE_SERVICO_PARA_INDICACAO;
-         else if (jComboBox2.getSelectedItem() == "Duplicata Rural")
+         else if (jComboBox3.getSelectedItem() == "Duplicata Rural")
             tipoDocumento = TipoDeTitulo.DR_DUPLICATA_RURAL;
-         else if (jComboBox2.getSelectedItem() == "Letra de Câmbio")
+         else if (jComboBox3.getSelectedItem() == "Letra de Câmbio")
             tipoDocumento = TipoDeTitulo.LC_LETRA_DE_CAMBIO;
-         else if (jComboBox2.getSelectedItem() == "Nota de Crédito Comercial")
+         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial")
             tipoDocumento = TipoDeTitulo.NCC_NOTA_DE_CREDITO_COMERCIAL;
-         else if (jComboBox2.getSelectedItem() == "Nota de Crédito a Exportação")
+         else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação")
             tipoDocumento = TipoDeTitulo.NCE_NOTA_DE_CREDITO_A_EXPORTACAO;
-         else if (jComboBox2.getSelectedItem() == "Nota de Crédito Industrial")
+         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial")
             tipoDocumento = TipoDeTitulo.NCI_NOTA_DE_CREDITO_INDUSTRIAL;
-         else if (jComboBox2.getSelectedItem() == "Nota de Crédito Rural")
+         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural")
             tipoDocumento = TipoDeTitulo.NCR_NOTA_DE_CREDITO_RURAL;
-         else if (jComboBox2.getSelectedItem() == "Nota Promissoria")
+         else if (jComboBox3.getSelectedItem() == "Nota Promissoria")
             tipoDocumento = TipoDeTitulo.NP_NOTA_PROMISSORIA;
-         else if (jComboBox2.getSelectedItem() == "Nota Promissoria Rural")
+         else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural")
             tipoDocumento = TipoDeTitulo.NPR_NOTA_PROMISSORIA_RURAL;
          
-         else if (jComboBox2.getSelectedItem() == "Triplicata Mercantil")
+         else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil")
             tipoDocumento = TipoDeTitulo.TM_TRIPLICATA_MERCANTIL;
-         else if (jComboBox2.getSelectedItem() == "Triplicata de Serviço")
+         else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço")
             tipoDocumento = TipoDeTitulo.TS_TRIPLICATA_DE_SERVICO;
-         else if (jComboBox2.getSelectedItem() == "Nota de Seguro")
+         else if (jComboBox3.getSelectedItem() == "Nota de Seguro")
             tipoDocumento = TipoDeTitulo.NS_NOTA_DE_SEGURO;
-         else if (jComboBox2.getSelectedItem() == "Recibo")
+         else if (jComboBox3.getSelectedItem() == "Recibo")
             tipoDocumento = TipoDeTitulo.RC_RECIBO;
-         else if (jComboBox2.getSelectedItem() == "Fatura")
+         else if (jComboBox3.getSelectedItem() == "Fatura")
             tipoDocumento = TipoDeTitulo.FAT_FATURA;
-         else if (jComboBox2.getSelectedItem() == "Nota de Débito")
+         else if (jComboBox3.getSelectedItem() == "Nota de Débito")
             tipoDocumento = TipoDeTitulo.ND_NOTA_DE_DEBITO;
-         else if (jComboBox2.getSelectedItem() == "Apólice de Seguro")
+         else if (jComboBox3.getSelectedItem() == "Apólice de Seguro")
             tipoDocumento = TipoDeTitulo.AP_APOLICE_DE_SEGURO;
-         else if (jComboBox2.getSelectedItem() == "Mensalidade Escolar")
+         else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar")
             tipoDocumento = TipoDeTitulo.ME_MENSALIDADE_ESCOLAR;
-         else if (jComboBox2.getSelectedItem() == "Parcela de Consórcio")
+         else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio")
             tipoDocumento = TipoDeTitulo.PC_PARCELA_DE_CONSORCIO;
-         else if (jComboBox2.getSelectedItem() == "Nota Fiscal")
+         else if (jComboBox3.getSelectedItem() == "Nota Fiscal")
             tipoDocumento = TipoDeTitulo.NF_NOTA_FISCAL;
-         else if (jComboBox2.getSelectedItem() == "Documento de Dívida")
+         else if (jComboBox3.getSelectedItem() == "Documento de Dívida")
             tipoDocumento = TipoDeTitulo.DD_DOCUMENTO_DE_DIVIDA;
          
-         else if (jComboBox2.getSelectedItem() == "Célula de Produto Rural")
+         else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural")
             tipoDocumento = TipoDeTitulo.CEDULA_DE_PRODUTO_RURAL;
-         else if (jComboBox2.getSelectedItem() == "Warrant")
+         else if (jComboBox3.getSelectedItem() == "Warrant")
             tipoDocumento = TipoDeTitulo.WARRANT;
-         else if (jComboBox2.getSelectedItem() == "Dívida Ativa de Estado")
+         else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado")
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_ESTADO;
-         else if (jComboBox2.getSelectedItem() == "Divida Ativa de Município")
+         else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município")
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_MUNICIPIO;
-         else if (jComboBox2.getSelectedItem() == "Divida Ativa da União")
+         else if (jComboBox3.getSelectedItem() == "Divida Ativa da União")
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DA_UNIAO;
-         else if (jComboBox2.getSelectedItem() == "Cota Condominial")
+         else if (jComboBox3.getSelectedItem() == "Cota Condominial")
             tipoDocumento = TipoDeTitulo.COTA_CONDOMINIAL;
-         else if (jComboBox2.getSelectedItem() == "Outros")
+         else if (jComboBox3.getSelectedItem() == "Outros")
             tipoDocumento = TipoDeTitulo.OUTROS;      
     }//GEN-LAST:event_jComboBox3ActionPerformed
+
+    private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
+        if (jComboBox4.getSelectedItem() == "Banco do Brasil"){
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
+        }else  if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
+        else  if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
+        else  if (jComboBox4.getSelectedItem() == "Banco Santander")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
+        else  if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
+        else  if (jComboBox4.getSelectedItem() == "Banco Intermedium")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
+        else  if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal")
+                contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
+        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
+                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
+        else  if (jComboBox4.getSelectedItem() == "Banco Bradesco")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
+        
+        else  if (jComboBox2.getSelectedItem() == "Banco Itaú")
+                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
+        else  if (jComboBox2.getSelectedItem() == "Banco ABN AMRO")
+                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
+        else  if (jComboBox2.getSelectedItem() == "Banco Mercantil do Brasil")
+                 contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
+        else  if (jComboBox2.getSelectedItem() == "HSBC")
+                  contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
+        else  if (jComboBox2.getSelectedItem() == "Unibanco")
+                 contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
+        else  if (jComboBox2.getSelectedItem() == "Banco Safra")
+                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
+        else  if (jComboBox2.getSelectedItem() == "Banco Rural")
+                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
+        else  if (jComboBox2.getSelectedItem() == "Banco Sicredi")
+                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
+        else  if (jComboBox2.getSelectedItem() == "Bancoob")
+               contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+    }//GEN-LAST:event_jComboBox4ActionPerformed
 
     
     /**
@@ -1642,6 +1688,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1721,7 +1768,6 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField21;
@@ -1733,7 +1779,6 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField27;
     private javax.swing.JTextField jTextField28;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField30;
     private javax.swing.JTextField jTextField31;
     private javax.swing.JTextField jTextField32;
     private javax.swing.JTextField jTextField33;
@@ -1754,5 +1799,6 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
