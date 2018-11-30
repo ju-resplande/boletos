@@ -8,7 +8,11 @@ package boletos;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import org.jrimum.bopepo.BancosSuportados;
@@ -748,6 +752,11 @@ public class janela extends javax.swing.JFrame {
         });
 
         jTextField28.setText("jTextField28");
+        jTextField28.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField28KeyReleased(evt);
+            }
+        });
 
         jTextField29.setText("jTextField29");
 
@@ -1168,8 +1177,6 @@ public class janela extends javax.swing.JFrame {
             titulo.setNossoNumero(this.nossoNumero);
             titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
             titulo.setValor(new BigDecimal (Double.parseDouble(this.valor)));
-            titulo.setDataDoDocumento(new Date());
-            titulo.setDataDoVencimento(new Date());
             titulo.setTipoDeDocumento(TipoDeTitulo.DM_DUPLICATA_MERCANTIL);
             titulo.setAceite(titulo.getAceite().A);
             titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
@@ -1178,6 +1185,22 @@ public class janela extends javax.swing.JFrame {
             titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
             titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
 
+            
+            //formato de data
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            //entender essa exceção
+            try {
+                titulo.setDataDoDocumento(new Date(format.parse(this.dataDocumento).getTime()));
+            } catch (ParseException ex) {
+                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            try {
+                titulo.setDataDoVencimento(new Date(format.parse(this.dataVencimento).getTime()));
+            } catch (ParseException ex) {
+                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             /*
              * INFORMANDO OS DADOS SOBRE O BOLETO.
              */
@@ -1310,6 +1333,10 @@ public class janela extends javax.swing.JFrame {
     private void jTextField27KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField27KeyReleased
        dataDocumento = jTextField27.getText();
     }//GEN-LAST:event_jTextField27KeyReleased
+
+    private void jTextField28KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField28KeyReleased
+       dataVencimento = jTextField28.getText();
+    }//GEN-LAST:event_jTextField28KeyReleased
 
     
     /**
