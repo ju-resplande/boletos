@@ -47,11 +47,13 @@ public class janela extends javax.swing.JFrame {
     String nomeSacadoAvalista,cpfSacadoAvalista,cepSacadoAvalista,
            numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
     String banco,numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
-    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,tipoDocumento,aceite;          
+    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,aceite;          
     String valor,desconto,mora,acrescimo,valorCobrado;
     String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
            instrucao7,instrucao8;
     UnidadeFederativa ufSacado, ufSacadoAval;
+    TipoDeTitulo tipoDocumento;
+    
     /**
      * Creates new form janela
      */
@@ -167,13 +169,13 @@ public class janela extends javax.swing.JFrame {
         jTextField26 = new javax.swing.JTextField();
         jTextField27 = new javax.swing.JTextField();
         jTextField28 = new javax.swing.JTextField();
-        jTextField29 = new javax.swing.JTextField();
         jTextField30 = new javax.swing.JTextField();
         jTextField31 = new javax.swing.JTextField();
         jTextField32 = new javax.swing.JTextField();
         jTextField33 = new javax.swing.JTextField();
         jTextField34 = new javax.swing.JTextField();
         jTextField35 = new javax.swing.JTextField();
+        jComboBox3 = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
@@ -247,7 +249,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
@@ -356,29 +358,25 @@ public class janela extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
-                                    .addComponent(jTextField8)))
+                                .addGap(27, 27, 27)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel6)))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField3)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel14)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(15, 15, 15)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel8)
-                                            .addComponent(jLabel6)))
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -386,22 +384,20 @@ public class janela extends javax.swing.JFrame {
                                         .addComponent(jLabel9)
                                         .addGap(18, 18, 18)
                                         .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextField3)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGap(161, 161, 161)
-                                                    .addComponent(jLabel11))
-                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                            .addGap(0, 0, Short.MAX_VALUE)))))))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(222, 222, 222)
                         .addComponent(jLabel4)))
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -543,7 +539,7 @@ public class janela extends javax.swing.JFrame {
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
+                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
                                     .addGroup(jPanel7Layout.createSequentialGroup()
                                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel22)
@@ -672,7 +668,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jTextField20)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 91, Short.MAX_VALUE))))
+                                .addGap(0, 104, Short.MAX_VALUE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addComponent(jLabel33))
@@ -776,8 +772,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField29.setText("jTextField29");
-
         jTextField30.setText("jTextField30");
 
         jTextField31.setText("jTextField31");
@@ -815,6 +809,13 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Cheque", "Duplicata Mercantil", "Duplicata Mercantil para Indicação", "Duplicata de Serviço", "Duplicata de Serviço para Indicação", "Duplicata Rural", "Letra de Câmbio", "Nota de Crédito Comercial", "Nota de Crédito a Exportação", "Nota de Crédito Industrial", "Nota de Crédito Rural", "Nota Promissoria", "Nota Promissoria Rural", "Triplicata Mercantil", "Triplicata de Serviço", "Nota de Seguro", "Recibo", "Fatura", "Nota de Débito", "Apólice de Seguro", "Mensalidade Escolar", "Parcela de Consórcio", "Nota Fiscal", "Documento de Dívida", "Célula de Produto Rural", "Warrant", "Dívida Ativa de Estado", "Divida Ativa de Município", "Divida Ativa da União", "Cota Condominial", "Outros", " " }));
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -846,12 +847,15 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel44))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField28)
-                        .addComponent(jTextField27)
-                        .addComponent(jTextField26))
-                    .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField30))
+                    .addComponent(jTextField30, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField28)
+                                .addComponent(jTextField27)
+                                .addComponent(jTextField26))
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -913,7 +917,7 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel43)
-                        .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel47)))
@@ -1046,16 +1050,19 @@ public class janela extends javax.swing.JFrame {
                                 .addComponent(jLabel51)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
                                         .addComponent(jLabel52)
                                         .addGap(337, 337, 337))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField37))))
+                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                                .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(jTextField37)))))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jLabel50)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
-                                .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(20, 20, 20))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(220, 220, 220)
@@ -1135,7 +1142,7 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel60)
                     .addComponent(jTextField41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Boleto", jPanel6);
@@ -1558,6 +1565,73 @@ public class janela extends javax.swing.JFrame {
        instrucao8 = jTextField45.getText();
     }//GEN-LAST:event_jTextField45KeyReleased
 
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+         if (jComboBox2.getSelectedItem() == "Cheque")
+             tipoDocumento = TipoDeTitulo.CH_CHEQUE;
+         else if (jComboBox2.getSelectedItem() == "Duplicata Mercantil")
+            tipoDocumento = TipoDeTitulo.DM_DUPLICATA_MERCANTIL;
+         else if (jComboBox2.getSelectedItem() == "Duplicata Mercantil para Indicação")
+            tipoDocumento = TipoDeTitulo.DMI_DUPLICATA_MERCANTIL_PARA_INDICACAO;
+         else if (jComboBox2.getSelectedItem() == "Duplicata de Serviço")
+            tipoDocumento = TipoDeTitulo.DS_DUPLICATA_DE_SERVICO;
+         else if (jComboBox2.getSelectedItem() == "Duplicata de Serviço para Indicação")
+            tipoDocumento = TipoDeTitulo.DSI_DUPLICATA_DE_SERVICO_PARA_INDICACAO;
+         else if (jComboBox2.getSelectedItem() == "Duplicata Rural")
+            tipoDocumento = TipoDeTitulo.DR_DUPLICATA_RURAL;
+         else if (jComboBox2.getSelectedItem() == "Letra de Câmbio")
+            tipoDocumento = TipoDeTitulo.LC_LETRA_DE_CAMBIO;
+         else if (jComboBox2.getSelectedItem() == "Nota de Crédito Comercial")
+            tipoDocumento = TipoDeTitulo.NCC_NOTA_DE_CREDITO_COMERCIAL;
+         else if (jComboBox2.getSelectedItem() == "Nota de Crédito a Exportação")
+            tipoDocumento = TipoDeTitulo.NCE_NOTA_DE_CREDITO_A_EXPORTACAO;
+         else if (jComboBox2.getSelectedItem() == "Nota de Crédito Industrial")
+            tipoDocumento = TipoDeTitulo.NCI_NOTA_DE_CREDITO_INDUSTRIAL;
+         else if (jComboBox2.getSelectedItem() == "Nota de Crédito Rural")
+            tipoDocumento = TipoDeTitulo.NCR_NOTA_DE_CREDITO_RURAL;
+         else if (jComboBox2.getSelectedItem() == "Nota Promissoria")
+            tipoDocumento = TipoDeTitulo.NP_NOTA_PROMISSORIA;
+         else if (jComboBox2.getSelectedItem() == "Nota Promissoria Rural")
+            tipoDocumento = TipoDeTitulo.NPR_NOTA_PROMISSORIA_RURAL;
+         
+         else if (jComboBox2.getSelectedItem() == "Triplicata Mercantil")
+            tipoDocumento = TipoDeTitulo.TM_TRIPLICATA_MERCANTIL;
+         else if (jComboBox2.getSelectedItem() == "Triplicata de Serviço")
+            tipoDocumento = TipoDeTitulo.TS_TRIPLICATA_DE_SERVICO;
+         else if (jComboBox2.getSelectedItem() == "Nota de Seguro")
+            tipoDocumento = TipoDeTitulo.NS_NOTA_DE_SEGURO;
+         else if (jComboBox2.getSelectedItem() == "Recibo")
+            tipoDocumento = TipoDeTitulo.RC_RECIBO;
+         else if (jComboBox2.getSelectedItem() == "Fatura")
+            tipoDocumento = TipoDeTitulo.FAT_FATURA;
+         else if (jComboBox2.getSelectedItem() == "Nota de Débito")
+            tipoDocumento = TipoDeTitulo.ND_NOTA_DE_DEBITO;
+         else if (jComboBox2.getSelectedItem() == "Apólice de Seguro")
+            tipoDocumento = TipoDeTitulo.AP_APOLICE_DE_SEGURO;
+         else if (jComboBox2.getSelectedItem() == "Mensalidade Escolar")
+            tipoDocumento = TipoDeTitulo.ME_MENSALIDADE_ESCOLAR;
+         else if (jComboBox2.getSelectedItem() == "Parcela de Consórcio")
+            tipoDocumento = TipoDeTitulo.PC_PARCELA_DE_CONSORCIO;
+         else if (jComboBox2.getSelectedItem() == "Nota Fiscal")
+            tipoDocumento = TipoDeTitulo.NF_NOTA_FISCAL;
+         else if (jComboBox2.getSelectedItem() == "Documento de Dívida")
+            tipoDocumento = TipoDeTitulo.DD_DOCUMENTO_DE_DIVIDA;
+         
+         else if (jComboBox2.getSelectedItem() == "Célula de Produto Rural")
+            tipoDocumento = TipoDeTitulo.CEDULA_DE_PRODUTO_RURAL;
+         else if (jComboBox2.getSelectedItem() == "Warrant")
+            tipoDocumento = TipoDeTitulo.WARRANT;
+         else if (jComboBox2.getSelectedItem() == "Dívida Ativa de Estado")
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_ESTADO;
+         else if (jComboBox2.getSelectedItem() == "Divida Ativa de Município")
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_MUNICIPIO;
+         else if (jComboBox2.getSelectedItem() == "Divida Ativa da União")
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DA_UNIAO;
+         else if (jComboBox2.getSelectedItem() == "Cota Condominial")
+            tipoDocumento = TipoDeTitulo.COTA_CONDOMINIAL;
+         else if (jComboBox2.getSelectedItem() == "Outros")
+            tipoDocumento = TipoDeTitulo.OUTROS;      
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -1567,6 +1641,7 @@ public class janela extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1657,7 +1732,6 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField26;
     private javax.swing.JTextField jTextField27;
     private javax.swing.JTextField jTextField28;
-    private javax.swing.JTextField jTextField29;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField30;
     private javax.swing.JTextField jTextField31;
