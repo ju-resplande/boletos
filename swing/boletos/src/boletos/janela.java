@@ -42,6 +42,7 @@ import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
  */
 public class janela extends javax.swing.JFrame {
     
+    Boolean AceiteStatus;
     String nomeCedente,cnpjCedente;
     String nomeSacado,cpfSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
            bairroSacado;
@@ -177,7 +178,7 @@ public class janela extends javax.swing.JFrame {
         jTextField34 = new javax.swing.JTextField();
         jTextField35 = new javax.swing.JTextField();
         jComboBox3 = new javax.swing.JComboBox<>();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        jComboBox5 = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
@@ -832,8 +833,12 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jToggleButton1.setSelected(true);
-        jToggleButton1.setText("jToggleButton1");
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "N" }));
+        jComboBox5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -871,7 +876,7 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jTextField27)
                         .addComponent(jTextField26))
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton1))
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
@@ -939,13 +944,12 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jLabel47)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel44)
-                        .addComponent(jToggleButton1))
+                    .addComponent(jLabel44)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel48)))
-                .addContainerGap(76, Short.MAX_VALUE))
+                        .addComponent(jLabel48))
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Título", jPanel5);
@@ -1279,7 +1283,11 @@ public class janela extends javax.swing.JFrame {
             titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
             titulo.setValor(new BigDecimal (Double.parseDouble(this.valor)));
             titulo.setTipoDeDocumento(this.tipoDocumento);
-            titulo.setAceite(titulo.getAceite().A);
+            
+            if(this.AceiteStatus == true)
+                titulo.setAceite(titulo.getAceite().A);
+            else if(this.AceiteStatus == false)
+                titulo.setAceite(titulo.getAceite().N);
             titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
             titulo.setDeducao(BigDecimal.ZERO);
             titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
@@ -1714,6 +1722,13 @@ public class janela extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField44ActionPerformed
 
+    private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
+if (jComboBox5.getSelectedItem() == "A")
+            this.AceiteStatus = true;
+        else if (jComboBox2.getSelectedItem() == "N")
+            this.AceiteStatus = false;
+    }//GEN-LAST:event_jComboBox5ActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -1725,6 +1740,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
+    private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1835,6 +1851,5 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
-    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
