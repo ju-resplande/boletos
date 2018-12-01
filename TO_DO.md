@@ -6,9 +6,9 @@
 
 # Finalizar básico
 - [ ] Criar variável dedução e criar lugar na janela e por para receber teclado
-- [ ] Alterar Conta Bancária, Título e Boleto para receber teclado
-- [X ] Usar variáveis locais em janela
-- [ ] Os campos aceitam tanto CPF como CNPJ = CRPF
+- [X] Alterar Conta Bancária, Título e Boleto para receber teclado
+- [X] Usar variáveis locais em janela
+- [X] Os campos aceitam tanto CPF como CNPJ = CRPF
 - [ ] Fechar e não dar mensagem de erro
 
 ## UF
@@ -28,9 +28,9 @@
 
 ## Bancos
 
-- [ ] Escolha de Bancos
-- [ ] Colocar ComboBox ou RadioButton para escolher os bancos
-- [ ] Arquivo bancos suportados possui as macros
+- [X] Escolha de Bancos
+- [X] Colocar ComboBox ou RadioButton para escolher os bancos
+- [X] Arquivo bancos suportados possui as macros
 - [ ] Inicialmente deixar nenhuma opção selecionada
 - [ ] Ver se o usuário escolheu ou não
 
@@ -59,8 +59,8 @@
 
 ## Melhorar:
 - [ ] Colocar exemplo no campo ainda não-inseridos
-- [ ] Melhorar Alinhamento
+- [X] Melhorar Alinhamento
 - [ ] Fazer um ítem "sobre" no menu
 - [x] O que fazer com o ítem file do menu?   
-- [ ] Configurar o menu file para receber arquivo
+- [X] Configurar o menu file para receber arquivo
 - [ ] Bloquear criação de boletos com data de vencimento antes da data de emissão (Fator Vencimento?) 
