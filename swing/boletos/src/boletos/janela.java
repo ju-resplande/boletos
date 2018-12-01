@@ -5,6 +5,17 @@
  */
 package boletos;
 
+import javax.swing.JFileChooser; 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+import java.util.Map;
+import java.util.HashMap;
+
+import java.io.FileWriter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -13,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.jrimum.bopepo.BancosSuportados;
@@ -42,6 +54,7 @@ import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
  */
 public class janela extends javax.swing.JFrame {
     
+    Map<String,String> buffer = new HashMap<String,String>() {};
     Boolean AceiteStatus;
     String nomeCedente,cnpjCedente;
     String nomeSacado,cpfSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
@@ -205,7 +218,7 @@ public class janela extends javax.swing.JFrame {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -282,6 +295,11 @@ public class janela extends javax.swing.JFrame {
         jLabel5.setText("Nome");
 
         jTextField3.setText("                                                                         ");
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField3KeyReleased(evt);
@@ -1180,8 +1198,14 @@ public class janela extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenu3.setText("jMenu3");
-        jMenu1.add(jMenu3);
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Salvar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
 
@@ -1729,6 +1753,88 @@ if (jComboBox5.getSelectedItem() == "A")
             this.AceiteStatus = false;
     }//GEN-LAST:event_jComboBox5ActionPerformed
 
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        buffer.put("jComboBox1", jComboBox1.getSelectedItem().toString());
+        buffer.put("jComboBox2", jComboBox2.getSelectedItem().toString());
+        buffer.put("jComboBox3", jComboBox3.getSelectedItem().toString());
+        buffer.put("jComboBox4", jComboBox4.getSelectedItem().toString());
+        buffer.put("jComboBox5", jComboBox5.getSelectedItem().toString());
+        buffer.put("jTextField1", jTextField1.getText());
+        buffer.put("jTextField2", jTextField2.getText());
+        buffer.put("jTextField3", jTextField3.getText());
+        buffer.put("jTextField4", jTextField4.getText());
+        buffer.put("jTextField6", jTextField6.getText());
+        buffer.put("jTextField7", jTextField7.getText());
+        buffer.put("jTextField8", jTextField8.getText());
+        buffer.put("jTextField9", jTextField9.getText());
+        buffer.put("jTextField10", jTextField10.getText());
+        buffer.put("jTextField11", jTextField11.getText());
+        buffer.put("jTextField12", jTextField12.getText());
+        buffer.put("jTextField14", jTextField14.getText());
+        buffer.put("jTextField15", jTextField15.getText());
+        buffer.put("jTextField16", jTextField16.getText());
+        buffer.put("jTextField17", jTextField17.getText());
+        buffer.put("jTextField18", jTextField18.getText());
+        buffer.put("jTextField20", jTextField20.getText());
+        buffer.put("jTextField21", jTextField21.getText());
+        buffer.put("jTextField22", jTextField22.getText());
+        buffer.put("jTextField23", jTextField23.getText());
+        buffer.put("jTextField24", jTextField24.getText());
+        buffer.put("jTextField25", jTextField25.getText());
+        buffer.put("jTextField26", jTextField26.getText());
+        buffer.put("jTextField27", jTextField27.getText());
+        buffer.put("jTextField28", jTextField28.getText());
+        buffer.put("jTextField31", jTextField31.getText());
+        buffer.put("jTextField32", jTextField32.getText());
+        buffer.put("jTextField33", jTextField33.getText());
+        buffer.put("jTextField34", jTextField34.getText());
+        buffer.put("jTextField35", jTextField35.getText());
+        buffer.put("jTextField36", jTextField36.getText());
+        buffer.put("jTextField37", jTextField37.getText());
+        buffer.put("jTextField38", jTextField38.getText());
+        buffer.put("jTextField39", jTextField39.getText());
+        buffer.put("jTextField40", jTextField40.getText());
+        buffer.put("jTextField41", jTextField41.getText());
+        buffer.put("jTextField42", jTextField42.getText());
+        buffer.put("jTextField43", jTextField43.getText());
+        buffer.put("jTextField44", jTextField44.getText());
+        buffer.put("jTextField45", jTextField45.getText());
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
+        Date date = new Date();
+        String default_filename = "boleto-" + formatter.format(date) + ".json";
+                
+        // map --> json
+        JSONObject export = new JSONObject();
+        for(Map.Entry<String, String> entry : buffer.entrySet())
+        {
+            export.put(entry.getKey(), entry.getValue());
+        }
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File(default_filename));
+        if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION ){
+               
+               File selected_file = fileChooser.getSelectedFile();
+               String absolute_path = selected_file.getAbsolutePath();
+               System.out.println(absolute_path);
+               try(FileWriter file = new FileWriter(absolute_path)){
+                    file.write(export.toJSONString());
+               }
+               catch(IOException e){
+                   e.printStackTrace();
+               }
+               
+               
+        }
+        
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -1799,9 +1905,9 @@ if (jComboBox5.getSelectedItem() == "A")
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
