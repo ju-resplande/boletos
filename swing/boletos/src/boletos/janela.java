@@ -65,7 +65,7 @@ public class janela extends javax.swing.JFrame {
             bairroSacado;
     String nomeSacadoAvalista, cpfSacadoAvalista, cepSacadoAvalista,
             numeroSacadoAvalista, logradouroSacadoAvalista, localidadeSacadoAvalista, bairroSacadoAvalista;
-    String numeroConta, tipoCarteira, nomeAgenciaBanco, numeroAgenciaBanco;
+    String numeroConta, tipoCarteira, digitoAgenciaBanco, numeroAgenciaBanco;
     String numeroDocumento, nossoNumero, digitoNossoNumero, dataDocumento, dataVencimento, aceite;
     String valor, desconto, mora, acrescimo, valorCobrado;
     String localPagamento, instrucaoSacado, instrucao1, instrucao2, instrucao3, instrucao4, instrucao5, instrucao6,
@@ -636,7 +636,7 @@ public class janela extends javax.swing.JFrame {
         jLabel33.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel33.setText("Agência");
 
-        jLabel34.setText("Nome");
+        jLabel34.setText("Dígito");
 
         jLabel35.setText("Número");
 
@@ -688,8 +688,8 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel35))
                         .addGap(86, 86, 86)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel31)
@@ -701,7 +701,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addContainerGap(391, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -724,12 +724,12 @@ public class janela extends javax.swing.JFrame {
                 .addComponent(jLabel33)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel34)
-                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel35)
                     .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34))
                 .addContainerGap(138, Short.MAX_VALUE))
         );
 
@@ -872,11 +872,10 @@ public class janela extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jTextField35, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField34, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                        .addComponent(jTextField33)
-                        .addComponent(jTextField31)
-                        .addComponent(jTextField32)))
+                    .addComponent(jTextField34, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(jTextField33, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField31, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField32, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(22, 22, 22))
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(347, 347, 347)
@@ -1250,7 +1249,7 @@ public class janela extends javax.swing.JFrame {
         // Informando dados sobre a conta bancária do título.
         contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(numeroConta),"0"));
         contaBancaria.setCarteira(new Carteira(Integer.parseInt(tipoCarteira)));
-        contaBancaria.setAgencia(new Agencia(Integer.parseInt(numeroAgenciaBanco), nomeAgenciaBanco));
+        contaBancaria.setAgencia(new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco));
 
         Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
         titulo.setNumeroDoDocumento(this.numeroDocumento);
@@ -2337,7 +2336,7 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField21KeyReleased
 
     private void jTextField22KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField22KeyReleased
-        nomeAgenciaBanco = jTextField22.getText();
+        digitoAgenciaBanco = jTextField22.getText();
     }//GEN-LAST:event_jTextField22KeyReleased
 
     private void jTextField23KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField23KeyReleased
