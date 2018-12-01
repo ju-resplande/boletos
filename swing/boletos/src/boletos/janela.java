@@ -1711,6 +1711,27 @@ public class janela extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jComboBox5ActionFromFile
 
+    public void jTextField20KeyFromFile() {//GEN-FIRST:event_jTextField20KeyFromFile
+        numeroConta = jTextField20.getText();
+    }//GEN-LAST:event_jTextField20KeyFromFile
+
+    public void jTextField21KeyFromFile() {//GEN-FIRST:event_jTextField21KeyFromFile
+        tipoCarteira = jTextField21.getText();
+    }//GEN-LAST:event_jTextField21KeyFromFile
+
+    public void jTextField22KeyFromFile() {//GEN-FIRST:event_jTextField22KeyFromFile
+        digitoAgenciaBanco = jTextField22.getText();
+    }//GEN-LAST:event_jTextField22KeyFromFile
+
+    public void jTextField23KeyFromFile() {//GEN-FIRST:event_jTextField23KeyFromFile
+        numeroAgenciaBanco = jTextField23.getText();
+    }//GEN-LAST:event_jTextField23KeyFromFile
+
+    public void jTextField20ActionFromFile() {//GEN-FIRST:event_jTextField20ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField20ActionFromFile
+
+
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         nomeCedente = jTextField1.getText();
@@ -2284,6 +2305,18 @@ public class janela extends javax.swing.JFrame {
                     } else if (key.equals("jTextField9")) {
                         jTextField9.setText(value);
                         jTextField9KeyFromFile();
+                    } else if (key.equals("jTextField20")){
+                        jTextField20.setText(value);
+                        jTextField20KeyFromFile();
+                    } else if (key.equals("jTextField21")){
+                        jTextField21.setText(value);
+                        jTextField21KeyFromFile();
+                    } else if (key.equals("jTextField22")){
+                        jTextField22.setText(value);
+                        jTextField22KeyFromFile();
+                    } else if (key.equals("jTextField23")){
+                        jTextField23.setText(value);
+                        jTextField23KeyFromFile();
                     } else if (key.equals("jComboBox1")) {
                         count = jComboBox1.getItemCount();
                         for (int i = 0; i < count; i++) {

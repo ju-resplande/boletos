@@ -5,11 +5,11 @@
 
 
 # Finalizar básico
-- [ ] Criar variável dedução e criar lugar na janela e por para receber teclado
-- [ ] Alterar Conta Bancária, Título e Boleto para receber teclado
+- [x] Criar variável dedução e criar lugar na janela e por para receber teclado
+- [x] Alterar Conta Bancária, Título e Boleto para receber teclado
 - [X ] Usar variáveis locais em janela
-- [ ] Os campos aceitam tanto CPF como CNPJ = CRPF
-- [ ] Fechar e não dar mensagem de erro
+- [x] Os campos aceitam tanto CPF como CNPJ = CRPF
+- [x] Fechar e não dar mensagem de erro
 
 ## UF
 
@@ -17,40 +17,40 @@
 - [x] Utilizar combobox no lugar de textfield para escolher ufs
 - [X] Imune a inserção de ufs inexistentes
 - [x] Inicialmente deixar selecionado em "Escolha estado"
-- [ ] Ver se o usuário escolheu ou não
+- [x] Ver se o usuário escolheu ou não
 
 ## Data
 
 - [X] Armazenar data
-~-[ ] Utilizar combobox para datas~
+~-[x] Utilizar combobox para datas~
 - [ ] Bloquear criação de boletos com datas que já passaram   
-- [ ] Tratar exceções de formatos de inválidas 
+- [x] Tratar exceções de formatos de inválidas 
 
 ## Bancos
 
-- [ ] Escolha de Bancos
-- [ ] Colocar ComboBox ou RadioButton para escolher os bancos
-- [ ] Arquivo bancos suportados possui as macros
+- [x] Escolha de Bancos
+- [x] Colocar ComboBox ou RadioButton para escolher os bancos
+- [x] Arquivo bancos suportados possui as macros
 - [ ] Inicialmente deixar nenhuma opção selecionada
 - [ ] Ver se o usuário escolheu ou não
 
 ## etc
 
-- [ ] Remover DialogMessage mostrando os campos inseridos
+- [x] Remover DialogMessage mostrando os campos inseridos
 
 # Erros
 
 ## Verificar Campos em branco:
-- [ ] Ver alguma String está como null
-- [ ] Como verificar se foi inserido valores das variáveis inteiras e doubles?
+- [x] Ver alguma String está como null
+- [x] Como verificar se foi inserido valores das variáveis inteiras e doubles?
 - [ ] Verificar se data foi inserida
 - [ ] Ver se o usuário escolheu algum uf ou banco
 
 ## Lidar com os Exceptions implantados pelo Jrimum:
-- [ ] CNPJException e CPFException em AbstractCPRf
-- [ ] IllegalArgumentException em AbstractCPRf
-- [ ] Colocar mensagem em caixa de texto (showInputDialog) modo erro OU colocar a mensagem na própria frame do lado e deixar o campo em vermelho
-- [ ] Código de Barras Exception
+- [x] CNPJException e CPFException em AbstractCPRf
+- [x] IllegalArgumentException em AbstractCPRf
+- [x] Colocar mensagem em caixa de texto (showInputDialog) modo erro OU colocar a mensagem na própria frame do lado e deixar o campo em vermelho
+- [x] Código de Barras Exception
 
 ## Inserção
 - [ ] As variáveis doubles só podem ser positivas? 
