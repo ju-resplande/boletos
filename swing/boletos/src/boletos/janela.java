@@ -5,7 +5,9 @@
  */
 package boletos;
 
-import javax.swing.JFileChooser; 
+import java.lang.reflect.*;
+
+import javax.swing.JFileChooser;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -48,58 +50,51 @@ import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo;
 import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
 import org.json.simple.parser.JSONParser;
 
-
-
-
-
 /**
  *
  * @author ruan
  */
 public class janela extends javax.swing.JFrame {
-    
-    Map<String,String> buffer = new HashMap<String,String>() {};
+
+    Map<String, String> buffer = new HashMap<String, String>() {
+    };
     Boolean AceiteStatus;
-    String nomeCedente,cnpjCedente;
-    String nomeSacado,cpfSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
-           bairroSacado;
-    String nomeSacadoAvalista,cpfSacadoAvalista,cepSacadoAvalista,
-           numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
-    String numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
-    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,aceite;          
-    String valor,desconto,mora,acrescimo,valorCobrado;
-    String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
-           instrucao7,instrucao8;
+    String nomeCedente, cnpjCedente;
+    String nomeSacado, cpfSacado, cepSacado, numeroSacado, logradouroSacado, localidadeSacado,
+            bairroSacado;
+    String nomeSacadoAvalista, cpfSacadoAvalista, cepSacadoAvalista,
+            numeroSacadoAvalista, logradouroSacadoAvalista, localidadeSacadoAvalista, bairroSacadoAvalista;
+    String numeroConta, tipoCarteira, nomeAgenciaBanco, numeroAgenciaBanco;
+    String numeroDocumento, nossoNumero, digitoNossoNumero, dataDocumento, dataVencimento, aceite;
+    String valor, desconto, mora, acrescimo, valorCobrado;
+    String localPagamento, instrucaoSacado, instrucao1, instrucao2, instrucao3, instrucao4, instrucao5, instrucao6,
+            instrucao7, instrucao8;
     UnidadeFederativa ufSacado, ufSacadoAval;
     TipoDeTitulo tipoDocumento;
     ContaBancaria contaBancaria;
-    
+
     /**
      * Creates new form janela
      */
     public janela() {
         initComponents();
     }
-    
-    
-            /**
-         * Exibe o arquivo na tela.
-         * 
-         * @param arquivoBoleto
-         */
-        private static void mostreBoletoNaTela(File arquivoBoleto) {
 
-                java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-                
-                try {
-                        desktop.open(arquivoBoleto);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
+    /**
+     * Exibe o arquivo na tela.
+     *
+     * @param arquivoBoleto
+     */
+    private static void mostreBoletoNaTela(File arquivoBoleto) {
+
+        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+
+        try {
+            desktop.open(arquivoBoleto);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    
-    
-
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1252,151 +1247,536 @@ public class janela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-            String string = new String();
-            string += "Cedente\n";
-            string += String.format("Nome: %s cpnj: %s", this.nomeCedente, this.cnpjCedente);
-            
-            string += "\nSacado\n";
-            string += String.format("Nome: %s cpnj: %s", this.nomeSacado, this.cpfSacado);
-          
-            string += "\nEndereço";
-            string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
-                    UnidadeFederativa.RN, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
-            string += "\nSacadorAvalista\n";
-            string += String.format("Nome: %s cpnj: %s", this.nomeSacadoAvalista, this.cpfSacadoAvalista);
-          
-            string += "\nEndereço";
-            string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
-                    UnidadeFederativa.RN, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
-            JOptionPane.showMessageDialog(null, string);
-            
-        
-        
-            Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
+        String string = new String();
+        string += "Cedente\n";
+        string += String.format("Nome: %s cpnj: %s", this.nomeCedente, this.cnpjCedente);
 
-            /*
+        string += "\nSacado\n";
+        string += String.format("Nome: %s cpnj: %s", this.nomeSacado, this.cpfSacado);
+
+        string += "\nEndereço";
+        string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s",
+                UnidadeFederativa.RN, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
+        string += "\nSacadorAvalista\n";
+        string += String.format("Nome: %s cpnj: %s", this.nomeSacadoAvalista, this.cpfSacadoAvalista);
+
+        string += "\nEndereço";
+        string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s",
+                UnidadeFederativa.RN, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
+        JOptionPane.showMessageDialog(null, string);
+
+        Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
+
+        /*
              * INFORMANDO DADOS SOBRE O SACADO.
-             */
-            Sacado sacado = new Sacado(this.nomeSacado, this.cpfSacado);
+         */
+        Sacado sacado = new Sacado(this.nomeSacado, this.cpfSacado);
 
-            // Informando o endereço do sacado.
-            Endereco enderecoSac = new Endereco();
-            enderecoSac.setUF(this.ufSacado);//janela.ufSacado
-            enderecoSac.setLocalidade(this.localidadeSacado);
-            enderecoSac.setCep(new CEP(this.cepSacado));
-            enderecoSac.setBairro(this.bairroSacado);
-            enderecoSac.setLogradouro(this.logradouroSacado);
-            enderecoSac.setNumero(this.numeroSacado);
-            sacado.addEndereco(enderecoSac);
+        // Informando o endereço do sacado.
+        Endereco enderecoSac = new Endereco();
+        enderecoSac.setUF(this.ufSacado);//janela.ufSacado
+        enderecoSac.setLocalidade(this.localidadeSacado);
+        enderecoSac.setCep(new CEP(this.cepSacado));
+        enderecoSac.setBairro(this.bairroSacado);
+        enderecoSac.setLogradouro(this.logradouroSacado);
+        enderecoSac.setNumero(this.numeroSacado);
+        sacado.addEndereco(enderecoSac);
 
-            /*
+        /*
              * INFORMANDO DADOS SOBRE O SACADOR AVALISTA.
-             */
-            SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.cpfSacadoAvalista);
+         */
+        SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.cpfSacadoAvalista);
 
-            // Informando o endereço do sacador avalista.
-            Endereco enderecoSacAval = new Endereco();
-            enderecoSacAval.setUF(this.ufSacadoAval);//janela.ufSacadoAvalista
-            enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
-            enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
-            enderecoSacAval.setBairro(this.bairroSacadoAvalista);
-            enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
-            enderecoSacAval.setNumero(this.numeroSacadoAvalista);
-            sacadorAvalista.addEndereco(enderecoSacAval);
+        // Informando o endereço do sacador avalista.
+        Endereco enderecoSacAval = new Endereco();
+        enderecoSacAval.setUF(this.ufSacadoAval);//janela.ufSacadoAvalista
+        enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
+        enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
+        enderecoSacAval.setBairro(this.bairroSacadoAvalista);
+        enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
+        enderecoSacAval.setNumero(this.numeroSacadoAvalista);
+        sacadorAvalista.addEndereco(enderecoSacAval);
 
-            /*
+        /*
              * INFORMANDO OS DADOS SOBRE O TÍTULO.
-             */
+         */
+        // Informando dados sobre a conta bancária do título.
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(123456, "0"));
+        contaBancaria.setCarteira(new Carteira(30));
+        contaBancaria.setAgencia(new Agencia(1234, "1"));
 
-            // Informando dados sobre a conta bancária do título.
-            contaBancaria.setNumeroDaConta(new NumeroDaConta(123456, "0"));
-            contaBancaria.setCarteira(new Carteira(30));
-            contaBancaria.setAgencia(new Agencia(1234, "1"));
+        Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+        titulo.setNumeroDoDocumento(this.numeroDocumento);
+        titulo.setNossoNumero(this.nossoNumero);
+        titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
+        titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
+        titulo.setTipoDeDocumento(this.tipoDocumento);
 
-            Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
-            titulo.setNumeroDoDocumento(this.numeroDocumento);
-            titulo.setNossoNumero(this.nossoNumero);
-            titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
-            titulo.setValor(new BigDecimal (Double.parseDouble(this.valor)));
-            titulo.setTipoDeDocumento(this.tipoDocumento);
-            
-            if(this.AceiteStatus == true)
-                titulo.setAceite(titulo.getAceite().A);
-            else if(this.AceiteStatus == false)
-                titulo.setAceite(titulo.getAceite().N);
-            titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
-            titulo.setDeducao(BigDecimal.ZERO);
-            titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
-            titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
-            titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
+        if (this.AceiteStatus == true) {
+            titulo.setAceite(titulo.getAceite().A);
+        } else if (this.AceiteStatus == false) {
+            titulo.setAceite(titulo.getAceite().N);
+        }
+        titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
+        titulo.setDeducao(BigDecimal.ZERO);
+        titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
+        titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
+        titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
 
-            
-            //formato de data
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            //entender essa exceção
-            try {
-                titulo.setDataDoDocumento(new Date(format.parse(this.dataDocumento).getTime()));
-            } catch (ParseException ex) {
-                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            try {
-                titulo.setDataDoVencimento(new Date(format.parse(this.dataVencimento).getTime()));
-            } catch (ParseException ex) {
-                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            /*
+        //formato de data
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        //entender essa exceção
+        try {
+            titulo.setDataDoDocumento(new Date(format.parse(this.dataDocumento).getTime()));
+        } catch (ParseException ex) {
+            Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            titulo.setDataDoVencimento(new Date(format.parse(this.dataVencimento).getTime()));
+        } catch (ParseException ex) {
+            Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        /*
              * INFORMANDO OS DADOS SOBRE O BOLETO.
-             */
-            Boleto boleto = new Boleto(titulo);
+         */
+        Boleto boleto = new Boleto(titulo);
 
-            boleto.setLocalPagamento(localPagamento);
-            boleto.setInstrucaoAoSacado(instrucaoSacado);
-            boleto.setInstrucao1(instrucao1);
-            boleto.setInstrucao2(instrucao2);
-            boleto.setInstrucao3(instrucao3);
-            boleto.setInstrucao4(instrucao4);
-            boleto.setInstrucao5(instrucao5);
-            boleto.setInstrucao6(instrucao6);
-            boleto.setInstrucao7(instrucao7);
-            boleto.setInstrucao8(instrucao8);
-            
-            /*
+        boleto.setLocalPagamento(localPagamento);
+        boleto.setInstrucaoAoSacado(instrucaoSacado);
+        boleto.setInstrucao1(instrucao1);
+        boleto.setInstrucao2(instrucao2);
+        boleto.setInstrucao3(instrucao3);
+        boleto.setInstrucao4(instrucao4);
+        boleto.setInstrucao5(instrucao5);
+        boleto.setInstrucao6(instrucao6);
+        boleto.setInstrucao7(instrucao7);
+        boleto.setInstrucao8(instrucao8);
+
+        /*
              * GERANDO O BOLETO BANCÁRIO.
-             */
-            // Instanciando um objeto "BoletoViewer", classe responsável pela
-            // geração do boleto bancário.
-            BoletoViewer boletoViewer = new BoletoViewer(boleto);
+         */
+        // Instanciando um objeto "BoletoViewer", classe responsável pela
+        // geração do boleto bancário.
+        BoletoViewer boletoViewer = new BoletoViewer(boleto);
 
-            // Gerando o arquivo. No caso o arquivo mencionado será salvo na mesma
-            // pasta do projeto. Outros exemplos:
-            // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
-            // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
-            File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
+        // Gerando o arquivo. No caso o arquivo mencionado será salvo na mesma
+        // pasta do projeto. Outros exemplos:
+        // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
+        // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
+        File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
 
-            // Mostrando o boleto gerado na tela.
-            mostreBoletoNaTela(arquivoPdf);
-            
-            
+        // Mostrando o boleto gerado na tela.
+        mostreBoletoNaTela(arquivoPdf);
+
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+
+    public void jTextField1KeyFromFile() {//GEN-FIRST:event_jTextField1KeyFromFile
+        nomeCedente = jTextField1.getText();
+    }//GEN-LAST:event_jTextField1KeyFromFile
+
+    public void jTextField2KeyFromFile() {//GEN-FIRST:event_jTextField2KeyFromFile
+        cnpjCedente = jTextField2.getText();
+    }//GEN-LAST:event_jTextField2KeyFromFile
+
+    public void jTextField3KeyFromFile() {//GEN-FIRST:event_jTextField3KeyFromFile
+        nomeSacado = jTextField3.getText();
+    }//GEN-LAST:event_jTextField3KeyFromFile
+
+    public void jTextField4KeyFromFile() {//GEN-FIRST:event_jTextField4KeyFromFile
+        cpfSacado = jTextField4.getText();
+    }//GEN-LAST:event_jTextField4KeyFromFile
+
+    public void jTextField6KeyFromFile() {//GEN-FIRST:event_jTextField6KeyFromFile
+        cepSacado = jTextField6.getText();
+    }//GEN-LAST:event_jTextField6KeyFromFile
+
+    public void jTextField7KeyFromFile() {//GEN-FIRST:event_jTextField7KeyFromFile
+        numeroSacado = jTextField7.getText();
+    }//GEN-LAST:event_jTextField7KeyFromFile
+
+    public void jTextField9KeyFromFile() {//GEN-FIRST:event_jTextField9KeyFromFile
+        localidadeSacado = jTextField9.getText();
+    }//GEN-LAST:event_jTextField9KeyFromFile
+
+    public void jTextField8KeyFromFile() {//GEN-FIRST:event_jTextField8KeyFromFile
+        logradouroSacado = jTextField8.getText();
+    }//GEN-LAST:event_jTextField8KeyFromFile
+
+    public void jTextField10KeyFromFile() {//GEN-FIRST:event_jTextField10KeyFromFile
+        bairroSacado = jTextField10.getText();
+    }//GEN-LAST:event_jTextField10KeyFromFile
+
+    public void jTextField11KeyFromFile() {//GEN-FIRST:event_jTextField11KeyFromFile
+        nomeSacadoAvalista = jTextField11.getText();
+    }//GEN-LAST:event_jTextField11KeyFromFile
+
+    public void jTextField12KeyFromFile() {//GEN-FIRST:event_jTextField12KeyFromFile
+        cpfSacadoAvalista = jTextField12.getText();
+    }//GEN-LAST:event_jTextField12KeyFromFile
+
+    public void jTextField14KeyFromFile() {//GEN-FIRST:event_jTextField14KeyFromFile
+        cepSacadoAvalista = jTextField14.getText();
+    }//GEN-LAST:event_jTextField14KeyFromFile
+
+    public void jTextField18KeyFromFile() {//GEN-FIRST:event_jTextField18KeyFromFile
+        bairroSacadoAvalista = jTextField18.getText();
+    }//GEN-LAST:event_jTextField18KeyFromFile
+
+    public void jTextField16KeyFromFile() {//GEN-FIRST:event_jTextField16KeyFromFile
+        logradouroSacadoAvalista = jTextField16.getText();
+    }//GEN-LAST:event_jTextField16KeyFromFile
+
+    public void jTextField17KeyFromFile() {//GEN-FIRST:event_jTextField17KeyFromFile
+        localidadeSacadoAvalista = jTextField17.getText();
+    }//GEN-LAST:event_jTextField17KeyFromFile
+
+    public void jTextField15KeyFromFile() {//GEN-FIRST:event_jTextField15KeyFromFile
+        numeroSacadoAvalista = jTextField15.getText();
+    }//GEN-LAST:event_jTextField15KeyFromFile
+
+    public void jTextField24KeyFromFile() {//GEN-FIRST:event_jTextField24KeyFromFile
+        numeroDocumento = jTextField24.getText();
+    }//GEN-LAST:event_jTextField24KeyFromFile
+
+    public void jTextField25KeyFromFile() {//GEN-FIRST:event_jTextField25KeyFromFile
+        nossoNumero = jTextField25.getText();
+    }//GEN-LAST:event_jTextField25KeyFromFile
+
+    public void jTextField31KeyFromFile() {//GEN-FIRST:event_jTextField31KeyFromFile
+        valor = jTextField31.getText();
+    }//GEN-LAST:event_jTextField31KeyFromFile
+
+    public void jTextField32KeyFromFile() {//GEN-FIRST:event_jTextField32KeyFromFile
+        desconto = jTextField32.getText();
+    }//GEN-LAST:event_jTextField32KeyFromFile
+
+    public void jTextField33KeyFromFile() {//GEN-FIRST:event_jTextField33KeyFromFile
+        mora = jTextField33.getText();
+    }//GEN-LAST:event_jTextField33KeyFromFile
+
+    public void jTextField34KeyFromFile() {//GEN-FIRST:event_jTextField34KeyFromFile
+        acrescimo = jTextField34.getText();
+    }//GEN-LAST:event_jTextField34KeyFromFile
+
+    public void jTextField35KeyFromFile() {//GEN-FIRST:event_jTextField35KeyFromFile
+        valorCobrado = jTextField35.getText();
+    }//GEN-LAST:event_jTextField35KeyFromFile
+
+    public void jTextField27KeyFromFile() {//GEN-FIRST:event_jTextField27KeyFromFile
+        dataDocumento = jTextField27.getText();
+    }//GEN-LAST:event_jTextField27KeyFromFile
+
+    public void jTextField28KeyFromFile() {//GEN-FIRST:event_jTextField28KeyFromFile
+        dataVencimento = jTextField28.getText();
+    }//GEN-LAST:event_jTextField28KeyFromFile
+
+    public void jComboBox1FromFile() {                                           
+        if (jComboBox1.getSelectedItem() == "AC") {
+            ufSacado = UnidadeFederativa.AC;
+        } else if (jComboBox1.getSelectedItem() == "AL") {
+            ufSacado = UnidadeFederativa.AL;
+        } else if (jComboBox1.getSelectedItem() == "AP") {
+            ufSacado = UnidadeFederativa.AP;
+        } else if (jComboBox1.getSelectedItem() == "AM") {
+            ufSacado = UnidadeFederativa.AM;
+        } else if (jComboBox1.getSelectedItem() == "BA") {
+            ufSacado = UnidadeFederativa.BA;
+        } else if (jComboBox1.getSelectedItem() == "CE") {
+            ufSacado = UnidadeFederativa.CE;
+        } else if (jComboBox1.getSelectedItem() == "DF") {
+            ufSacado = UnidadeFederativa.DF;
+        } else if (jComboBox1.getSelectedItem() == "ES") {
+            ufSacado = UnidadeFederativa.ES;
+        } else if (jComboBox1.getSelectedItem() == "GO") {
+            ufSacado = UnidadeFederativa.GO;
+        } else if (jComboBox1.getSelectedItem() == "MA") {
+            ufSacado = UnidadeFederativa.MA;
+        } else if (jComboBox1.getSelectedItem() == "MT") {
+            ufSacado = UnidadeFederativa.MT;
+        } else if (jComboBox1.getSelectedItem() == "MS") {
+            ufSacado = UnidadeFederativa.MS;
+        } else if (jComboBox1.getSelectedItem() == "MG") {
+            ufSacado = UnidadeFederativa.MG;
+        } else if (jComboBox1.getSelectedItem() == "PA") {
+            ufSacado = UnidadeFederativa.PA;
+        } else if (jComboBox1.getSelectedItem() == "PR") {
+            ufSacado = UnidadeFederativa.PR;
+        } else if (jComboBox1.getSelectedItem() == "PE") {
+            ufSacado = UnidadeFederativa.PE;
+        } else if (jComboBox1.getSelectedItem() == "PI") {
+            ufSacado = UnidadeFederativa.PI;
+        } else if (jComboBox1.getSelectedItem() == "CE") {
+            ufSacado = UnidadeFederativa.CE;
+        } else if (jComboBox1.getSelectedItem() == "RJ") {
+            ufSacado = UnidadeFederativa.RJ;
+        } else if (jComboBox1.getSelectedItem() == "RN") {
+            ufSacado = UnidadeFederativa.RN;
+        } else if (jComboBox1.getSelectedItem() == "RS") {
+            ufSacado = UnidadeFederativa.RS;
+        } else if (jComboBox1.getSelectedItem() == "RO") {
+            ufSacado = UnidadeFederativa.RO;
+        } else if (jComboBox1.getSelectedItem() == "RR") {
+            ufSacado = UnidadeFederativa.RR;
+        } else if (jComboBox1.getSelectedItem() == "SC") {
+            ufSacado = UnidadeFederativa.SC;
+        } else if (jComboBox1.getSelectedItem() == "SP") {
+            ufSacado = UnidadeFederativa.SP;
+        } else if (jComboBox1.getSelectedItem() == "SE") {
+            ufSacado = UnidadeFederativa.SE;
+        } else if (jComboBox1.getSelectedItem() == "TO") {
+            ufSacado = UnidadeFederativa.TO;
+        }
+    }                                          
+
+    public void jComboBox2FromFile() {                                           
+        if (jComboBox2.getSelectedItem() == "AC") {
+            ufSacadoAval = UnidadeFederativa.AC;
+        } else if (jComboBox2.getSelectedItem() == "AL") {
+            ufSacadoAval = UnidadeFederativa.AL;
+        } else if (jComboBox2.getSelectedItem() == "AP") {
+            ufSacadoAval = UnidadeFederativa.AP;
+        } else if (jComboBox2.getSelectedItem() == "AM") {
+            ufSacadoAval = UnidadeFederativa.AM;
+        } else if (jComboBox2.getSelectedItem() == "BA") {
+            ufSacadoAval = UnidadeFederativa.BA;
+        } else if (jComboBox2.getSelectedItem() == "CE") {
+            ufSacadoAval = UnidadeFederativa.CE;
+        } else if (jComboBox2.getSelectedItem() == "DF") {
+            ufSacadoAval = UnidadeFederativa.DF;
+        } else if (jComboBox2.getSelectedItem() == "ES") {
+            ufSacadoAval = UnidadeFederativa.ES;
+        } else if (jComboBox2.getSelectedItem() == "GO") {
+            ufSacadoAval = UnidadeFederativa.GO;
+        } else if (jComboBox2.getSelectedItem() == "MA") {
+            ufSacadoAval = UnidadeFederativa.MA;
+        } else if (jComboBox2.getSelectedItem() == "MT") {
+            ufSacadoAval = UnidadeFederativa.MT;
+        } else if (jComboBox2.getSelectedItem() == "MS") {
+            ufSacadoAval = UnidadeFederativa.MS;
+        } else if (jComboBox2.getSelectedItem() == "MG") {
+            ufSacadoAval = UnidadeFederativa.MG;
+        } else if (jComboBox2.getSelectedItem() == "PA") {
+            ufSacadoAval = UnidadeFederativa.PA;
+        } else if (jComboBox2.getSelectedItem() == "PR") {
+            ufSacadoAval = UnidadeFederativa.PR;
+        } else if (jComboBox2.getSelectedItem() == "PE") {
+            ufSacadoAval = UnidadeFederativa.PE;
+        } else if (jComboBox2.getSelectedItem() == "PI") {
+            ufSacadoAval = UnidadeFederativa.PI;
+        } else if (jComboBox2.getSelectedItem() == "CE") {
+            ufSacadoAval = UnidadeFederativa.CE;
+        } else if (jComboBox2.getSelectedItem() == "RJ") {
+            ufSacadoAval = UnidadeFederativa.RJ;
+        } else if (jComboBox2.getSelectedItem() == "RN") {
+            ufSacadoAval = UnidadeFederativa.RN;
+        } else if (jComboBox2.getSelectedItem() == "RS") {
+            ufSacadoAval = UnidadeFederativa.RS;
+        } else if (jComboBox2.getSelectedItem() == "RO") {
+            ufSacadoAval = UnidadeFederativa.RO;
+        } else if (jComboBox2.getSelectedItem() == "RR") {
+            ufSacadoAval = UnidadeFederativa.RR;
+        } else if (jComboBox2.getSelectedItem() == "SC") {
+            ufSacadoAval = UnidadeFederativa.SC;
+        } else if (jComboBox2.getSelectedItem() == "SP") {
+            ufSacadoAval = UnidadeFederativa.SP;
+        } else if (jComboBox2.getSelectedItem() == "SE") {
+            ufSacadoAval = UnidadeFederativa.SE;
+        } else if (jComboBox2.getSelectedItem() == "TO") {
+            ufSacadoAval = UnidadeFederativa.TO;
+        }
+    }                                          
+
+    public void jTextField36KeyFromFile() {//GEN-FIRST:event_jTextField36KeyFromFile
+        localPagamento = jTextField36.getText();
+    }//GEN-LAST:event_jTextField36KeyFromFile
+
+    public void jTextField37KeyFromFile() {//GEN-FIRST:event_jTextField37KeyFromFile
+        instrucaoSacado = jTextField37.getText();
+    }//GEN-LAST:event_jTextField37KeyFromFile
+
+    public void jTextField38KeyFromFile() {//GEN-FIRST:event_jTextField38KeyFromFile
+        instrucao1 = jTextField38.getText();
+    }//GEN-LAST:event_jTextField38KeyFromFile
+
+    public void jTextField39KeyFromFile() {//GEN-FIRST:event_jTextField39KeyFromFile
+        instrucao2 = jTextField39.getText();
+    }//GEN-LAST:event_jTextField39KeyFromFile
+
+    public void jTextField40KeyFromFile() {//GEN-FIRST:event_jTextField40KeyFromFile
+        instrucao3 = jTextField40.getText();
+    }//GEN-LAST:event_jTextField40KeyFromFile
+
+    public void jTextField41KeyFromFile() {//GEN-FIRST:event_jTextField41KeyFromFile
+        instrucao4 = jTextField41.getText();
+    }//GEN-LAST:event_jTextField41KeyFromFile
+
+    public void jTextField42KeyFromFile() {//GEN-FIRST:event_jTextField42KeyFromFile
+        instrucao5 = jTextField42.getText();
+    }//GEN-LAST:event_jTextField42KeyFromFile
+
+    public void jTextField43KeyFromFile() {//GEN-FIRST:event_jTextField43KeyFromFile
+        instrucao6 = jTextField43.getText();
+    }//GEN-LAST:event_jTextField43KeyFromFile
+
+    public void jTextField44KeyFromFile() {//GEN-FIRST:event_jTextField44KeyFromFile
+        instrucao7 = jTextField44.getText();
+    }//GEN-LAST:event_jTextField44KeyFromFile
+
+    public void jTextField45KeyFromFile() {//GEN-FIRST:event_jTextField45KeyFromFile
+        instrucao8 = jTextField45.getText();
+    }//GEN-LAST:event_jTextField45KeyFromFile
+
+    public void jComboBox3ActionFromFile() {                                           
+        if (jComboBox3.getSelectedItem() == "Cheque") {
+            tipoDocumento = TipoDeTitulo.CH_CHEQUE;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil") {
+            tipoDocumento = TipoDeTitulo.DM_DUPLICATA_MERCANTIL;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação") {
+            tipoDocumento = TipoDeTitulo.DMI_DUPLICATA_MERCANTIL_PARA_INDICACAO;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço") {
+            tipoDocumento = TipoDeTitulo.DS_DUPLICATA_DE_SERVICO;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação") {
+            tipoDocumento = TipoDeTitulo.DSI_DUPLICATA_DE_SERVICO_PARA_INDICACAO;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Rural") {
+            tipoDocumento = TipoDeTitulo.DR_DUPLICATA_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Letra de Câmbio") {
+            tipoDocumento = TipoDeTitulo.LC_LETRA_DE_CAMBIO;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial") {
+            tipoDocumento = TipoDeTitulo.NCC_NOTA_DE_CREDITO_COMERCIAL;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação") {
+            tipoDocumento = TipoDeTitulo.NCE_NOTA_DE_CREDITO_A_EXPORTACAO;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial") {
+            tipoDocumento = TipoDeTitulo.NCI_NOTA_DE_CREDITO_INDUSTRIAL;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural") {
+            tipoDocumento = TipoDeTitulo.NCR_NOTA_DE_CREDITO_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria") {
+            tipoDocumento = TipoDeTitulo.NP_NOTA_PROMISSORIA;
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural") {
+            tipoDocumento = TipoDeTitulo.NPR_NOTA_PROMISSORIA_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil") {
+            tipoDocumento = TipoDeTitulo.TM_TRIPLICATA_MERCANTIL;
+        } else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço") {
+            tipoDocumento = TipoDeTitulo.TS_TRIPLICATA_DE_SERVICO;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Seguro") {
+            tipoDocumento = TipoDeTitulo.NS_NOTA_DE_SEGURO;
+        } else if (jComboBox3.getSelectedItem() == "Recibo") {
+            tipoDocumento = TipoDeTitulo.RC_RECIBO;
+        } else if (jComboBox3.getSelectedItem() == "Fatura") {
+            tipoDocumento = TipoDeTitulo.FAT_FATURA;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Débito") {
+            tipoDocumento = TipoDeTitulo.ND_NOTA_DE_DEBITO;
+        } else if (jComboBox3.getSelectedItem() == "Apólice de Seguro") {
+            tipoDocumento = TipoDeTitulo.AP_APOLICE_DE_SEGURO;
+        } else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar") {
+            tipoDocumento = TipoDeTitulo.ME_MENSALIDADE_ESCOLAR;
+        } else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio") {
+            tipoDocumento = TipoDeTitulo.PC_PARCELA_DE_CONSORCIO;
+        } else if (jComboBox3.getSelectedItem() == "Nota Fiscal") {
+            tipoDocumento = TipoDeTitulo.NF_NOTA_FISCAL;
+        } else if (jComboBox3.getSelectedItem() == "Documento de Dívida") {
+            tipoDocumento = TipoDeTitulo.DD_DOCUMENTO_DE_DIVIDA;
+        } else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural") {
+            tipoDocumento = TipoDeTitulo.CEDULA_DE_PRODUTO_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Warrant") {
+            tipoDocumento = TipoDeTitulo.WARRANT;
+        } else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado") {
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_ESTADO;
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município") {
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_MUNICIPIO;
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa da União") {
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DA_UNIAO;
+        } else if (jComboBox3.getSelectedItem() == "Cota Condominial") {
+            tipoDocumento = TipoDeTitulo.COTA_CONDOMINIAL;
+        } else if (jComboBox3.getSelectedItem() == "Outros") {
+            tipoDocumento = TipoDeTitulo.OUTROS;
+        }
+    }                                          
+
+    public void jComboBox4ActionFromFile() {                                           
+        if (jComboBox4.getSelectedItem() == "Banco do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Santander") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Intermedium") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
+        } else if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal") {
+            contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
+        } //        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
+        //                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
+        else if (jComboBox4.getSelectedItem() == "Banco Bradesco") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Itaú") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco ABN AMRO") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "HSBC") {
+            contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
+        } else if (jComboBox4.getSelectedItem() == "Unibanco") {
+            contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Safra") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Rural") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Sicredi") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
+        } else if (jComboBox4.getSelectedItem() == "Bancoob") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+        }
+    }                                          
+
+    public void jTextField4ActionFromFile() {//GEN-FIRST:event_jTextField4ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionFromFile
+
+    public void jTextField28ActionFromFile() {//GEN-FIRST:event_jTextField28ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField28ActionFromFile
+
+    public void jTextField41ActionFromFile() {//GEN-FIRST:event_jTextField41ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField41ActionFromFile
+
+    public void jTextField44ActionFromFile() {//GEN-FIRST:event_jTextField44ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField44ActionFromFile
+
+    public void jComboBox5ActionFromFile() {//GEN-FIRST:event_jComboBox5ActionFromFile
+        if (jComboBox5.getSelectedItem() == "A") {
+            this.AceiteStatus = true;
+        } else if (jComboBox5.getSelectedItem() == "N") {
+            this.AceiteStatus = false;
+        }
+    }//GEN-LAST:event_jComboBox5ActionFromFile
+
+
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-       nomeCedente = jTextField1.getText();
+        nomeCedente = jTextField1.getText();
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
-       cnpjCedente = jTextField2.getText(); 
+        cnpjCedente = jTextField2.getText();
     }//GEN-LAST:event_jTextField2KeyReleased
 
     private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
-       nomeSacado = jTextField3.getText();
+        nomeSacado = jTextField3.getText();
     }//GEN-LAST:event_jTextField3KeyReleased
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-         cpfSacado = jTextField4.getText();
+        cpfSacado = jTextField4.getText();
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
@@ -1404,11 +1784,11 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField6KeyReleased
 
     private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
-       numeroSacado = jTextField7.getText();
+        numeroSacado = jTextField7.getText();
     }//GEN-LAST:event_jTextField7KeyReleased
 
     private void jTextField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField9KeyReleased
-         localidadeSacado = jTextField9.getText();
+        localidadeSacado = jTextField9.getText();
     }//GEN-LAST:event_jTextField9KeyReleased
 
     private void jTextField8KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyReleased
@@ -1432,7 +1812,7 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField14KeyReleased
 
     private void jTextField18KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField18KeyReleased
-         bairroSacadoAvalista = jTextField18.getText();
+        bairroSacadoAvalista = jTextField18.getText();
     }//GEN-LAST:event_jTextField18KeyReleased
 
     private void jTextField16KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField16KeyReleased
@@ -1448,19 +1828,19 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField15KeyReleased
 
     private void jTextField24KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField24KeyReleased
-         numeroDocumento = jTextField24.getText();
+        numeroDocumento = jTextField24.getText();
     }//GEN-LAST:event_jTextField24KeyReleased
 
     private void jTextField25KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField25KeyReleased
-         nossoNumero = jTextField25.getText();
+        nossoNumero = jTextField25.getText();
     }//GEN-LAST:event_jTextField25KeyReleased
 
     private void jTextField31KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField31KeyReleased
-         valor = jTextField31.getText();
+        valor = jTextField31.getText();
     }//GEN-LAST:event_jTextField31KeyReleased
 
     private void jTextField32KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField32KeyReleased
-         desconto = jTextField32.getText();
+        desconto = jTextField32.getText();
     }//GEN-LAST:event_jTextField32KeyReleased
 
     private void jTextField33KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField33KeyReleased
@@ -1476,133 +1856,135 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField35KeyReleased
 
     private void jTextField27KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField27KeyReleased
-       dataDocumento = jTextField27.getText();
+        dataDocumento = jTextField27.getText();
     }//GEN-LAST:event_jTextField27KeyReleased
 
     private void jTextField28KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField28KeyReleased
-       dataVencimento = jTextField28.getText();
+        dataVencimento = jTextField28.getText();
     }//GEN-LAST:event_jTextField28KeyReleased
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem() == "AC")
+        if (jComboBox1.getSelectedItem() == "AC") {
             ufSacado = UnidadeFederativa.AC;
-        else if (jComboBox1.getSelectedItem() == "AL")
+        } else if (jComboBox1.getSelectedItem() == "AL") {
             ufSacado = UnidadeFederativa.AL;
-        else if (jComboBox1.getSelectedItem() == "AP")
+        } else if (jComboBox1.getSelectedItem() == "AP") {
             ufSacado = UnidadeFederativa.AP;
-        else if (jComboBox1.getSelectedItem() == "AM")
+        } else if (jComboBox1.getSelectedItem() == "AM") {
             ufSacado = UnidadeFederativa.AM;
-        else if (jComboBox1.getSelectedItem() == "BA")
+        } else if (jComboBox1.getSelectedItem() == "BA") {
             ufSacado = UnidadeFederativa.BA;
-        else if (jComboBox1.getSelectedItem() == "CE")
+        } else if (jComboBox1.getSelectedItem() == "CE") {
             ufSacado = UnidadeFederativa.CE;
-        else if (jComboBox1.getSelectedItem() == "DF")
+        } else if (jComboBox1.getSelectedItem() == "DF") {
             ufSacado = UnidadeFederativa.DF;
-        else if (jComboBox1.getSelectedItem() == "ES")
+        } else if (jComboBox1.getSelectedItem() == "ES") {
             ufSacado = UnidadeFederativa.ES;
-        else if (jComboBox1.getSelectedItem() == "GO")
+        } else if (jComboBox1.getSelectedItem() == "GO") {
             ufSacado = UnidadeFederativa.GO;
-        else if (jComboBox1.getSelectedItem() == "MA")
+        } else if (jComboBox1.getSelectedItem() == "MA") {
             ufSacado = UnidadeFederativa.MA;
-        else if (jComboBox1.getSelectedItem() == "MT")
+        } else if (jComboBox1.getSelectedItem() == "MT") {
             ufSacado = UnidadeFederativa.MT;
-        else if (jComboBox1.getSelectedItem() == "MS")
+        } else if (jComboBox1.getSelectedItem() == "MS") {
             ufSacado = UnidadeFederativa.MS;
-        else if (jComboBox1.getSelectedItem() == "MG")
+        } else if (jComboBox1.getSelectedItem() == "MG") {
             ufSacado = UnidadeFederativa.MG;
-        else if (jComboBox1.getSelectedItem() == "PA")
+        } else if (jComboBox1.getSelectedItem() == "PA") {
             ufSacado = UnidadeFederativa.PA;
-        else if (jComboBox1.getSelectedItem() == "PR")
+        } else if (jComboBox1.getSelectedItem() == "PR") {
             ufSacado = UnidadeFederativa.PR;
-        else if (jComboBox1.getSelectedItem() == "PE")
+        } else if (jComboBox1.getSelectedItem() == "PE") {
             ufSacado = UnidadeFederativa.PE;
-        else if (jComboBox1.getSelectedItem() == "PI")
+        } else if (jComboBox1.getSelectedItem() == "PI") {
             ufSacado = UnidadeFederativa.PI;
-        else if (jComboBox1.getSelectedItem() == "CE")
+        } else if (jComboBox1.getSelectedItem() == "CE") {
             ufSacado = UnidadeFederativa.CE;
-        else if (jComboBox1.getSelectedItem() == "RJ")
+        } else if (jComboBox1.getSelectedItem() == "RJ") {
             ufSacado = UnidadeFederativa.RJ;
-        else if (jComboBox1.getSelectedItem() == "RN")
+        } else if (jComboBox1.getSelectedItem() == "RN") {
             ufSacado = UnidadeFederativa.RN;
-        else if (jComboBox1.getSelectedItem() == "RS")
+        } else if (jComboBox1.getSelectedItem() == "RS") {
             ufSacado = UnidadeFederativa.RS;
-        else if (jComboBox1.getSelectedItem() == "RO")
+        } else if (jComboBox1.getSelectedItem() == "RO") {
             ufSacado = UnidadeFederativa.RO;
-        else if (jComboBox1.getSelectedItem() == "RR")
+        } else if (jComboBox1.getSelectedItem() == "RR") {
             ufSacado = UnidadeFederativa.RR;
-        else if (jComboBox1.getSelectedItem() == "SC")
+        } else if (jComboBox1.getSelectedItem() == "SC") {
             ufSacado = UnidadeFederativa.SC;
-        else if (jComboBox1.getSelectedItem() == "SP")
+        } else if (jComboBox1.getSelectedItem() == "SP") {
             ufSacado = UnidadeFederativa.SP;
-        else if (jComboBox1.getSelectedItem() == "SE")
+        } else if (jComboBox1.getSelectedItem() == "SE") {
             ufSacado = UnidadeFederativa.SE;
-        else if (jComboBox1.getSelectedItem() == "TO")
+        } else if (jComboBox1.getSelectedItem() == "TO") {
             ufSacado = UnidadeFederativa.TO;
+        }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        if (jComboBox2.getSelectedItem() == "AC")
+        if (jComboBox2.getSelectedItem() == "AC") {
             ufSacadoAval = UnidadeFederativa.AC;
-        else if (jComboBox2.getSelectedItem() == "AL")
+        } else if (jComboBox2.getSelectedItem() == "AL") {
             ufSacadoAval = UnidadeFederativa.AL;
-        else if (jComboBox2.getSelectedItem() == "AP")
+        } else if (jComboBox2.getSelectedItem() == "AP") {
             ufSacadoAval = UnidadeFederativa.AP;
-        else if (jComboBox2.getSelectedItem() == "AM")
+        } else if (jComboBox2.getSelectedItem() == "AM") {
             ufSacadoAval = UnidadeFederativa.AM;
-        else if (jComboBox2.getSelectedItem() == "BA")
+        } else if (jComboBox2.getSelectedItem() == "BA") {
             ufSacadoAval = UnidadeFederativa.BA;
-        else if (jComboBox2.getSelectedItem() == "CE")
+        } else if (jComboBox2.getSelectedItem() == "CE") {
             ufSacadoAval = UnidadeFederativa.CE;
-        else if (jComboBox2.getSelectedItem() == "DF")
+        } else if (jComboBox2.getSelectedItem() == "DF") {
             ufSacadoAval = UnidadeFederativa.DF;
-        else if (jComboBox2.getSelectedItem() == "ES")
+        } else if (jComboBox2.getSelectedItem() == "ES") {
             ufSacadoAval = UnidadeFederativa.ES;
-        else if (jComboBox2.getSelectedItem() == "GO")
+        } else if (jComboBox2.getSelectedItem() == "GO") {
             ufSacadoAval = UnidadeFederativa.GO;
-        else if (jComboBox2.getSelectedItem() == "MA")
+        } else if (jComboBox2.getSelectedItem() == "MA") {
             ufSacadoAval = UnidadeFederativa.MA;
-        else if (jComboBox2.getSelectedItem() == "MT")
+        } else if (jComboBox2.getSelectedItem() == "MT") {
             ufSacadoAval = UnidadeFederativa.MT;
-        else if (jComboBox2.getSelectedItem() == "MS")
+        } else if (jComboBox2.getSelectedItem() == "MS") {
             ufSacadoAval = UnidadeFederativa.MS;
-        else if (jComboBox2.getSelectedItem() == "MG")
+        } else if (jComboBox2.getSelectedItem() == "MG") {
             ufSacadoAval = UnidadeFederativa.MG;
-        else if (jComboBox2.getSelectedItem() == "PA")
+        } else if (jComboBox2.getSelectedItem() == "PA") {
             ufSacadoAval = UnidadeFederativa.PA;
-        else if (jComboBox2.getSelectedItem() == "PR")
+        } else if (jComboBox2.getSelectedItem() == "PR") {
             ufSacadoAval = UnidadeFederativa.PR;
-        else if (jComboBox2.getSelectedItem() == "PE")
+        } else if (jComboBox2.getSelectedItem() == "PE") {
             ufSacadoAval = UnidadeFederativa.PE;
-        else if (jComboBox2.getSelectedItem() == "PI")
+        } else if (jComboBox2.getSelectedItem() == "PI") {
             ufSacadoAval = UnidadeFederativa.PI;
-        else if (jComboBox2.getSelectedItem() == "CE")
+        } else if (jComboBox2.getSelectedItem() == "CE") {
             ufSacadoAval = UnidadeFederativa.CE;
-        else if (jComboBox2.getSelectedItem() == "RJ")
+        } else if (jComboBox2.getSelectedItem() == "RJ") {
             ufSacadoAval = UnidadeFederativa.RJ;
-        else if (jComboBox2.getSelectedItem() == "RN")
+        } else if (jComboBox2.getSelectedItem() == "RN") {
             ufSacadoAval = UnidadeFederativa.RN;
-        else if (jComboBox2.getSelectedItem() == "RS")
+        } else if (jComboBox2.getSelectedItem() == "RS") {
             ufSacadoAval = UnidadeFederativa.RS;
-        else if (jComboBox2.getSelectedItem() == "RO")
+        } else if (jComboBox2.getSelectedItem() == "RO") {
             ufSacadoAval = UnidadeFederativa.RO;
-        else if (jComboBox2.getSelectedItem() == "RR")
+        } else if (jComboBox2.getSelectedItem() == "RR") {
             ufSacadoAval = UnidadeFederativa.RR;
-        else if (jComboBox2.getSelectedItem() == "SC")
+        } else if (jComboBox2.getSelectedItem() == "SC") {
             ufSacadoAval = UnidadeFederativa.SC;
-        else if (jComboBox2.getSelectedItem() == "SP")
+        } else if (jComboBox2.getSelectedItem() == "SP") {
             ufSacadoAval = UnidadeFederativa.SP;
-        else if (jComboBox2.getSelectedItem() == "SE")
+        } else if (jComboBox2.getSelectedItem() == "SE") {
             ufSacadoAval = UnidadeFederativa.SE;
-        else if (jComboBox2.getSelectedItem() == "TO")
+        } else if (jComboBox2.getSelectedItem() == "TO") {
             ufSacadoAval = UnidadeFederativa.TO;
+        }
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jTextField36KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField36KeyReleased
-       localPagamento = jTextField36.getText();
+        localPagamento = jTextField36.getText();
     }//GEN-LAST:event_jTextField36KeyReleased
 
     private void jTextField37KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField37KeyReleased
-       instrucaoSacado = jTextField37.getText();
+        instrucaoSacado = jTextField37.getText();
     }//GEN-LAST:event_jTextField37KeyReleased
 
     private void jTextField38KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField38KeyReleased
@@ -1610,15 +1992,15 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField38KeyReleased
 
     private void jTextField39KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField39KeyReleased
-       instrucao2 = jTextField39.getText();
+        instrucao2 = jTextField39.getText();
     }//GEN-LAST:event_jTextField39KeyReleased
 
     private void jTextField40KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField40KeyReleased
-       instrucao3 = jTextField40.getText();
+        instrucao3 = jTextField40.getText();
     }//GEN-LAST:event_jTextField40KeyReleased
 
     private void jTextField41KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField41KeyReleased
-       instrucao4 = jTextField41.getText();
+        instrucao4 = jTextField41.getText();
     }//GEN-LAST:event_jTextField41KeyReleased
 
     private void jTextField42KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField42KeyReleased
@@ -1634,114 +2016,113 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField44KeyReleased
 
     private void jTextField45KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField45KeyReleased
-       instrucao8 = jTextField45.getText();
+        instrucao8 = jTextField45.getText();
     }//GEN-LAST:event_jTextField45KeyReleased
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-         if (jComboBox3.getSelectedItem() == "Cheque")
-             tipoDocumento = TipoDeTitulo.CH_CHEQUE;
-         else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil")
+        if (jComboBox3.getSelectedItem() == "Cheque") {
+            tipoDocumento = TipoDeTitulo.CH_CHEQUE;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil") {
             tipoDocumento = TipoDeTitulo.DM_DUPLICATA_MERCANTIL;
-         else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação") {
             tipoDocumento = TipoDeTitulo.DMI_DUPLICATA_MERCANTIL_PARA_INDICACAO;
-         else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço") {
             tipoDocumento = TipoDeTitulo.DS_DUPLICATA_DE_SERVICO;
-         else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação") {
             tipoDocumento = TipoDeTitulo.DSI_DUPLICATA_DE_SERVICO_PARA_INDICACAO;
-         else if (jComboBox3.getSelectedItem() == "Duplicata Rural")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Rural") {
             tipoDocumento = TipoDeTitulo.DR_DUPLICATA_RURAL;
-         else if (jComboBox3.getSelectedItem() == "Letra de Câmbio")
+        } else if (jComboBox3.getSelectedItem() == "Letra de Câmbio") {
             tipoDocumento = TipoDeTitulo.LC_LETRA_DE_CAMBIO;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial") {
             tipoDocumento = TipoDeTitulo.NCC_NOTA_DE_CREDITO_COMERCIAL;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação") {
             tipoDocumento = TipoDeTitulo.NCE_NOTA_DE_CREDITO_A_EXPORTACAO;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial") {
             tipoDocumento = TipoDeTitulo.NCI_NOTA_DE_CREDITO_INDUSTRIAL;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural") {
             tipoDocumento = TipoDeTitulo.NCR_NOTA_DE_CREDITO_RURAL;
-         else if (jComboBox3.getSelectedItem() == "Nota Promissoria")
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria") {
             tipoDocumento = TipoDeTitulo.NP_NOTA_PROMISSORIA;
-         else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural")
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural") {
             tipoDocumento = TipoDeTitulo.NPR_NOTA_PROMISSORIA_RURAL;
-         
-         else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil")
+        } else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil") {
             tipoDocumento = TipoDeTitulo.TM_TRIPLICATA_MERCANTIL;
-         else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço")
+        } else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço") {
             tipoDocumento = TipoDeTitulo.TS_TRIPLICATA_DE_SERVICO;
-         else if (jComboBox3.getSelectedItem() == "Nota de Seguro")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Seguro") {
             tipoDocumento = TipoDeTitulo.NS_NOTA_DE_SEGURO;
-         else if (jComboBox3.getSelectedItem() == "Recibo")
+        } else if (jComboBox3.getSelectedItem() == "Recibo") {
             tipoDocumento = TipoDeTitulo.RC_RECIBO;
-         else if (jComboBox3.getSelectedItem() == "Fatura")
+        } else if (jComboBox3.getSelectedItem() == "Fatura") {
             tipoDocumento = TipoDeTitulo.FAT_FATURA;
-         else if (jComboBox3.getSelectedItem() == "Nota de Débito")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Débito") {
             tipoDocumento = TipoDeTitulo.ND_NOTA_DE_DEBITO;
-         else if (jComboBox3.getSelectedItem() == "Apólice de Seguro")
+        } else if (jComboBox3.getSelectedItem() == "Apólice de Seguro") {
             tipoDocumento = TipoDeTitulo.AP_APOLICE_DE_SEGURO;
-         else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar")
+        } else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar") {
             tipoDocumento = TipoDeTitulo.ME_MENSALIDADE_ESCOLAR;
-         else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio")
+        } else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio") {
             tipoDocumento = TipoDeTitulo.PC_PARCELA_DE_CONSORCIO;
-         else if (jComboBox3.getSelectedItem() == "Nota Fiscal")
+        } else if (jComboBox3.getSelectedItem() == "Nota Fiscal") {
             tipoDocumento = TipoDeTitulo.NF_NOTA_FISCAL;
-         else if (jComboBox3.getSelectedItem() == "Documento de Dívida")
+        } else if (jComboBox3.getSelectedItem() == "Documento de Dívida") {
             tipoDocumento = TipoDeTitulo.DD_DOCUMENTO_DE_DIVIDA;
-         
-         else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural")
+        } else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural") {
             tipoDocumento = TipoDeTitulo.CEDULA_DE_PRODUTO_RURAL;
-         else if (jComboBox3.getSelectedItem() == "Warrant")
+        } else if (jComboBox3.getSelectedItem() == "Warrant") {
             tipoDocumento = TipoDeTitulo.WARRANT;
-         else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado")
+        } else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado") {
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_ESTADO;
-         else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município")
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município") {
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_MUNICIPIO;
-         else if (jComboBox3.getSelectedItem() == "Divida Ativa da União")
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa da União") {
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DA_UNIAO;
-         else if (jComboBox3.getSelectedItem() == "Cota Condominial")
+        } else if (jComboBox3.getSelectedItem() == "Cota Condominial") {
             tipoDocumento = TipoDeTitulo.COTA_CONDOMINIAL;
-         else if (jComboBox3.getSelectedItem() == "Outros")
-            tipoDocumento = TipoDeTitulo.OUTROS;      
+        } else if (jComboBox3.getSelectedItem() == "Outros") {
+            tipoDocumento = TipoDeTitulo.OUTROS;
+        }
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
-        if (jComboBox4.getSelectedItem() == "Banco do Brasil"){
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
-        }else  if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Santander")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Intermedium")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
-        else  if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal")
-                contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
-//        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
-//                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Bradesco")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
-        
-        else  if (jComboBox4.getSelectedItem() == "Banco Itaú")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco ABN AMRO")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil")
-                 contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
-        else  if (jComboBox4.getSelectedItem() == "HSBC")
-                  contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
-        else  if (jComboBox4.getSelectedItem() == "Unibanco")
-                 contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Safra")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Rural")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Sicredi")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
-        else  if (jComboBox4.getSelectedItem() == "Bancoob")
-               contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+        if (jComboBox4.getSelectedItem() == "Banco do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Santander") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Intermedium") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
+        } else if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal") {
+            contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
+        } //        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
+        //                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
+        else if (jComboBox4.getSelectedItem() == "Banco Bradesco") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Itaú") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco ABN AMRO") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "HSBC") {
+            contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
+        } else if (jComboBox4.getSelectedItem() == "Unibanco") {
+            contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Safra") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Rural") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Sicredi") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
+        } else if (jComboBox4.getSelectedItem() == "Bancoob") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+        }
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
@@ -1761,10 +2142,11 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField44ActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
-if (jComboBox5.getSelectedItem() == "A")
+        if (jComboBox5.getSelectedItem() == "A") {
             this.AceiteStatus = true;
-        else if (jComboBox2.getSelectedItem() == "N")
+        } else if (jComboBox5.getSelectedItem() == "N") {
             this.AceiteStatus = false;
+        }
     }//GEN-LAST:event_jComboBox5ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -1818,55 +2200,201 @@ if (jComboBox5.getSelectedItem() == "A")
         buffer.put("jTextField43", jTextField43.getText());
         buffer.put("jTextField44", jTextField44.getText());
         buffer.put("jTextField45", jTextField45.getText());
-        
+
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
         Date date = new Date();
         String default_filename = "boleto-" + formatter.format(date) + ".json";
-                
+
         // map --> json
         JSONObject export = new JSONObject();
-        for(Map.Entry<String, String> entry : buffer.entrySet())
-        {
+        for (Map.Entry<String, String> entry : buffer.entrySet()) {
             export.put(entry.getKey(), entry.getValue());
         }
-        
+
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File(default_filename));
-        if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION ){
-               
-               File selected_file = fileChooser.getSelectedFile();
-               String absolute_path = selected_file.getAbsolutePath();
-               System.out.println(absolute_path);
-               try(FileWriter file = new FileWriter(absolute_path)){
-                    file.write(export.toJSONString());
-               }
-               catch(IOException e){
-                   e.printStackTrace();
-               }
-               
-               
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+            File selected_file = fileChooser.getSelectedFile();
+            String absolute_path = selected_file.getAbsolutePath();
+            System.out.println(absolute_path);
+            try (FileWriter file = new FileWriter(absolute_path)) {
+                file.write(export.toJSONString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
-        
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         JFileChooser chooser = new JFileChooser();
-        chooser.setFileFilter(new FileNameExtensionFilter("json file","json"));
-        if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+        chooser.setFileFilter(new FileNameExtensionFilter("json file", "json"));
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File selected_file = chooser.getSelectedFile();
             String absolute_path = selected_file.getAbsolutePath();
-            
+
             JSONParser jsonParser = new JSONParser();
-            try(FileReader reader = new FileReader(absolute_path) ){
+            try (FileReader reader = new FileReader(absolute_path)) {
                 Object obj = jsonParser.parse(reader);
                 JSONObject jsonObject = (JSONObject) obj;
-                for(Iterator iterator = jsonObject.keySet().iterator(); iterator.hasNext(); ){
+                for (Iterator iterator = jsonObject.keySet().iterator(); iterator.hasNext();) {
                     String key = (String) iterator.next();
                     String value = (String) jsonObject.get(key);
-                    System.out.println(key + " " + value);
+
+                    if (key.equals("jTextField1")) {
+
+                        jTextField1.setText(value);
+                        jTextField1KeyFromFile();
+                    } else if (key.equals("jTextField10")) {
+                        jTextField10.setText(value);
+                        jTextField10KeyFromFile();
+                    } else if (key.equals("jTextField11")) {
+                        jTextField11.setText(value);
+                        jTextField11KeyFromFile();
+                    } else if (key.equals("jTextField12")) {
+                        jTextField12.setText(value);
+                        jTextField12KeyFromFile();
+                    } else if (key.equals("jTextField14")) {
+                        jTextField14.setText(value);
+                        jTextField14KeyFromFile();
+                    } else if (key.equals("jTextField15")) {
+                        jTextField15.setText(value);
+                        jTextField15KeyFromFile();
+                    } else if (key.equals("jTextField16")) {
+                        jTextField16.setText(value);
+                        jTextField16KeyFromFile();
+                    } else if (key.equals("jTextField17")) {
+                        jTextField17.setText(value);
+                        jTextField17KeyFromFile();
+                    } else if (key.equals("jTextField18")) {
+                        jTextField18.setText(value);
+                        jTextField18KeyFromFile();
+                    } else if (key.equals("jTextField2")) {
+                        jTextField2.setText(value);
+                        jTextField2KeyFromFile();
+                    } else if (key.equals("jTextField24")) {
+                        jTextField24.setText(value);
+                        jTextField24KeyFromFile();
+                    } else if (key.equals("jTextField25")) {
+                        jTextField25.setText(value);
+                        jTextField25KeyFromFile();
+                    } else if (key.equals("jTextField27")) {
+                        jTextField27.setText(value);
+                        jTextField27KeyFromFile();
+                    } else if (key.equals("jTextField28")) {
+                        jTextField28.setText(value);
+                        jTextField28KeyFromFile();
+                    } else if (key.equals("jTextField3")) {
+                        jTextField3.setText(value);
+                        jTextField3KeyFromFile();
+                    } else if (key.equals("jTextField31")) {
+                        jTextField31.setText(value);
+                        jTextField31KeyFromFile();
+                    } else if (key.equals("jTextField32")) {
+                        jTextField32.setText(value);
+                        jTextField32KeyFromFile();
+                    } else if (key.equals("jTextField33")) {
+                        jTextField33.setText(value);
+                        jTextField33KeyFromFile();
+                    } else if (key.equals("jTextField34")) {
+                        jTextField34.setText(value);
+                        jTextField34KeyFromFile();
+                    } else if (key.equals("jTextField35")) {
+                        jTextField35.setText(value);
+                        jTextField35KeyFromFile();
+                    } else if (key.equals("jTextField36")) {
+                        jTextField36.setText(value);
+                        jTextField36KeyFromFile();
+                    } else if (key.equals("jTextField37")) {
+                        jTextField37.setText(value);
+                        jTextField37KeyFromFile();
+                    } else if (key.equals("jTextField38")) {
+                        jTextField38.setText(value);
+                        jTextField38KeyFromFile();
+                    } else if (key.equals("jTextField39")) {
+                        jTextField39.setText(value);
+                        jTextField39KeyFromFile();
+                    } else if (key.equals("jTextField4")) {
+                        jTextField4.setText(value);
+                        jTextField4KeyFromFile();
+                    } else if (key.equals("jTextField40")) {
+                        jTextField40.setText(value);
+                        jTextField40KeyFromFile();
+                    } else if (key.equals("jTextField41")) {
+                        jTextField41.setText(value);
+                        jTextField41KeyFromFile();
+                    } else if (key.equals("jTextField42")) {
+                        jTextField42.setText(value);
+                        jTextField42KeyFromFile();
+                    } else if (key.equals("jTextField43")) {
+                        jTextField43.setText(value);
+                        jTextField43KeyFromFile();
+                    } else if (key.equals("jTextField44")) {
+                        jTextField44.setText(value);
+                        jTextField44KeyFromFile();
+                    } else if (key.equals("jTextField45")) {
+                        jTextField45.setText(value);
+                        jTextField45KeyFromFile();
+                    } else if (key.equals("jTextField6")) {
+                        jTextField6.setText(value);
+                        jTextField6KeyFromFile();
+                    } else if (key.equals("jTextField7")) {
+                        jTextField7.setText(value);
+                        jTextField7KeyFromFile();
+                    } else if (key.equals("jTextField8")) {
+                        jTextField8.setText(value);
+                        jTextField8KeyFromFile();
+                    } else if (key.equals("jTextField9")) {
+                        jTextField9.setText(value);
+                        jTextField9KeyFromFile();
+                    }
+
+                    int count;
+
+                    count = jComboBox1.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        if (jComboBox1.getItemAt(i).toString().contains(value)) {
+                            jComboBox1.setSelectedIndex(i);
+                            jComboBox1FromFile();
+                        }
+                    }
+
+                    count = jComboBox2.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        if (jComboBox2.getItemAt(i).toString().contains(value)) {
+                            jComboBox2.setSelectedIndex(i);
+                            jComboBox2FromFile();
+                        }
+                    }
+
+                    count = jComboBox3.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        if (jComboBox3.getItemAt(i).toString().contains(value)) {
+                            jComboBox3.setSelectedIndex(i);
+                            jComboBox3ActionFromFile();
+                        }
+                    }
+
+                    count = jComboBox4.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        if (jComboBox4.getItemAt(i).toString().contains(value)) {
+                            jComboBox4.setSelectedIndex(i);
+                            jComboBox4ActionFromFile();
+                        }
+                    }
+
+                    count = jComboBox5.getItemCount();
+                    for (int i = 0; i < count; i++) {
+                        if (jComboBox5.getItemAt(i).toString().contains(value)) {
+                            jComboBox5.setSelectedIndex(i);
+                            jComboBox5ActionFromFile();
+                        }
+                    }
+
                 }
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             } catch (org.json.simple.parser.ParseException ex) {
                 Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
@@ -1875,11 +2403,9 @@ if (jComboBox5.getSelectedItem() == "A")
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboBox1;
