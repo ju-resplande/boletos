@@ -217,7 +217,7 @@ public class janela extends javax.swing.JFrame {
 
         jLabel2.setText("Nome");
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText("                                             ");
         jTextField1.setToolTipText("Nome do Cedente");
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -227,7 +227,7 @@ public class janela extends javax.swing.JFrame {
 
         jLabel3.setText("CPF/CNPJ");
 
-        jTextField2.setText("jTextField2");
+        jTextField2.setText("                           ");
         jTextField2.setToolTipText("CNPJ do Cedente");
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -280,7 +280,7 @@ public class janela extends javax.swing.JFrame {
 
         jLabel5.setText("Nome");
 
-        jTextField3.setText("jTextField3");
+        jTextField3.setText("                                                                         ");
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField3KeyReleased(evt);
@@ -289,7 +289,12 @@ public class janela extends javax.swing.JFrame {
 
         jLabel6.setText("CPF ou CNPJ");
 
-        jTextField4.setText("jTextField4");
+        jTextField4.setText("                                        ");
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField4KeyReleased(evt);
@@ -311,35 +316,35 @@ public class janela extends javax.swing.JFrame {
 
         jLabel14.setText("Número");
 
-        jTextField6.setText("jTextField6");
+        jTextField6.setText("                                               ");
         jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField6KeyReleased(evt);
             }
         });
 
-        jTextField7.setText("jTextField7");
+        jTextField7.setText("              ");
         jTextField7.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField7KeyReleased(evt);
             }
         });
 
-        jTextField8.setText("jTextField8");
+        jTextField8.setText("                                                                                                        ");
         jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField8KeyReleased(evt);
             }
         });
 
-        jTextField9.setText("jTextField9");
+        jTextField9.setText("                                                                                                    ");
         jTextField9.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField9KeyReleased(evt);
             }
         });
 
-        jTextField10.setText("jTextField10");
+        jTextField10.setText("                                                                                                       ");
         jTextField10.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField10KeyReleased(evt);
@@ -466,49 +471,49 @@ public class janela extends javax.swing.JFrame {
 
         jLabel28.setText("Número");
 
-        jTextField11.setText("jTextField11");
+        jTextField11.setText("                                                                                                                                                                                      ");
         jTextField11.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField11KeyReleased(evt);
             }
         });
 
-        jTextField12.setText("jTextField12");
+        jTextField12.setText("                                         ");
         jTextField12.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField12KeyReleased(evt);
             }
         });
 
-        jTextField14.setText("jTextField14");
+        jTextField14.setText("                                   ");
         jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField14KeyReleased(evt);
             }
         });
 
-        jTextField15.setText("jTextField15");
+        jTextField15.setText("                                                                                                                           ");
         jTextField15.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField15KeyReleased(evt);
             }
         });
 
-        jTextField16.setText("jTextField16");
+        jTextField16.setText("                                                                                                                     ");
         jTextField16.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField16KeyReleased(evt);
             }
         });
 
-        jTextField17.setText("jTextField17");
+        jTextField17.setText("                                                                                                                ");
         jTextField17.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField17KeyReleased(evt);
             }
         });
 
-        jTextField18.setText("jTextField18");
+        jTextField18.setText("                         ");
         jTextField18.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField18KeyReleased(evt);
@@ -639,13 +644,13 @@ public class janela extends javax.swing.JFrame {
 
         jLabel35.setText("Número");
 
-        jTextField20.setText("jTextField20");
+        jTextField20.setText("                                                                                                                                      ");
 
-        jTextField21.setText("jTextField21");
+        jTextField21.setText("                                                                           ");
 
-        jTextField22.setText("jTextField22");
+        jTextField22.setText("                                           ");
 
-        jTextField23.setText("jTextField23");
+        jTextField23.setText("                                                  ");
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Banco do Brasil", "Banco do Nordeste do Brasil", "Banco do Estado do Espírito Santo", "Banco Santander", "Banco do Estado do Rio Grande do Sul", "Banco Intermedium", "Caixa Econômica Federal", "Nossa Caixa", "Banco Bradesco", "Banco Itaú", "Banco ABN AMRO", "Mercantil do Brasil", "HSBC", "Unibanco", "Banco Safra", "Banco Rural", "Banco Sincredi", "BANCOOB" }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
@@ -750,65 +755,70 @@ public class janela extends javax.swing.JFrame {
 
         jLabel48.setText("Valor Cobrado");
 
-        jTextField24.setText("jTextField24");
+        jTextField24.setText("                                            ");
         jTextField24.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField24KeyReleased(evt);
             }
         });
 
-        jTextField25.setText("jTextField25");
+        jTextField25.setText("                                                ");
         jTextField25.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField25KeyReleased(evt);
             }
         });
 
-        jTextField26.setText("jTextField26");
+        jTextField26.setText("                       ");
 
-        jTextField27.setText("jTextField27");
+        jTextField27.setText("                          ");
         jTextField27.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField27KeyReleased(evt);
             }
         });
 
-        jTextField28.setText("jTextField28");
+        jTextField28.setText("                          ");
+        jTextField28.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField28ActionPerformed(evt);
+            }
+        });
         jTextField28.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField28KeyReleased(evt);
             }
         });
 
-        jTextField31.setText("jTextField31");
+        jTextField31.setText("                          ");
         jTextField31.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField31KeyReleased(evt);
             }
         });
 
-        jTextField32.setText("jTextField32");
+        jTextField32.setText("                           ");
         jTextField32.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField32KeyReleased(evt);
             }
         });
 
-        jTextField33.setText("jTextField33");
+        jTextField33.setText("                          ");
         jTextField33.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField33KeyReleased(evt);
             }
         });
 
-        jTextField34.setText("jTextField34");
+        jTextField34.setText("                           ");
         jTextField34.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField34KeyReleased(evt);
             }
         });
 
-        jTextField35.setText("jTextField35");
+        jTextField35.setText("                           ");
         jTextField35.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField35KeyReleased(evt);
@@ -862,7 +872,7 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jTextField26))
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel48)
@@ -974,70 +984,80 @@ public class janela extends javax.swing.JFrame {
         jLabel60.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel60.setText("8");
 
-        jTextField36.setText("jTextField36");
+        jTextField36.setText("                                                       ");
         jTextField36.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField36KeyReleased(evt);
             }
         });
 
-        jTextField37.setText("jTextField37");
+        jTextField37.setText("                                                          ");
         jTextField37.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField37KeyReleased(evt);
             }
         });
 
-        jTextField38.setText("jTextField38");
+        jTextField38.setText("                                                ");
         jTextField38.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField38KeyReleased(evt);
             }
         });
 
-        jTextField39.setText("jTextField39");
+        jTextField39.setText("                                                 ");
         jTextField39.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField39KeyReleased(evt);
             }
         });
 
-        jTextField40.setText("jTextField40");
+        jTextField40.setText("                                                 ");
         jTextField40.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField40KeyReleased(evt);
             }
         });
 
-        jTextField41.setText("jTextField41");
+        jTextField41.setText("                                                   ");
+        jTextField41.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField41ActionPerformed(evt);
+            }
+        });
         jTextField41.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField41KeyReleased(evt);
             }
         });
 
-        jTextField42.setText("jTextField42");
+        jTextField42.setText("                                                         ");
         jTextField42.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField42KeyReleased(evt);
             }
         });
 
-        jTextField43.setText("jTextField43");
+        jTextField43.setText("                                                         ");
         jTextField43.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField43KeyReleased(evt);
             }
         });
 
-        jTextField44.setText("jTextField44");
+        jTextField44.setText("                                                       ");
+        jTextField44.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField44ActionPerformed(evt);
+            }
+        });
         jTextField44.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField44KeyReleased(evt);
             }
         });
 
-        jTextField45.setText("jTextField45");
+        jTextField45.setText("                                                        ");
         jTextField45.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField45KeyReleased(evt);
@@ -1677,6 +1697,22 @@ public class janela extends javax.swing.JFrame {
         else  if (jComboBox4.getSelectedItem() == "Bancoob")
                contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
     }//GEN-LAST:event_jComboBox4ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField28ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField28ActionPerformed
+
+    private void jTextField41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField41ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField41ActionPerformed
+
+    private void jTextField44ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField44ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField44ActionPerformed
 
     
     /**
