@@ -23,7 +23,7 @@ Cada release acompanha um arquivo de demonstração chamado **dados.json** que p
 
 O menu **Arquivos** também permite salvar arquivos JSON com preenchimentos de campos.
 
-Geramos boletos a partir dos campos atualmente preenchidos na aplicação através do menu **Gerar Boleto**
+Geramos boletos a partir dos campos atualmente preenchidos na aplicação através do menu **Gerar Boleto**.
 
 Todas estas funcionalidades também estão disponíveis através de atalhos de teclado:
 
