@@ -17,15 +17,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
@@ -43,6 +46,7 @@ import org.jrimum.domkee.financeiro.banco.febraban.Sacado;
 import org.jrimum.domkee.financeiro.banco.febraban.SacadorAvalista;
 import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo;
 import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
+import org.json.simple.parser.JSONParser;
 
 
 
@@ -219,6 +223,7 @@ public class janela extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -1207,6 +1212,15 @@ public class janela extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setText("Carregar");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Gerar Boleto");
@@ -1835,6 +1849,32 @@ if (jComboBox5.getSelectedItem() == "A")
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new FileNameExtensionFilter("json file","json"));
+        if(chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File selected_file = chooser.getSelectedFile();
+            String absolute_path = selected_file.getAbsolutePath();
+            
+            JSONParser jsonParser = new JSONParser();
+            try(FileReader reader = new FileReader(absolute_path) ){
+                Object obj = jsonParser.parse(reader);
+                JSONObject jsonObject = (JSONObject) obj;
+                for(Iterator iterator = jsonObject.keySet().iterator(); iterator.hasNext(); ){
+                    String key = (String) iterator.next();
+                    String value = (String) jsonObject.get(key);
+                    System.out.println(key + " " + value);
+                }
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            } catch (org.json.simple.parser.ParseException ex) {
+                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -1908,6 +1948,7 @@ if (jComboBox5.getSelectedItem() == "A")
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
