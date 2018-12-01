@@ -1,5 +1,5 @@
 # boletos
-## Sistema Gerador de Boletos Bancários
+## Interface Gráfica para um Sistema Gerador de Boletos Bancários
 
 Este repositório é um trabalho final ( Projeto de Aplicação) para a disciplina de Programação Orientada a Objetos.
 
