@@ -10,6 +10,7 @@
 - [X] Usar variáveis locais em janela
 - [X] Os campos aceitam tanto CPF como CNPJ = CRPF
 - [ ] Fechar e não dar mensagem de erro
+- [ ] SacadoAvalista opcional
 
 ## UF
 
