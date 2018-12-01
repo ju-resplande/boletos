@@ -19,7 +19,9 @@ Você também pode executar o programa diretamente através de `java -jar boleto
 
 Cada release acompanha um arquivo de demonstração chamado **dados.json** que pode ser carregado através do menu **Arquivos**.
 
-O menu **Arquivos** também permite salvar arquivos JSON com preenchimentos de campos, bem como gerar boletos a partir dos campos atualmente preenchidos na aplicação através do menu **Gerar Boleto**
+O menu **Arquivos** também permite salvar arquivos JSON com preenchimentos de campos.
+
+Geramos boletos a partir dos campos atualmente preenchidos na aplicação através do menu **Gerar Boleto**
 
 Todas estas funcionalidades também estão disponíveis através de atalhos de teclado:
 
