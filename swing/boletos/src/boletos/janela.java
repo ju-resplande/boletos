@@ -615,7 +615,7 @@ public class janela extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 850, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 859, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -640,6 +640,11 @@ public class janela extends javax.swing.JFrame {
 
         jLabel35.setText("Número");
 
+        jTextField20.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField20ActionPerformed(evt);
+            }
+        });
         jTextField20.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField20KeyReleased(evt);
@@ -2124,6 +2129,11 @@ public class janela extends javax.swing.JFrame {
         buffer.put("jTextField43", jTextField43.getText());
         buffer.put("jTextField44", jTextField44.getText());
         buffer.put("jTextField45", jTextField45.getText());
+        buffer.put("jComboBox1", jComboBox1.getSelectedItem().toString());
+        buffer.put("jComboBox2", jComboBox2.getSelectedItem().toString());
+        buffer.put("jComboBox3", jComboBox3.getSelectedItem().toString());
+        buffer.put("jComboBox4", jComboBox4.getSelectedItem().toString());
+        buffer.put("jComboBox5", jComboBox5.getSelectedItem().toString());
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
         Date date = new Date();
@@ -2154,6 +2164,7 @@ public class janela extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         JFileChooser chooser = new JFileChooser();
+        int count;
         chooser.setFileFilter(new FileNameExtensionFilter("json file", "json"));
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             File selected_file = chooser.getSelectedFile();
@@ -2273,50 +2284,49 @@ public class janela extends javax.swing.JFrame {
                     } else if (key.equals("jTextField9")) {
                         jTextField9.setText(value);
                         jTextField9KeyFromFile();
-                    }
+                    } else if (key.equals("jComboBox1")) {
+                        count = jComboBox1.getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            if (jComboBox1.getItemAt(i).toString().contains(value)) {
+                                jComboBox1.setSelectedIndex(i);
+                                jComboBox1FromFile();
+                            }
+                        }
+                    } else if (key.equals("jComboBox2")) {
+                        count = jComboBox2.getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            if (jComboBox2.getItemAt(i).toString().contains(value)) {
+                                jComboBox2.setSelectedIndex(i);
+                                jComboBox2FromFile();
+                            }
+                        }
 
-                    int count;
+                    } else if (key.equals("jComboBox3")) {
+                        count = jComboBox3.getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            if (jComboBox3.getItemAt(i).toString().contains(value)) {
+                                jComboBox3.setSelectedIndex(i);
+                                jComboBox3ActionFromFile();
+                            }
+                        }
+                    } else if (key.equals("jComboBox4")) {
+                        count = jComboBox4.getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            if (jComboBox4.getItemAt(i).toString().contains(value)) {
+                                jComboBox4.setSelectedIndex(i);
+                                jComboBox4ActionFromFile();
+                            }
+                        }
 
-                    count = jComboBox1.getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        if (jComboBox1.getItemAt(i).toString().contains(value)) {
-                            jComboBox1.setSelectedIndex(i);
-                            jComboBox1FromFile();
+                    } else if (key.equals("jComboBox5")) {
+                        count = jComboBox5.getItemCount();
+                        for (int i = 0; i < count; i++) {
+                            if (jComboBox5.getItemAt(i).toString().contains(value)) {
+                                jComboBox5.setSelectedIndex(i);
+                                jComboBox5ActionFromFile();
+                            }
                         }
                     }
-
-                    count = jComboBox2.getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        if (jComboBox2.getItemAt(i).toString().contains(value)) {
-                            jComboBox2.setSelectedIndex(i);
-                            jComboBox2FromFile();
-                        }
-                    }
-
-                    count = jComboBox3.getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        if (jComboBox3.getItemAt(i).toString().contains(value)) {
-                            jComboBox3.setSelectedIndex(i);
-                            jComboBox3ActionFromFile();
-                        }
-                    }
-
-                    count = jComboBox4.getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        if (jComboBox4.getItemAt(i).toString().contains(value)) {
-                            jComboBox4.setSelectedIndex(i);
-                            jComboBox4ActionFromFile();
-                        }
-                    }
-
-                    count = jComboBox5.getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        if (jComboBox5.getItemAt(i).toString().contains(value)) {
-                            jComboBox5.setSelectedIndex(i);
-                            jComboBox5ActionFromFile();
-                        }
-                    }
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2342,6 +2352,10 @@ public class janela extends javax.swing.JFrame {
     private void jTextField23KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField23KeyReleased
         numeroAgenciaBanco = jTextField23.getText();
     }//GEN-LAST:event_jTextField23KeyReleased
+
+    private void jTextField20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField20ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField20ActionPerformed
 
     /**
      * @param args the command line arguments
