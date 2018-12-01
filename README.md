@@ -7,7 +7,9 @@ Trata-se de uma interface gráfica em Swing para a biblioteca geradora de boleto
 
 ## Instalação
 
-Após baixar o [último release](https://github.com/ruanchaves/boletos/releases/tag/v1.0), execute `bash install.sh` para criar o comando `boletos` no seu **~/.bash_aliases**. Após isso, basta invocar o programa através de digitar `boletos` em seu terminal.
+[Clique aqui para baixar a versão 1.0](https://github.com/ruanchaves/boletos/releases/tag/v1.0).
+
+Após baixar o [último release](https://github.com/ruanchaves/boletos/releases/), execute `bash install.sh` para criar o comando `boletos` no seu **~/.bash_aliases**. Após isso, basta invocar o programa através de digitar `boletos` em seu terminal.
 
 ![](https://i.imgur.com/B5JyquM.png)
 
