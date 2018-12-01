@@ -1653,8 +1653,8 @@ public class janela extends javax.swing.JFrame {
                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
         else  if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal")
                 contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
-        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
-                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
+//        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
+//                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
         else  if (jComboBox4.getSelectedItem() == "Banco Bradesco")
                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
         
