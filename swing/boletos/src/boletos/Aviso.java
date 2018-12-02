@@ -68,4 +68,16 @@ public class Aviso {
         rotulo.setVisible(false);
         campo.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("TextField.border"));
     }
+    
+    public static void avisoExcecao(RuntimeException excecao, JComponent campo){
+        campo.setToolTipText(excecao.getMessage());
+        campo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(242, 34, 34), 2, true));
+    }
+    
+   
+    
+    public static void resetarAviso(JComponent campo){
+        campo.setBorder(UIManager.getLookAndFeel().getDefaults().getBorder("TextField.border"));
+        campo.setToolTipText(null);
+    }
 }
