@@ -753,6 +753,7 @@ public class janela extends javax.swing.JFrame {
         jLabel64.setVisible(false);
 
         jLabel65.setText("jLabel65");
+        jLabel65.setVisible(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1361,7 +1362,7 @@ public class janela extends javax.swing.JFrame {
         }
         
         
-        Boolean erro1 = false, erro2 = false, erro3;
+        Boolean erro1 = false, erro2 = false;
         
         try{
             contaBancaria.setAgencia(agencia);
@@ -1423,20 +1424,36 @@ public class janela extends javax.swing.JFrame {
             }
         
         }
+        
+        if (erro2 == false){
+             Aviso.resetarAviso(jComboBox4);
+             Aviso.resetarAviso(jLabel65, jTextField20);
+             Aviso.resetarAviso(jLabel65, jTextField21);
+             Aviso.resetarAviso(jLabel65, jTextField22);
+             Aviso.resetarAviso(jLabel65, jTextField23);
+        }
+            
 
         //Colocar no try
+        try{
+            titulo.setNumeroDoDocumento(this.numeroDocumento);
+            titulo.setNossoNumero(this.nossoNumero);
+            titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
+            titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
+            titulo.setTipoDeDocumento(this.tipoDocumento);
+            titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
+            titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
+            titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
+            titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
+            titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
+        }catch (CampoLivreException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         
-        titulo.setNumeroDoDocumento(this.numeroDocumento);
-        titulo.setNossoNumero(this.nossoNumero);
-        titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
-        titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
-        titulo.setTipoDeDocumento(this.tipoDocumento);
-        titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
-        titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
-        titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
-        titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
-        titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
-
         //formato de data
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         //entender essa exceção

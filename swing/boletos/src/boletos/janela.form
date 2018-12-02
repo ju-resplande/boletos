@@ -1054,6 +1054,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="jLabel65"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jLabel65.setVisible(false);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
