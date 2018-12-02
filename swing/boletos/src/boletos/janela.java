@@ -753,7 +753,6 @@ public class janela extends javax.swing.JFrame {
         jLabel64.setVisible(false);
 
         jLabel65.setText("jLabel65");
-        jLabel65.setVisible(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1339,7 +1338,7 @@ public class janela extends javax.swing.JFrame {
         
         Cedente cedente = new Cedente(this.nomeCedente, this.CPRFCedente);
         Sacado sacado = new Sacado(this.nomeSacado, this.CPRFSacado);
-        SacadorAvalista sacadorAvalista;
+        SacadorAvalista sacadorAvalista = new SacadorAvalista("");
        
         enderecoSac.setLocalidade(this.localidadeSacado);
         enderecoSac.setBairro(this.bairroSacado);
@@ -1354,7 +1353,7 @@ public class janela extends javax.swing.JFrame {
             Endereco enderecoSacAval = new Endereco();
             enderecoSacAval.setUF(this.ufSacadoAval);
             enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
-            enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista)); //Se funfar depois
+            enderecoSacAval.setCep(CEPSacadoAvalista); //Se funfar depois
             enderecoSacAval.setBairro(this.bairroSacadoAvalista);
             enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
             enderecoSacAval.setNumero(this.numeroSacadoAvalista);
@@ -1378,13 +1377,15 @@ public class janela extends javax.swing.JFrame {
                 Aviso.resetarAviso(jLabel62,jTextField23);
         }
         
-        if (SacadoAvalistaStatus ==  false){
+        if (SacadoAvalistaStatus == false){
             try{
                 titulo = new Titulo(contaBancaria, sacado, cedente);
             }catch (NotSupportedBancoException ex){
                 Aviso.avisoExcecao(ex, jComboBox4);
+                erro2 = true;
                 return;
             }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                erro2 = true;
                 Aviso.avisoExcecao(ex, jLabel65, jTextField20);
                 Aviso.avisoExcecao(ex, jLabel65, jTextField21);
                 Aviso.avisoExcecao(ex, jLabel65, jTextField22);
@@ -1399,26 +1400,31 @@ public class janela extends javax.swing.JFrame {
             }
         }else{
             try{
-                titulo = new Titulo(contaBancaria, sacado, cedente);
-                return;
+              titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
             }catch (NotSupportedBancoException ex){
+                    erro2 = true;
                     Aviso.avisoExcecao(ex, jComboBox4);
                     return;
              }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                erro2 = true;
                 Aviso.avisoExcecao(ex, jLabel65, jTextField20);
                 Aviso.avisoExcecao(ex, jLabel65, jTextField21);
                 Aviso.avisoExcecao(ex, jLabel65, jTextField22);
                 Aviso.avisoExcecao(ex, jLabel65, jTextField23);
                 return;
             }catch (CampoLivreException ex){
+                erro2 = true;
                 JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }catch (IllegalArgumentException ex){
+                erro2 = true;
                 JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         
         }
+
+        //Colocar no try
         
         titulo.setNumeroDoDocumento(this.numeroDocumento);
         titulo.setNossoNumero(this.nossoNumero);
@@ -2574,7 +2580,19 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField12FocusLost
 
     private void jTextField14FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField14FocusLost
-
+         boolean erro = false;
+        
+        try{
+            CEPSacadoAvalista.setCep(jTextField14.getText());
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            
+            Aviso.avisoExcecao(entrada,jTextField14);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jTextField14);
+        }
     }//GEN-LAST:event_jTextField14FocusLost
 
     private void jTextField6FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField6FocusLost
