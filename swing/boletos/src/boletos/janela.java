@@ -37,6 +37,10 @@ import javax.swing.text.MaskFormatter;
 
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
+import org.jrimum.bopepo.LinhaDigitavelException;
+import org.jrimum.bopepo.campolivre.CampoLivreException;
+import org.jrimum.bopepo.campolivre.NotSupportedBancoException;
+import org.jrimum.bopepo.campolivre.NotSupportedCampoLivreException;
 import org.jrimum.bopepo.view.BoletoViewer;
 import org.jrimum.domkee.comum.pessoa.endereco.CEP;
 import org.jrimum.domkee.comum.pessoa.endereco.Endereco;
@@ -78,8 +82,11 @@ public class janela extends javax.swing.JFrame {
             instrucao7, instrucao8;
     UnidadeFederativa ufSacado, ufSacadoAval;
     TipoDeTitulo tipoDocumento;
-    ContaBancaria contaBancaria;
+    ContaBancaria contaBancaria = new ContaBancaria();
     Aviso esquecimento;
+    Agencia agencia;
+    Titulo titulo;
+    Endereco enderecoSac = new Endereco();
     
     /**
      * Creates new form janela
@@ -179,6 +186,10 @@ public class janela extends javax.swing.JFrame {
         jTextField22 = new javax.swing.JTextField();
         jTextField23 = new javax.swing.JTextField();
         jComboBox4 = new javax.swing.JComboBox<>();
+        jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
+        jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -262,11 +273,6 @@ public class janela extends javax.swing.JFrame {
                 jTextField2FocusLost(evt);
             }
         });
-        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField2KeyReleased(evt);
-            }
-        });
 
         jLabel17.setText("jLabel17");
         jLabel17.setToolTipText("");
@@ -332,11 +338,6 @@ public class janela extends javax.swing.JFrame {
                 jTextField4FocusLost(evt);
             }
         });
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField4KeyReleased(evt);
-            }
-        });
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel7.setText("Endereço do Sacado");
@@ -356,11 +357,6 @@ public class janela extends javax.swing.JFrame {
         jTextField6.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField6FocusLost(evt);
-            }
-        });
-        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField6KeyReleased(evt);
             }
         });
 
@@ -522,21 +518,11 @@ public class janela extends javax.swing.JFrame {
                 jTextField12FocusLost(evt);
             }
         });
-        jTextField12.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField12KeyReleased(evt);
-            }
-        });
 
         jTextField14.setToolTipText("CEP");
         jTextField14.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField14FocusLost(evt);
-            }
-        });
-        jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField14KeyReleased(evt);
             }
         });
 
@@ -721,32 +707,32 @@ public class janela extends javax.swing.JFrame {
 
         jLabel35.setText("Número");
 
-        jTextField20.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField20ActionPerformed(evt);
-            }
-        });
-        jTextField20.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField20KeyReleased(evt);
+        jTextField20.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField20FocusLost(evt);
             }
         });
 
+        jTextField21.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField21FocusLost(evt);
+            }
+        });
         jTextField21.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField21KeyReleased(evt);
             }
         });
 
-        jTextField22.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField22KeyReleased(evt);
+        jTextField22.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField22FocusLost(evt);
             }
         });
 
-        jTextField23.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField23KeyReleased(evt);
+        jTextField23.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField23FocusLost(evt);
             }
         });
 
@@ -757,12 +743,24 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jLabel62.setText("jLabel62");
+        jLabel62.setVisible(false);
+
+        jLabel63.setText("jLabel63");
+        jLabel63.setVisible(false);
+
+        jLabel64.setText("jLabel64");
+        jLabel64.setVisible(false);
+
+        jLabel65.setText("jLabel65");
+        jLabel65.setVisible(false);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 429, Short.MAX_VALUE)
                 .addComponent(jLabel29)
                 .addGap(299, 299, 299))
             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -774,7 +772,10 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel35))
                         .addGap(86, 86, 86)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel62))
                             .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -785,9 +786,17 @@ public class janela extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(402, Short.MAX_VALUE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel63))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel64)
+                                .addGap(185, 185, 185)
+                                .addComponent(jLabel65)))))
+                .addContainerGap(405, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -801,22 +810,34 @@ public class janela extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
-                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel32)
-                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel33)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel35)
-                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel63))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel32)
+                            .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel64))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel33))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel65)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel35)
+                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel62)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel34))
-                .addContainerGap(138, Short.MAX_VALUE))
+                .addContainerGap(166, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Conta Bancária", jPanel4);
@@ -857,6 +878,12 @@ public class janela extends javax.swing.JFrame {
         jTextField25.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField25KeyReleased(evt);
+            }
+        });
+
+        jTextField26.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField26KeyReleased(evt);
             }
         });
 
@@ -909,7 +936,7 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "N" }));
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "A", "N" }));
         jComboBox5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox5ActionPerformed(evt);
@@ -968,7 +995,7 @@ public class janela extends javax.swing.JFrame {
                                 .addComponent(jTextField27, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jTextField28, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jTextField26, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel40, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1042,7 +1069,7 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Título", jPanel5);
@@ -1306,92 +1333,98 @@ public class janela extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
-        /*String string = new String();
-        string += "Cedente\n";
-        string += String.format("Nome: %s cpnj: %s", this.nomeCedente, this.cnpjCedente);
-
-        string += "\nSacado\n";
-        string += String.format("Nome: %s cpnj: %s", this.nomeSacado, this.cpfSacado);
-
-        string += "\nEndereço";
-        string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s",
-                ufSacado, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
-        string += "\nSacadorAvalista\n";
-        string += String.format("Nome: %s cpnj: %s", this.nomeSacadoAvalista, this.cpfSacadoAvalista);
-
-        string += "\nEndereço";
-        string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s",
-                ufSacadoAval, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
-        string += "Tipo de Aceite Selecionado\n"; 
-        string += jComboBox5.getSelectedItem();
-        
-        JOptionPane.showMessageDialog(null, string);*/
         
         if (!esquecimento.VerificaComboBox()) //Corresponde a combox
             return;
         
         Cedente cedente = new Cedente(this.nomeCedente, this.CPRFCedente);
-
-        /*
-             * INFORMANDO DADOS SOBRE O SACADO.
-         */
         Sacado sacado = new Sacado(this.nomeSacado, this.CPRFSacado);
-
-        // Informando o endereço do sacado.
-        Endereco enderecoSac = new Endereco();
-        enderecoSac.setUF(this.ufSacado);
+        SacadorAvalista sacadorAvalista;
+       
         enderecoSac.setLocalidade(this.localidadeSacado);
-        enderecoSac.setCep(this.cepSacado);
         enderecoSac.setBairro(this.bairroSacado);
         enderecoSac.setLogradouro(this.logradouroSacado);
         enderecoSac.setNumero(this.numeroSacado);
         sacado.addEndereco(enderecoSac);
-        
-        Titulo titulo;
 
         if (SacadoAvalistaStatus == true){
-        /*
-             * INFORMANDO DADOS SOBRE O SACADOR AVALISTA.
-         */
-            
-        
-        SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.CPRFSacadoAvalista);
+            sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.CPRFSacadoAvalista);
 
-        // Informando o endereço do sacador avalista.
-        Endereco enderecoSacAval = new Endereco();
-        enderecoSacAval.setUF(this.ufSacadoAval);
-        enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
-        enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
-        enderecoSacAval.setBairro(this.bairroSacadoAvalista);
-        enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
-        enderecoSacAval.setNumero(this.numeroSacadoAvalista);
-        sacadorAvalista.addEndereco(enderecoSacAval);
-        titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+            // Informando o endereço do sacador avalista.
+            Endereco enderecoSacAval = new Endereco();
+            enderecoSacAval.setUF(this.ufSacadoAval);
+            enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
+            enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista)); //Se funfar depois
+            enderecoSacAval.setBairro(this.bairroSacadoAvalista);
+            enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
+            enderecoSacAval.setNumero(this.numeroSacadoAvalista);
+            sacadorAvalista.addEndereco(enderecoSacAval);
         }
-        else
-            titulo = new Titulo(contaBancaria, sacado, cedente);
         
         
-        /*
-             * INFORMANDO OS DADOS SOBRE O TÍTULO.
-         */
-        // Informando dados sobre a conta bancária do título.
-        contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(numeroConta),"0"));
-        contaBancaria.setCarteira(new Carteira(Integer.parseInt(tipoCarteira)));
-        contaBancaria.setAgencia(new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco));
-
+        Boolean erro1 = false, erro2 = false, erro3;
+        
+        try{
+            contaBancaria.setAgencia(agencia);
+        }catch (IllegalArgumentException ex){
+                erro1 = true;
+                Aviso.avisoExcecao(ex, jLabel62,jTextField22);
+                Aviso.avisoExcecao(ex, jLabel62,jTextField23);
+                return;
+        }
+        
+        if(!erro1){
+                Aviso.resetarAviso(jLabel62,jTextField22);
+                Aviso.resetarAviso(jLabel62,jTextField23);
+        }
+        
+        if (SacadoAvalistaStatus ==  false){
+            try{
+                titulo = new Titulo(contaBancaria, sacado, cedente);
+            }catch (NotSupportedBancoException ex){
+                Aviso.avisoExcecao(ex, jComboBox4);
+                return;
+            }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                Aviso.avisoExcecao(ex, jLabel65, jTextField20);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField21);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField22);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField23);
+                return;
+            }catch (CampoLivreException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else{
+            try{
+                titulo = new Titulo(contaBancaria, sacado, cedente);
+                return;
+            }catch (NotSupportedBancoException ex){
+                    Aviso.avisoExcecao(ex, jComboBox4);
+                    return;
+             }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                Aviso.avisoExcecao(ex, jLabel65, jTextField20);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField21);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField22);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField23);
+                return;
+            }catch (CampoLivreException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
+        }
         
         titulo.setNumeroDoDocumento(this.numeroDocumento);
         titulo.setNossoNumero(this.nossoNumero);
         titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
         titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
         titulo.setTipoDeDocumento(this.tipoDocumento);
-
-        if (this.AceiteStatus == true) {
-            titulo.setAceite(titulo.getAceite().A);
-        } else if (this.AceiteStatus == false) {
-            titulo.setAceite(titulo.getAceite().N);
-        }
         titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
         titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
         titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
@@ -1417,32 +1450,30 @@ public class janela extends javax.swing.JFrame {
              * INFORMANDO OS DADOS SOBRE O BOLETO.
          */
         Boleto boleto = new Boleto(titulo);
-
-        boleto.setLocalPagamento(localPagamento);
-        boleto.setInstrucaoAoSacado(instrucaoSacado);
-        boleto.setInstrucao1(instrucao1);
-        boleto.setInstrucao2(instrucao2);
-        boleto.setInstrucao3(instrucao3);
-        boleto.setInstrucao4(instrucao4);
-        boleto.setInstrucao5(instrucao5);
-        boleto.setInstrucao6(instrucao6);
-        boleto.setInstrucao7(instrucao7);
-        boleto.setInstrucao8(instrucao8);
-
-        /*
-             * GERANDO O BOLETO BANCÁRIO.
-         */
-        // Instanciando um objeto "BoletoViewer", classe responsável pela
-        // geração do boleto bancário.
+        
+        try{
+            boleto.setLocalPagamento(localPagamento);
+            boleto.setInstrucaoAoSacado(instrucaoSacado);
+            boleto.setInstrucao1(instrucao1);
+            boleto.setInstrucao2(instrucao2);
+            boleto.setInstrucao3(instrucao3);
+            boleto.setInstrucao4(instrucao4);
+            boleto.setInstrucao5(instrucao5);
+            boleto.setInstrucao6(instrucao6);
+            boleto.setInstrucao7(instrucao7);
+            boleto.setInstrucao8(instrucao8);
+        }catch(LinhaDigitavelException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }catch(IllegalArgumentException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+   
         BoletoViewer boletoViewer = new BoletoViewer(boleto);
-
-        // Gerando o arquivo. No caso o arquivo mencionado será salvo na mesma
-        // pasta do projeto. Outros exemplos:
         // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
         // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
         File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
-
-        // Mostrando o boleto gerado na tela.
         mostreBoletoNaTela(arquivoPdf);
 
 
@@ -1786,8 +1817,7 @@ public class janela extends javax.swing.JFrame {
             contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
         } else if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal") {
             contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
-        } //        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
-        //                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
+        }
         else if (jComboBox4.getSelectedItem() == "Banco Bradesco") {
             contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Itaú") {
@@ -1862,21 +1892,9 @@ public class janela extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(null,"Percebi");
     }//GEN-LAST:event_jTextField1KeyReleased
 
-    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
-        cnpjCedente = jTextField2.getText();
-    }//GEN-LAST:event_jTextField2KeyReleased
-
     private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
         nomeSacado = jTextField3.getText();
     }//GEN-LAST:event_jTextField3KeyReleased
-
-    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-        cpfSacado = jTextField4.getText();
-    }//GEN-LAST:event_jTextField4KeyReleased
-
-    private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
-        cepSacado = jTextField6.getText();
-    }//GEN-LAST:event_jTextField6KeyReleased
 
     private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
         numeroSacado = jTextField7.getText();
@@ -1897,14 +1915,6 @@ public class janela extends javax.swing.JFrame {
     private void jTextField11KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField11KeyReleased
         nomeSacadoAvalista = jTextField11.getText();
     }//GEN-LAST:event_jTextField11KeyReleased
-
-    private void jTextField12KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField12KeyReleased
-        cpfSacadoAvalista = jTextField12.getText();
-    }//GEN-LAST:event_jTextField12KeyReleased
-
-    private void jTextField14KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField14KeyReleased
-        cepSacadoAvalista = jTextField14.getText();
-    }//GEN-LAST:event_jTextField14KeyReleased
 
     private void jTextField18KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField18KeyReleased
         bairroSacadoAvalista = jTextField18.getText();
@@ -1959,8 +1969,8 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField28KeyReleased
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem() == "AC") {
-            ufSacado = UnidadeFederativa.AC;
+        if (jComboBox1.getSelectedItem() == "AC") { 
+           ufSacado = UnidadeFederativa.AC;
         } else if (jComboBox1.getSelectedItem() == "AL") {
             ufSacado = UnidadeFederativa.AL;
         } else if (jComboBox1.getSelectedItem() == "AP") {
@@ -2014,6 +2024,8 @@ public class janela extends javax.swing.JFrame {
         } else if (jComboBox1.getSelectedItem() == "TO") {
             ufSacado = UnidadeFederativa.TO;
         }
+        
+        enderecoSac.setUF(this.ufSacado);
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
@@ -2182,41 +2194,41 @@ public class janela extends javax.swing.JFrame {
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
         if (jComboBox4.getSelectedItem() == "Banco do Brasil") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_BRASIL.create());
         } else if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
         } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Santander") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_SANTANDER.create());
         } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Intermedium") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_INTEMEDIUM.create());
         } else if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal") {
-            contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
-        } //        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
-        //                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
+            contaBancaria.setBanco(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
+        }else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
+            contaBancaria.setBanco(BancosSuportados.NOSSA_CAIXA.create());
         else if (jComboBox4.getSelectedItem() == "Banco Bradesco") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_BRADESCO.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Itaú") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_ITAU.create());
         } else if (jComboBox4.getSelectedItem() == "Banco ABN AMRO") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil") {
-            contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
+            contaBancaria.setBanco(BancosSuportados.MERCANTIL_DO_BRASIL.create());
         } else if (jComboBox4.getSelectedItem() == "HSBC") {
-            contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
+            contaBancaria.setBanco(BancosSuportados.HSBC.create());
         } else if (jComboBox4.getSelectedItem() == "Unibanco") {
-            contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
+            contaBancaria.setBanco(BancosSuportados.UNIBANCO.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Safra") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_SAFRA.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Rural") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_RURAL.create());
         } else if (jComboBox4.getSelectedItem() == "Banco Sicredi") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
+            contaBancaria.setBanco(BancosSuportados.BANCO_SICREDI.create());
         } else if (jComboBox4.getSelectedItem() == "Bancoob") {
-            contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+            contaBancaria.setBanco(BancosSuportados.BANCOOB.create());
         }
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
@@ -2495,25 +2507,9 @@ public class janela extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jTextField20KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField20KeyReleased
-        numeroConta = jTextField20.getText();
-    }//GEN-LAST:event_jTextField20KeyReleased
-
     private void jTextField21KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField21KeyReleased
         tipoCarteira = jTextField21.getText();
     }//GEN-LAST:event_jTextField21KeyReleased
-
-    private void jTextField22KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField22KeyReleased
-        digitoAgenciaBanco = jTextField22.getText();
-    }//GEN-LAST:event_jTextField22KeyReleased
-
-    private void jTextField23KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField23KeyReleased
-        numeroAgenciaBanco = jTextField23.getText();
-    }//GEN-LAST:event_jTextField23KeyReleased
-
-    private void jTextField20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField20ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField20ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
@@ -2597,6 +2593,85 @@ public class janela extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField6FocusLost
 
+    private void jTextField22FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField22FocusLost
+       boolean erro = false;
+       
+       digitoAgenciaBanco = jTextField22.getText();
+       
+        if(numeroAgenciaBanco != null){
+            try{
+                agencia = new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco);
+            }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jLabel62,jTextField22);
+                Aviso.avisoExcecao(ex, jLabel62,jTextField23);
+            }
+            
+            if(!erro){
+                Aviso.resetarAviso(jLabel62,jTextField22);
+                Aviso.resetarAviso(jLabel62,jTextField23);
+            }
+        }
+           
+    }//GEN-LAST:event_jTextField22FocusLost
+
+    private void jTextField23FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField23FocusLost
+        numeroAgenciaBanco = jTextField23.getText();
+        
+        boolean erro = false;
+       
+        if(digitoAgenciaBanco != null){
+            try{
+                agencia = new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco);
+            }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jLabel62,jTextField22);
+                Aviso.avisoExcecao(ex, jLabel62,jTextField23);
+            }
+            
+            if(!erro){
+                Aviso.resetarAviso(jLabel62,jTextField22);
+                Aviso.resetarAviso(jLabel62,jTextField23);
+            }
+        }
+    }//GEN-LAST:event_jTextField23FocusLost
+
+    private void jTextField26KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField26KeyReleased
+        digitoNossoNumero = jTextField26.getText();
+    }//GEN-LAST:event_jTextField26KeyReleased
+
+    private void jTextField20FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField20FocusLost
+       numeroConta = jTextField20.getText();
+       Boolean erro = false;
+       
+        try{
+            contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(numeroConta)));
+        }catch (IllegalArgumentException ex){
+            erro = true;
+            Aviso.avisoExcecao(ex, jLabel63,jTextField20);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jLabel63,jTextField20);
+        }
+    }//GEN-LAST:event_jTextField20FocusLost
+
+    private void jTextField21FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField21FocusLost
+        Boolean erro = false;
+        tipoCarteira = jTextField21.getText();
+        
+        try{
+           contaBancaria.setCarteira(new Carteira(Integer.parseInt(tipoCarteira)));
+        }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jLabel63,jTextField21);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jLabel63,jTextField21);
+        }
+    }//GEN-LAST:event_jTextField21FocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -2604,9 +2679,9 @@ public class janela extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JComboBox<String> jComboBox1;
     public javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    public javax.swing.JComboBox<String> jComboBox3;
     public javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
+    public javax.swing.JComboBox<String> jComboBox5;
     public javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2666,6 +2741,10 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
