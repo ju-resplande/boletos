@@ -19,11 +19,11 @@ Você também pode executar o programa diretamente através de `java -jar boleto
 
 `boletos` permite salvar e carregar preenchimentos prontos dos campos como arquivos JSON.
 
-Cada release acompanha um arquivo de demonstração chamado **dados.json** que pode ser carregado através do menu **Arquivos**.
+Cada release acompanha um arquivo de demonstração chamado **dados.json** que pode ser carregado através do menu **File**.
 
 ![](https://i.imgur.com/aU5qwam.png)
 
-O menu **Arquivos** também permite salvar arquivos JSON com preenchimentos de campos.
+O menu **File** também permite salvar arquivos JSON com preenchimentos de campos.
 
 Geramos boletos a partir dos campos atualmente preenchidos na aplicação através do menu **Gerar Boleto**.
 
