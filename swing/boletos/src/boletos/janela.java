@@ -59,7 +59,7 @@ public class janela extends javax.swing.JFrame {
 
     Map<String, String> buffer = new HashMap<String, String>() {
     };
-    Boolean AceiteStatus;
+    Boolean AceiteStatus, SacadoAvalistaStatus;
     String nomeCedente, cnpjCedente;
     String nomeSacado, cpfSacado, cepSacado, numeroSacado, logradouroSacado, localidadeSacado,
             bairroSacado;
@@ -67,7 +67,7 @@ public class janela extends javax.swing.JFrame {
             numeroSacadoAvalista, logradouroSacadoAvalista, localidadeSacadoAvalista, bairroSacadoAvalista;
     String numeroConta, tipoCarteira, digitoAgenciaBanco, numeroAgenciaBanco;
     String numeroDocumento, nossoNumero, digitoNossoNumero, dataDocumento, dataVencimento, aceite;
-    String valor, desconto, mora, acrescimo, valorCobrado;
+    String valor, desconto, mora, acrescimo, valorCobrado, deducao;
     String localPagamento, instrucaoSacado, instrucao1, instrucao2, instrucao3, instrucao4, instrucao5, instrucao6,
             instrucao7, instrucao8;
     UnidadeFederativa ufSacado, ufSacadoAval;
@@ -153,6 +153,8 @@ public class janela extends javax.swing.JFrame {
         jTextField17 = new javax.swing.JTextField();
         jTextField18 = new javax.swing.JTextField();
         jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jComboBox6 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
@@ -192,6 +194,8 @@ public class janela extends javax.swing.JFrame {
         jTextField35 = new javax.swing.JTextField();
         jComboBox3 = new javax.swing.JComboBox<>();
         jComboBox5 = new javax.swing.JComboBox<>();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
@@ -399,7 +403,7 @@ public class janela extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                         .addGap(13, 13, 13)
                                         .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 91, Short.MAX_VALUE))
+                        .addGap(0, 92, Short.MAX_VALUE))
                     .addComponent(jTextField3))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -516,12 +520,21 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jLabel15.setText("Caso não Possuir Sacado Avalista, selecione \"não\"");
+
+        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sim", "não" }));
+        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(26, 26, 26)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel20)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -552,10 +565,10 @@ public class janela extends javax.swing.JFrame {
                                         .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField18)
+                                    .addComponent(jTextField18, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
                                     .addComponent(jTextField16)
                                     .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(340, 340, 340))
+                                .addGap(142, 142, 142))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel22)
                                 .addGap(177, 177, 177))))
@@ -563,11 +576,17 @@ public class janela extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 737, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                            .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))))
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(288, 288, 288)
-                .addComponent(jLabel19)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(288, 288, 288)
+                        .addComponent(jLabel19))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(258, 258, 258)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -576,6 +595,10 @@ public class janela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel19)
                 .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -608,14 +631,14 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel28)
                             .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel26))))
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addGap(78, 78, 78))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 859, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -706,7 +729,7 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(391, Short.MAX_VALUE))
+                .addContainerGap(402, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -835,6 +858,20 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jTextField5.setToolTipText("");
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField5KeyReleased(evt);
+            }
+        });
+
+        jLabel16.setText("Dedução");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -850,42 +887,50 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jTextField24))
                 .addContainerGap())
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel39)
-                    .addComponent(jLabel41)
-                    .addComponent(jLabel42)
-                    .addComponent(jLabel43)
-                    .addComponent(jLabel44))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jTextField27, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTextField28, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTextField26, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel40, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel45, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel46))
-                        .addComponent(jLabel47))
-                    .addComponent(jLabel48))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextField35, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                    .addComponent(jTextField34, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                    .addComponent(jTextField33, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField31, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField32, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(22, 22, 22))
-            .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(347, 347, 347)
                 .addComponent(jLabel36)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel39)
+                            .addComponent(jLabel41)
+                            .addComponent(jLabel42)
+                            .addComponent(jLabel43)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel44)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTextField27, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField28, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField26, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel40, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel45, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel46))
+                                .addComponent(jLabel47))
+                            .addComponent(jLabel48)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel16)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField5)
+                    .addComponent(jTextField35, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(jTextField34, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(jTextField33)
+                    .addComponent(jTextField31)
+                    .addComponent(jTextField32))
+                .addGap(22, 22, 22))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -930,12 +975,17 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jLabel47)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel44)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel48))
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(113, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel44)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Título", jPanel5);
@@ -1047,7 +1097,7 @@ public class janela extends javax.swing.JFrame {
                                 .addComponent(jLabel51)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
                                         .addComponent(jLabel52)
                                         .addGap(337, 337, 337))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
@@ -1214,6 +1264,9 @@ public class janela extends javax.swing.JFrame {
         string += "\nEndereço";
         string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s",
                 ufSacadoAval, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
+        string += "Tipo de Aceite Selecionado\n"; 
+        string += jComboBox5.getSelectedItem();
+        
         JOptionPane.showMessageDialog(null, string);
 
         Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
@@ -1232,10 +1285,15 @@ public class janela extends javax.swing.JFrame {
         enderecoSac.setLogradouro(this.logradouroSacado);
         enderecoSac.setNumero(this.numeroSacado);
         sacado.addEndereco(enderecoSac);
+        
+        Titulo titulo;
 
+        if (SacadoAvalistaStatus == true){
         /*
              * INFORMANDO DADOS SOBRE O SACADOR AVALISTA.
          */
+            
+        
         SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.cpfSacadoAvalista);
 
         // Informando o endereço do sacador avalista.
@@ -1247,7 +1305,12 @@ public class janela extends javax.swing.JFrame {
         enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
         enderecoSacAval.setNumero(this.numeroSacadoAvalista);
         sacadorAvalista.addEndereco(enderecoSacAval);
-
+        titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+        }
+        else
+            titulo = new Titulo(contaBancaria, sacado, cedente);
+        
+        
         /*
              * INFORMANDO OS DADOS SOBRE O TÍTULO.
          */
@@ -1256,7 +1319,7 @@ public class janela extends javax.swing.JFrame {
         contaBancaria.setCarteira(new Carteira(Integer.parseInt(tipoCarteira)));
         contaBancaria.setAgencia(new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco));
 
-        Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+        
         titulo.setNumeroDoDocumento(this.numeroDocumento);
         titulo.setNossoNumero(this.nossoNumero);
         titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
@@ -1269,7 +1332,7 @@ public class janela extends javax.swing.JFrame {
             titulo.setAceite(titulo.getAceite().N);
         }
         titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
-        titulo.setDeducao(BigDecimal.ZERO);
+        titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
         titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
         titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
         titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
@@ -2390,6 +2453,22 @@ public class janela extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField20ActionPerformed
 
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
+       deducao = jTextField5.getText();
+    }//GEN-LAST:event_jTextField5KeyReleased
+
+    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
+        if (jComboBox6.getSelectedItem() == "sim") {
+            this.SacadoAvalistaStatus = true;
+        } else if (jComboBox6.getSelectedItem() == "não") {
+            this.SacadoAvalistaStatus = false;
+        }
+    }//GEN-LAST:event_jComboBox6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2400,12 +2479,15 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
+    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -2507,6 +2589,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField43;
     private javax.swing.JTextField jTextField44;
     private javax.swing.JTextField jTextField45;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
