@@ -37,6 +37,7 @@ import javax.swing.text.MaskFormatter;
 
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
+import org.jrimum.bopepo.LinhaDigitavelException;
 import org.jrimum.bopepo.campolivre.CampoLivreException;
 import org.jrimum.bopepo.campolivre.NotSupportedBancoException;
 import org.jrimum.bopepo.campolivre.NotSupportedCampoLivreException;
@@ -85,6 +86,7 @@ public class janela extends javax.swing.JFrame {
     Aviso esquecimento;
     Agencia agencia;
     Titulo titulo;
+    Endereco enderecoSac = new Endereco();
     
     /**
      * Creates new form janela
@@ -187,6 +189,7 @@ public class janela extends javax.swing.JFrame {
         jLabel62 = new javax.swing.JLabel();
         jLabel63 = new javax.swing.JLabel();
         jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -749,6 +752,9 @@ public class janela extends javax.swing.JFrame {
         jLabel64.setText("jLabel64");
         jLabel64.setVisible(false);
 
+        jLabel65.setText("jLabel65");
+        jLabel65.setVisible(false);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -787,8 +793,10 @@ public class janela extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel64)))))
-                .addContainerGap(451, Short.MAX_VALUE))
+                                .addComponent(jLabel64)
+                                .addGap(185, 185, 185)
+                                .addComponent(jLabel65)))))
+                .addContainerGap(405, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -804,13 +812,18 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel31)
                     .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel63))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel32)
-                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel64))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel33)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel32)
+                            .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel64))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel33))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel65)))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1325,43 +1338,33 @@ public class janela extends javax.swing.JFrame {
             return;
         
         Cedente cedente = new Cedente(this.nomeCedente, this.CPRFCedente);
-
-        /*
-             * INFORMANDO DADOS SOBRE O SACADO.
-         */
         Sacado sacado = new Sacado(this.nomeSacado, this.CPRFSacado);
-
-        // Informando o endereço do sacado.
-        Endereco enderecoSac = new Endereco();
-        enderecoSac.setUF(this.ufSacado);
+        SacadorAvalista sacadorAvalista = new SacadorAvalista("");
+       
         enderecoSac.setLocalidade(this.localidadeSacado);
-        enderecoSac.setCep(this.cepSacado);
         enderecoSac.setBairro(this.bairroSacado);
         enderecoSac.setLogradouro(this.logradouroSacado);
         enderecoSac.setNumero(this.numeroSacado);
         sacado.addEndereco(enderecoSac);
 
         if (SacadoAvalistaStatus == true){
-        /*
-             * INFORMANDO DADOS SOBRE O SACADOR AVALISTA.
-         */
-        
-        SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.CPRFSacadoAvalista);
+            sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.CPRFSacadoAvalista);
 
-        // Informando o endereço do sacador avalista.
-        Endereco enderecoSacAval = new Endereco();
-        enderecoSacAval.setUF(this.ufSacadoAval);
-        enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
-        enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
-        enderecoSacAval.setBairro(this.bairroSacadoAvalista);
-        enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
-        enderecoSacAval.setNumero(this.numeroSacadoAvalista);
-        sacadorAvalista.addEndereco(enderecoSacAval);
+            // Informando o endereço do sacador avalista.
+            Endereco enderecoSacAval = new Endereco();
+            enderecoSacAval.setUF(this.ufSacadoAval);
+            enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
+            enderecoSacAval.setCep(CEPSacadoAvalista); //Se funfar depois
+            enderecoSacAval.setBairro(this.bairroSacadoAvalista);
+            enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
+            enderecoSacAval.setNumero(this.numeroSacadoAvalista);
+            sacadorAvalista.addEndereco(enderecoSacAval);
+        }
         
-        Boolean erro1 = false, erro2 = false, erro3;
+        
+        Boolean erro1 = false, erro2 = false;
         
         try{
-            //Nao e possivel pois verifica banco antes
             contaBancaria.setAgencia(agencia);
         }catch (IllegalArgumentException ex){
                 erro1 = true;
@@ -1374,47 +1377,83 @@ public class janela extends javax.swing.JFrame {
                 Aviso.resetarAviso(jLabel62,jTextField22);
                 Aviso.resetarAviso(jLabel62,jTextField23);
         }
-       
         
-        try{
-                titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+        if (SacadoAvalistaStatus == false){
+            try{
+                titulo = new Titulo(contaBancaria, sacado, cedente);
             }catch (NotSupportedBancoException ex){
                 Aviso.avisoExcecao(ex, jComboBox4);
-            }catch (NotSupportedCampoLivreException ex){
-                Aviso.avisoExcecao(ex, jTextField25);
+                erro2 = true;
+                return;
+            }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                erro2 = true;
+                Aviso.avisoExcecao(ex, jLabel65, jTextField20);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField21);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField22);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField23);
+                return;
             }catch (CampoLivreException ex){
-                Aviso.avisoExcecao(ex, jTextField26);
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+        }else{
+            try{
+              titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+            }catch (NotSupportedBancoException ex){
+                    erro2 = true;
+                    Aviso.avisoExcecao(ex, jComboBox4);
+                    return;
+             }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                erro2 = true;
+                Aviso.avisoExcecao(ex, jLabel65, jTextField20);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField21);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField22);
+                Aviso.avisoExcecao(ex, jLabel65, jTextField23);
+                return;
+            }catch (CampoLivreException ex){
+                erro2 = true;
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                erro2 = true;
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
         }
-        else try{
-            titulo = new Titulo(contaBancaria, sacado, cedente);
-        }catch (NotSupportedBancoException ex){
-            Aviso.avisoExcecao(ex, jComboBox4);
-        }catch (NotSupportedCampoLivreException ex){
-            Aviso.avisoExcecao(ex, jTextField25);
+        
+        if (erro2 == false){
+             Aviso.resetarAviso(jComboBox4);
+             Aviso.resetarAviso(jLabel65, jTextField20);
+             Aviso.resetarAviso(jLabel65, jTextField21);
+             Aviso.resetarAviso(jLabel65, jTextField22);
+             Aviso.resetarAviso(jLabel65, jTextField23);
+        }
+            
+
+        //Colocar no try
+        try{
+            titulo.setNumeroDoDocumento(this.numeroDocumento);
+            titulo.setNossoNumero(this.nossoNumero);
+            titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
+            titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
+            titulo.setTipoDeDocumento(this.tipoDocumento);
+            titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
+            titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
+            titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
+            titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
+            titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
         }catch (CampoLivreException ex){
-            Aviso.avisoExcecao(ex, jTextField26);
-        }
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         
-        
-        /*
-             * INFORMANDO OS DADOS SOBRE O TÍTULO.
-         */
-        // Informando dados sobre a conta bancária do título.
-        
-
-        
-        titulo.setNumeroDoDocumento(this.numeroDocumento);
-        titulo.setNossoNumero(this.nossoNumero);
-        titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
-        titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
-        titulo.setTipoDeDocumento(this.tipoDocumento);
-        titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
-        titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
-        titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
-        titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
-        titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
-
         //formato de data
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         //entender essa exceção
@@ -1434,32 +1473,30 @@ public class janela extends javax.swing.JFrame {
              * INFORMANDO OS DADOS SOBRE O BOLETO.
          */
         Boleto boleto = new Boleto(titulo);
-
-        boleto.setLocalPagamento(localPagamento);
-        boleto.setInstrucaoAoSacado(instrucaoSacado);
-        boleto.setInstrucao1(instrucao1);
-        boleto.setInstrucao2(instrucao2);
-        boleto.setInstrucao3(instrucao3);
-        boleto.setInstrucao4(instrucao4);
-        boleto.setInstrucao5(instrucao5);
-        boleto.setInstrucao6(instrucao6);
-        boleto.setInstrucao7(instrucao7);
-        boleto.setInstrucao8(instrucao8);
-
-        /*
-             * GERANDO O BOLETO BANCÁRIO.
-         */
-        // Instanciando um objeto "BoletoViewer", classe responsável pela
-        // geração do boleto bancário.
+        
+        try{
+            boleto.setLocalPagamento(localPagamento);
+            boleto.setInstrucaoAoSacado(instrucaoSacado);
+            boleto.setInstrucao1(instrucao1);
+            boleto.setInstrucao2(instrucao2);
+            boleto.setInstrucao3(instrucao3);
+            boleto.setInstrucao4(instrucao4);
+            boleto.setInstrucao5(instrucao5);
+            boleto.setInstrucao6(instrucao6);
+            boleto.setInstrucao7(instrucao7);
+            boleto.setInstrucao8(instrucao8);
+        }catch(LinhaDigitavelException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }catch(IllegalArgumentException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+   
         BoletoViewer boletoViewer = new BoletoViewer(boleto);
-
-        // Gerando o arquivo. No caso o arquivo mencionado será salvo na mesma
-        // pasta do projeto. Outros exemplos:
         // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
         // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
         File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
-
-        // Mostrando o boleto gerado na tela.
         mostreBoletoNaTela(arquivoPdf);
 
 
@@ -1955,8 +1992,8 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField28KeyReleased
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem() == "AC") {
-            ufSacado = UnidadeFederativa.AC;
+        if (jComboBox1.getSelectedItem() == "AC") { 
+           ufSacado = UnidadeFederativa.AC;
         } else if (jComboBox1.getSelectedItem() == "AL") {
             ufSacado = UnidadeFederativa.AL;
         } else if (jComboBox1.getSelectedItem() == "AP") {
@@ -2010,6 +2047,8 @@ public class janela extends javax.swing.JFrame {
         } else if (jComboBox1.getSelectedItem() == "TO") {
             ufSacado = UnidadeFederativa.TO;
         }
+        
+        enderecoSac.setUF(this.ufSacado);
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
@@ -2558,7 +2597,19 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField12FocusLost
 
     private void jTextField14FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField14FocusLost
-
+         boolean erro = false;
+        
+        try{
+            CEPSacadoAvalista.setCep(jTextField14.getText());
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            
+            Aviso.avisoExcecao(entrada,jTextField14);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jTextField14);
+        }
     }//GEN-LAST:event_jTextField14FocusLost
 
     private void jTextField6FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField6FocusLost
@@ -2728,6 +2779,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
