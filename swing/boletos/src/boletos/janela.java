@@ -757,7 +757,10 @@ public class janela extends javax.swing.JFrame {
         jLabel64.setText("jLabel64");
         jLabel64.setVisible(false);
 
-        jTextField13.setText("jTextField13");
+        jTextField13.setToolTipText("");
+        jTextField13.setMinimumSize(new java.awt.Dimension(10, 60));
+        jTextField13.setName(""); // NOI18N
+        jTextField13.setPreferredSize(new java.awt.Dimension(30, 28));
         jTextField13.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField13FocusLost(evt);
@@ -810,7 +813,7 @@ public class janela extends javax.swing.JFrame {
                                 .addComponent(jLabel63)
                                 .addGap(18, 18, 18)
                                 .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(473, Short.MAX_VALUE))
+                .addContainerGap(484, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
