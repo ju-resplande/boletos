@@ -29,6 +29,7 @@ package boletos;
 public class Boletos {
 
         public static void main(String args[]) {
+            org.apache.log4j.BasicConfigurator.configure();
             janela janela = new janela();
             /* Set the Nimbus look and feel */
             //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

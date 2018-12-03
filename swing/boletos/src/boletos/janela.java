@@ -91,11 +91,16 @@ public class janela extends javax.swing.JFrame {
     Date vencimento, pagamento;
     private boolean erro3;
     private boolean erro4;
+    private String digitoConta;
+    NumeroDaConta numeroDaConta = new NumeroDaConta();
+    
+   
     /**
      * Creates new form janela
      */
     public janela() {
         initComponents();
+        contaBancaria.setNumeroDaConta(numeroDaConta);
         esquecimento = new Aviso(this);
     }
 
@@ -192,6 +197,7 @@ public class janela extends javax.swing.JFrame {
         jLabel62 = new javax.swing.JLabel();
         jLabel63 = new javax.swing.JLabel();
         jLabel64 = new javax.swing.JLabel();
+        jTextField13 = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -751,6 +757,18 @@ public class janela extends javax.swing.JFrame {
         jLabel64.setText("jLabel64");
         jLabel64.setVisible(false);
 
+        jTextField13.setText("jTextField13");
+        jTextField13.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField13FocusLost(evt);
+            }
+        });
+        jTextField13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField13ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -781,16 +799,18 @@ public class janela extends javax.swing.JFrame {
                             .addComponent(jLabel33))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel64))
                             .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel63))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel64)))))
-                .addContainerGap(484, Short.MAX_VALUE))
+                                .addComponent(jLabel63)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(473, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -805,7 +825,8 @@ public class janela extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
                     .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel63))
+                    .addComponent(jLabel63)
+                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel32)
@@ -1468,8 +1489,10 @@ public class janela extends javax.swing.JFrame {
         }catch(NullPointerException ex){
            JOptionPane.showMessageDialog(null,"Possui alguma linha da aba boleto em branco","Erro", JOptionPane.ERROR_MESSAGE);
            return;
+        }catch(IllegalStateException ex){
+           JOptionPane.showMessageDialog(null,"Possui alguma linha da aba boleto em branco","Erro", JOptionPane.ERROR_MESSAGE);
+           return;
         }
-   
         BoletoViewer boletoViewer = new BoletoViewer(boleto);
         // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
         // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
@@ -1491,6 +1514,9 @@ public class janela extends javax.swing.JFrame {
                 return;
            }catch(NullPointerException ex){
            JOptionPane.showMessageDialog(null,"Possui algum campo em branco","Erro", JOptionPane.ERROR_MESSAGE);
+           return;
+        }catch(IllegalStateException ex){
+           JOptionPane.showMessageDialog(null,"Possui alguma linha da aba boleto em branco","Erro", JOptionPane.ERROR_MESSAGE);
            return;
         }
         
@@ -2331,7 +2357,7 @@ public class janela extends javax.swing.JFrame {
         
         try{
             Integer.parseInt(jTextField14.getText());
-            if(jTextField14.getText().length() != 9) throw new IllegalArgumentException("Número de dígitos incorreto");
+            if(jTextField14.getText().length() != 8) throw new IllegalArgumentException("Número de dígitos incorreto");
         }catch(NumberFormatException entrada){
             erro = true;
             Aviso.avisoExcecao(entrada,jTextField14);
@@ -2351,7 +2377,7 @@ public class janela extends javax.swing.JFrame {
         
         try{
             Integer.parseInt(jTextField6.getText());
-            if(jTextField6.getText().length() != 9) throw new IllegalArgumentException("Número de dígitos incorreto");
+            if(jTextField6.getText().length() != 8) throw new IllegalArgumentException("Número de dígitos incorreto");
         }catch(NumberFormatException entrada){
             erro = true;
             Aviso.avisoExcecao(entrada,jTextField6);
@@ -2417,8 +2443,9 @@ public class janela extends javax.swing.JFrame {
        numeroConta = jTextField20.getText();
        Boolean erro = false;
        
+       
         try{
-            contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(numeroConta)));
+            numeroDaConta.setCodigoDaConta(Integer.parseInt(numeroConta));
         }catch (IllegalArgumentException ex){
             erro = true;
             Aviso.avisoExcecao(ex, jLabel63,jTextField20);
@@ -2478,6 +2505,26 @@ public class janela extends javax.swing.JFrame {
             Aviso.resetarAviso(jTextField28);
         }
     }//GEN-LAST:event_jTextField28FocusLost
+
+    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField13ActionPerformed
+
+    private void jTextField13FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField13FocusLost
+        Boolean erro = false;
+        digitoConta = jTextField13.getText();
+        
+        try{
+           numeroDaConta.setDigitoDaConta(digitoConta);
+        }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jTextField13);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jTextField13);
+        }
+    }//GEN-LAST:event_jTextField13FocusLost
 
     /**
      * @param args the command line arguments
@@ -2570,6 +2617,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
+    private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
