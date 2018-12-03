@@ -5,22 +5,47 @@
  */
 package boletos;
 
+import java.awt.KeyboardFocusManager;
+import java.lang.reflect.*;
+
+import javax.swing.JFileChooser;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+import java.util.Map;
+import java.util.HashMap;
+
+import java.io.FileWriter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.MaskFormatter;
 
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
+import org.jrimum.bopepo.LinhaDigitavelException;
+import org.jrimum.bopepo.campolivre.CampoLivreException;
+import org.jrimum.bopepo.campolivre.NotSupportedBancoException;
+import org.jrimum.bopepo.campolivre.NotSupportedCampoLivreException;
 import org.jrimum.bopepo.view.BoletoViewer;
 import org.jrimum.domkee.comum.pessoa.endereco.CEP;
 import org.jrimum.domkee.comum.pessoa.endereco.Endereco;
 import org.jrimum.domkee.comum.pessoa.endereco.UnidadeFederativa;
+import org.jrimum.domkee.comum.pessoa.id.cprf.AbstractCPRF;
 import org.jrimum.domkee.financeiro.banco.febraban.Agencia;
 import org.jrimum.domkee.financeiro.banco.febraban.Banco;
 import org.jrimum.domkee.financeiro.banco.febraban.Carteira;
@@ -31,60 +56,64 @@ import org.jrimum.domkee.financeiro.banco.febraban.Sacado;
 import org.jrimum.domkee.financeiro.banco.febraban.SacadorAvalista;
 import org.jrimum.domkee.financeiro.banco.febraban.TipoDeTitulo;
 import org.jrimum.domkee.financeiro.banco.febraban.Titulo;
-
-
-
-
+import org.json.simple.parser.JSONParser;
 
 /**
  *
  * @author ruan
  */
 public class janela extends javax.swing.JFrame {
-    
-    // AceiteStatus serve para o botão do Aceite determinar A ou N para o aceite do boleto
-    Boolean AceiteStatus;
-    
+
+    Map<String, String> buffer = new HashMap<String, String>() {
+    };
+    Boolean AceiteStatus, SacadoAvalistaStatus;
     String nomeCedente,cnpjCedente;
-    String nomeSacado,cpfSacado,cepSacado,numeroSacado,logradouroSacado,localidadeSacado,
-           bairroSacado;
-    String nomeSacadoAvalista,cpfSacadoAvalista,cepSacadoAvalista,
-           numeroSacadoAvalista,logradouroSacadoAvalista,localidadeSacadoAvalista,bairroSacadoAvalista;
-    String numeroConta,tipoCarteira,nomeAgenciaBanco,numeroAgenciaBanco;
-    String numeroDocumento,nossoNumero,digitoNossoNumero,dataDocumento,dataVencimento,aceite;          
-    String valor,desconto,mora,acrescimo,valorCobrado;
-    String localPagamento,instrucaoSacado,instrucao1,instrucao2,instrucao3,instrucao4,instrucao5,instrucao6,
-           instrucao7,instrucao8;
+    CEP CEPSacado = new CEP();
+    CEP CEPSacadoAvalista = new CEP();
+    AbstractCPRF CPRFCedente, CPRFSacado, CPRFSacadoAvalista;
+    String nomeSacado, cpfSacado, cepSacado, numeroSacado, logradouroSacado, localidadeSacado,
+            bairroSacado;
+    String nomeSacadoAvalista, cpfSacadoAvalista, cepSacadoAvalista,
+            numeroSacadoAvalista, logradouroSacadoAvalista, localidadeSacadoAvalista, bairroSacadoAvalista;
+    String numeroConta, tipoCarteira, digitoAgenciaBanco, numeroAgenciaBanco;
+    String numeroDocumento, nossoNumero, digitoNossoNumero, dataDocumento, dataVencimento, aceite;
+    String valor, desconto, mora, acrescimo, valorCobrado, deducao;
+    String localPagamento, instrucaoSacado, instrucao1, instrucao2, instrucao3, instrucao4, instrucao5, instrucao6,
+            instrucao7, instrucao8;
     UnidadeFederativa ufSacado, ufSacadoAval;
     TipoDeTitulo tipoDocumento;
-    ContaBancaria contaBancaria;
-    
+    ContaBancaria contaBancaria = new ContaBancaria();
+    Aviso esquecimento;
+    Agencia agencia;
+    Titulo titulo;
+    Endereco enderecoSac = new Endereco();
+    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    Date vencimento, pagamento;
+    private boolean erro3;
+    private boolean erro4;
     /**
      * Creates new form janela
      */
     public janela() {
         initComponents();
+        esquecimento = new Aviso(this);
     }
-    
-    
-            /**
-         * Exibe o arquivo na tela.
-         * 
-         * @param arquivoBoleto
-         */
-        private static void mostreBoletoNaTela(File arquivoBoleto) {
 
-                java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-                
-                try {
-                        desktop.open(arquivoBoleto);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
+    /**
+     * Exibe o arquivo na tela.
+     *
+     * @param arquivoBoleto
+     */
+    private static void mostreBoletoNaTela(File arquivoBoleto) {
+
+        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+
+        try {
+            desktop.open(arquivoBoleto);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    
-    
-
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -103,6 +132,7 @@ public class janela extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -122,6 +152,7 @@ public class janela extends javax.swing.JFrame {
         jTextField9 = new javax.swing.JTextField();
         jTextField10 = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel18 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
@@ -142,6 +173,9 @@ public class janela extends javax.swing.JFrame {
         jTextField17 = new javax.swing.JTextField();
         jTextField18 = new javax.swing.JTextField();
         jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jComboBox6 = new javax.swing.JComboBox<>();
+        jLabel61 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
@@ -155,6 +189,9 @@ public class janela extends javax.swing.JFrame {
         jTextField22 = new javax.swing.JTextField();
         jTextField23 = new javax.swing.JTextField();
         jComboBox4 = new javax.swing.JComboBox<>();
+        jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
+        jLabel64 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel36 = new javax.swing.JLabel();
         jLabel37 = new javax.swing.JLabel();
@@ -181,6 +218,8 @@ public class janela extends javax.swing.JFrame {
         jTextField35 = new javax.swing.JTextField();
         jComboBox3 = new javax.swing.JComboBox<>();
         jComboBox5 = new javax.swing.JComboBox<>();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel49 = new javax.swing.JLabel();
         jLabel50 = new javax.swing.JLabel();
@@ -206,8 +245,6 @@ public class janela extends javax.swing.JFrame {
         jTextField45 = new javax.swing.JTextField();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -230,33 +267,38 @@ public class janela extends javax.swing.JFrame {
         jLabel3.setText("CPF/CNPJ");
 
         jTextField2.setToolTipText("CNPJ do Cedente");
-        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField2KeyReleased(evt);
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
             }
         });
+
+        jLabel17.setText("jLabel17");
+        jLabel17.setToolTipText("");
+        jLabel17.setVisible(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 746, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(220, 220, 220)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addComponent(jLabel17)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(321, 321, 321)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,8 +312,9 @@ public class janela extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(284, Short.MAX_VALUE))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addContainerGap(319, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cedente", jPanel1);
@@ -287,11 +330,11 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("CPF ou CNPJ");
+        jLabel6.setText("CPF/CNPJ");
 
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField4KeyReleased(evt);
+        jTextField4.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField4FocusLost(evt);
             }
         });
 
@@ -310,14 +353,9 @@ public class janela extends javax.swing.JFrame {
 
         jLabel14.setText("Número");
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
-            }
-        });
-        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField6KeyReleased(evt);
+        jTextField6.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField6FocusLost(evt);
             }
         });
 
@@ -327,11 +365,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
-            }
-        });
         jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField8KeyReleased(evt);
@@ -344,11 +377,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
-            }
-        });
         jTextField10.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField10KeyReleased(evt);
@@ -362,6 +390,9 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jLabel18.setText("jLabel18");
+        jLabel18.setVisible(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -369,46 +400,50 @@ public class janela extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel6)))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel6)))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField3)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel11)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel18))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(113, 113, 113)
-                                        .addComponent(jLabel9)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(34, 34, 34)
-                                        .addComponent(jLabel13)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel13)
+                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel11)))
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(222, 222, 222)
-                        .addComponent(jLabel4)))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addGap(13, 13, 13)
+                                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 92, Short.MAX_VALUE))
+                    .addComponent(jTextField3))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(342, 342, 342)
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -422,7 +457,8 @@ public class janela extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
@@ -437,18 +473,13 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(jLabel10)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(92, 92, 92))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(95, 95, 95))
         );
 
         jTabbedPane1.addTab("Sacado", jPanel2);
@@ -458,7 +489,7 @@ public class janela extends javax.swing.JFrame {
 
         jLabel20.setText("Nome");
 
-        jLabel21.setText("CPF ou CNPJ");
+        jLabel21.setText("CPF/CNPJ");
 
         jLabel22.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel22.setText("Endereço do Sacado Avalista");
@@ -481,15 +512,16 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField12.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField12KeyReleased(evt);
+        jTextField12.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField12FocusLost(evt);
             }
         });
 
-        jTextField14.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField14KeyReleased(evt);
+        jTextField14.setToolTipText("CEP");
+        jTextField14.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField14FocusLost(evt);
             }
         });
 
@@ -499,11 +531,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField16ActionPerformed(evt);
-            }
-        });
         jTextField16.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField16KeyReleased(evt);
@@ -516,7 +543,6 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField18.setText("            ");
         jTextField18.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField18KeyReleased(evt);
@@ -530,57 +556,80 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
+        jLabel15.setText("Caso não Possuir Sacado Avalista, selecione \"não\"");
+
+        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sim", "não" }));
+        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox6ActionPerformed(evt);
+            }
+        });
+
+        jLabel61.setText("jLabel61");
+        jLabel61.setVisible(false);
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel20)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel28)
+                        .addComponent(jLabel21))
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel23))
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel20)
-                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel28)
-                                .addComponent(jLabel21))
-                            .addComponent(jLabel25)
-                            .addComponent(jLabel23))
+                        .addGap(8, 8, 8)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
+                                .addGap(10, 10, 10)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
-                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel22)
-                                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel27))
-                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel24))
-                                                    .addGroup(jPanel7Layout.createSequentialGroup()
-                                                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(64, 64, 64)
-                                                        .addComponent(jLabel26)))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField16)
-                                            .addComponent(jTextField17)
-                                            .addComponent(jTextField15)))))
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel7Layout.createSequentialGroup()
+                                            .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(19, 19, 19))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(27, 27, 27)))
+                                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel27)
+                                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel26)
+                                        .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField18, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                                    .addComponent(jTextField16)
+                                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(142, 142, 142))
                             .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jLabel22)
+                                .addGap(177, 177, 177))))
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(183, 183, 183)
-                        .addComponent(jLabel19)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 737, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel61))))))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(288, 288, 288)
+                        .addComponent(jLabel19))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(258, 258, 258)
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,43 +638,50 @@ public class janela extends javax.swing.JFrame {
                 .addComponent(jLabel19)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel22)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(jLabel24)
-                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel26)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel27)
-                    .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel28)
-                    .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(113, Short.MAX_VALUE))
+                    .addComponent(jLabel15)
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel20)
+                            .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel21)
+                            .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel61))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel22)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(jLabel24)
+                            .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel27)
+                            .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel28)
+                            .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel26))))
+                .addGap(78, 78, 78))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -646,66 +702,95 @@ public class janela extends javax.swing.JFrame {
         jLabel33.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel33.setText("Agência");
 
-        jLabel34.setText("Nome");
+        jLabel34.setText("Dígito");
 
         jLabel35.setText("Número");
 
-        jTextField20.setText("    ");
-
-        jTextField21.setText("     ");
-
-        jTextField22.setText("    ");
-        jTextField22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField22ActionPerformed(evt);
+        jTextField20.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField20FocusLost(evt);
             }
         });
 
-        jTextField23.setText("    ");
+        jTextField21.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField21FocusLost(evt);
+            }
+        });
+        jTextField21.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField21KeyReleased(evt);
+            }
+        });
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Banco do Brasil", "Banco do Nordeste do Brasil", "Banco do Estado do Espírito Santo", "Banco Santander", "Banco do Estado do Rio Grande do Sul", "Banco Intermedium", "Caixa Econômica Federal", "Nossa Caixa", "Banco Bradesco", "Banco Itaú", "Banco ABN AMRO", "Mercantil do Brasil", "HSBC", "Unibanco", "Banco Safra", "Banco Rural", "Banco Sincredi", "BANCOOB" }));
+        jTextField22.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField22FocusLost(evt);
+            }
+        });
+
+        jTextField23.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField23FocusLost(evt);
+            }
+        });
+
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "Banco do Brasil", "Banco do Nordeste do Brasil", "Banco do Estado do Espírito Santo", "Banco Santander", "Banco do Estado do Rio Grande do Sul", "Banco Intermedium", "Caixa Econômica Federal", "Nossa Caixa", "Banco Bradesco", "Banco Itaú", "Banco ABN AMRO", "Mercantil do Brasil", "HSBC", "Unibanco", "Banco Safra", "Banco Rural", "Banco Sincredi", "BANCOOB" }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox4ActionPerformed(evt);
             }
         });
 
+        jLabel62.setText("jLabel62");
+        jLabel62.setVisible(false);
+
+        jLabel63.setText("jLabel63");
+        jLabel63.setVisible(false);
+
+        jLabel64.setText("jLabel64");
+        jLabel64.setVisible(false);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(0, 429, Short.MAX_VALUE)
+                .addComponent(jLabel29)
+                .addGap(299, 299, 299))
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(182, 182, 182)
-                        .addComponent(jLabel29))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel34)
+                            .addComponent(jLabel35))
+                        .addGap(86, 86, 86)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel62))
+                            .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel31)
+                            .addComponent(jLabel30)
                             .addComponent(jLabel32)
-                            .addComponent(jLabel30))
+                            .addComponent(jLabel33))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField20)
+                            .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 104, Short.MAX_VALUE))))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel33))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel35)
-                            .addComponent(jLabel34))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                                .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel63))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel64)))))
+                .addContainerGap(484, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -713,28 +798,35 @@ public class janela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel29)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel30)
-                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel30))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel31)
-                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel63))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel32)
-                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel64))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel33)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel34)
-                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel35)
-                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(116, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel35)
+                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel62)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34))
+                .addContainerGap(166, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Conta Bancária", jPanel4);
@@ -766,33 +858,38 @@ public class janela extends javax.swing.JFrame {
 
         jLabel48.setText("Valor Cobrado");
 
-        jTextField24.setText("    ");
         jTextField24.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField24KeyReleased(evt);
             }
         });
 
-        jTextField25.setText("    ");
         jTextField25.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField25KeyReleased(evt);
             }
         });
 
-        jTextField26.setText("    ");
+        jTextField26.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField26KeyReleased(evt);
+            }
+        });
 
-        jTextField27.setText("    ");
+        jTextField27.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField27FocusLost(evt);
+            }
+        });
         jTextField27.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField27KeyReleased(evt);
             }
         });
 
-        jTextField28.setText("                           ");
-        jTextField28.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField28ActionPerformed(evt);
+        jTextField28.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField28FocusLost(evt);
             }
         });
         jTextField28.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -801,35 +898,30 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jTextField31.setText("                          ");
         jTextField31.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField31KeyReleased(evt);
             }
         });
 
-        jTextField32.setText("                           ");
         jTextField32.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField32KeyReleased(evt);
             }
         });
 
-        jTextField33.setText("                             ");
         jTextField33.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField33KeyReleased(evt);
             }
         });
 
-        jTextField34.setText("                              ");
         jTextField34.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField34KeyReleased(evt);
             }
         });
 
-        jTextField35.setText("                                ");
         jTextField35.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField35KeyReleased(evt);
@@ -843,72 +935,84 @@ public class janela extends javax.swing.JFrame {
             }
         });
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A", "N" }));
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione", "A", "N" }));
         jComboBox5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox5ActionPerformed(evt);
             }
         });
 
+        jTextField5.setToolTipText("");
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField5KeyReleased(evt);
+            }
+        });
+
+        jLabel16.setText("Dedução");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel37)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField24))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel38)
-                                .addGap(83, 83, 83)
-                                .addComponent(jTextField25))))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(215, 215, 215)
-                        .addComponent(jLabel36)))
-                .addContainerGap())
-            .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel39)
-                    .addComponent(jLabel41)
-                    .addComponent(jLabel42)
-                    .addComponent(jLabel43)
-                    .addComponent(jLabel44))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel38)
+                    .addComponent(jLabel37))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField28)
-                        .addComponent(jTextField27)
-                        .addComponent(jTextField26))
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTextField25)
+                    .addComponent(jTextField24))
+                .addContainerGap())
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(347, 347, 347)
+                .addComponent(jLabel36)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel48)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel16))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel39)
+                            .addComponent(jLabel41)
+                            .addComponent(jLabel42)
+                            .addComponent(jLabel43)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel44)))
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel40)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel45)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel46)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField33, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel47)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTextField27, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField28, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField26, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel40, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel45, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel47)
+                                .addComponent(jLabel46, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel48))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField5)
+                    .addComponent(jTextField35, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(jTextField34, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(jTextField33)
+                    .addComponent(jTextField31)
+                    .addComponent(jTextField32))
                 .addGap(22, 22, 22))
         );
         jPanel5Layout.setVerticalGroup(
@@ -954,12 +1058,17 @@ public class janela extends javax.swing.JFrame {
                         .addComponent(jLabel47)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel44)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel48))
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel44)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Título", jPanel5);
@@ -998,80 +1107,60 @@ public class janela extends javax.swing.JFrame {
         jLabel60.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         jLabel60.setText("8");
 
-        jTextField36.setText("                                                                           ");
         jTextField36.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField36KeyReleased(evt);
             }
         });
 
-        jTextField37.setText("                                                                             ");
-        jTextField37.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField37ActionPerformed(evt);
-            }
-        });
         jTextField37.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField37KeyReleased(evt);
             }
         });
 
-        jTextField38.setText("                                                                                        ");
         jTextField38.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField38KeyReleased(evt);
             }
         });
 
-        jTextField39.setText("                                                                                    ");
-        jTextField39.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField39ActionPerformed(evt);
-            }
-        });
         jTextField39.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField39KeyReleased(evt);
             }
         });
 
-        jTextField40.setText("                                                                                                                        ");
         jTextField40.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField40KeyReleased(evt);
             }
         });
 
-        jTextField41.setText("                                                                                                                    ");
         jTextField41.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField41KeyReleased(evt);
             }
         });
 
-        jTextField42.setText("                                                                                                                   ");
         jTextField42.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField42KeyReleased(evt);
             }
         });
 
-        jTextField43.setText("                                                                                                                           ");
         jTextField43.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField43KeyReleased(evt);
             }
         });
 
-        jTextField44.setText("                                                                                       ");
         jTextField44.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField44KeyReleased(evt);
             }
         });
 
-        jTextField45.setText("                                                                                              ");
         jTextField45.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField45KeyReleased(evt);
@@ -1091,58 +1180,56 @@ public class janela extends javax.swing.JFrame {
                                 .addComponent(jLabel51)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
                                         .addComponent(jLabel52)
                                         .addGap(337, 337, 337))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                                .addComponent(jTextField36, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(jTextField36)
                                             .addComponent(jTextField37)))))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jLabel50)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(20, 20, 20))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(220, 220, 220)
-                        .addComponent(jLabel49))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(16, 16, 16)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel53)
-                            .addComponent(jLabel54))
-                        .addGap(20, 20, 20)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel53)
+                                    .addComponent(jLabel54))
+                                .addGap(20, 20, 20)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField38)
+                                    .addComponent(jTextField39, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel55)
+                                    .addComponent(jLabel56))
+                                .addGap(20, 20, 20)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextField40)
+                                    .addComponent(jTextField41))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel57)
+                                .addComponent(jLabel58))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel59)
+                                .addComponent(jLabel60)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField39, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                            .addComponent(jTextField38))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel57)
-                            .addComponent(jLabel58))
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField43)
-                            .addComponent(jTextField42)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel55)
-                            .addComponent(jLabel56))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField40)
-                            .addComponent(jTextField41))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel59)
-                            .addComponent(jLabel60))
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField44, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                            .addComponent(jTextField44, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                            .addComponent(jTextField43, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField42, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField45))))
                 .addContainerGap())
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(343, 343, 343)
+                .addComponent(jLabel49)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1183,17 +1270,10 @@ public class janela extends javax.swing.JFrame {
                     .addComponent(jLabel60)
                     .addComponent(jTextField41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(97, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Boleto", jPanel6);
-
-        jMenu1.setText("File");
-
-        jMenu3.setText("jMenu3");
-        jMenu1.add(jMenu3);
-
-        jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Gerar Boleto");
 
@@ -1214,7 +1294,10 @@ public class janela extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1224,103 +1307,148 @@ public class janela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-            String string = new String();
-            string += "Cedente\n";
-            string += String.format("Nome: %s cpnj: %s", this.nomeCedente, this.cnpjCedente);
-            
-            string += "\nSacado\n";
-            string += String.format("Nome: %s cpnj: %s", this.nomeSacado, this.cpfSacado);
-          
-            string += "\nEndereço";
-            string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
-                    UnidadeFederativa.RN, localidadeSacado, new CEP(this.cepSacado).getCep(), bairroSacado, logradouroSacado, numeroSacado);
-            string += "\nSacadorAvalista\n";
-            string += String.format("Nome: %s cpnj: %s", this.nomeSacadoAvalista, this.cpfSacadoAvalista);
-          
-            string += "\nEndereço";
-            string += String.format("UF: %s, Localidade: %s, CEP: %s, Bairro: %s, Logradouro: %s, Número: %s", 
-                    UnidadeFederativa.RN, localidadeSacadoAvalista, new CEP(this.cepSacadoAvalista).getCep(), bairroSacadoAvalista, logradouroSacadoAvalista, numeroSacadoAvalista);
-            JOptionPane.showMessageDialog(null, string);
-            
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
         
+        if (!esquecimento.VerificaComboBox()) //Corresponde a combox
+            return;
         
-            Cedente cedente = new Cedente(this.nomeCedente, this.cnpjCedente);
+        Cedente cedente = new Cedente(this.nomeCedente, this.CPRFCedente);
+        Sacado sacado = new Sacado(this.nomeSacado, this.CPRFSacado);
+        SacadorAvalista sacadorAvalista = new SacadorAvalista("");
+       
+        enderecoSac.setLocalidade(this.localidadeSacado);
+        enderecoSac.setBairro(this.bairroSacado);
+        enderecoSac.setLogradouro(this.logradouroSacado);
+        enderecoSac.setNumero(this.numeroSacado);
+        sacado.addEndereco(enderecoSac);
 
-            /*
-             * INFORMANDO DADOS SOBRE O SACADO.
-             */
-            Sacado sacado = new Sacado(this.nomeSacado, this.cpfSacado);
-
-            // Informando o endereço do sacado.
-            Endereco enderecoSac = new Endereco();
-            enderecoSac.setUF(this.ufSacado);//janela.ufSacado
-            enderecoSac.setLocalidade(this.localidadeSacado);
-            enderecoSac.setCep(new CEP(this.cepSacado));
-            enderecoSac.setBairro(this.bairroSacado);
-            enderecoSac.setLogradouro(this.logradouroSacado);
-            enderecoSac.setNumero(this.numeroSacado);
-            sacado.addEndereco(enderecoSac);
-
-            /*
-             * INFORMANDO DADOS SOBRE O SACADOR AVALISTA.
-             */
-            SacadorAvalista sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.cpfSacadoAvalista);
+        if (SacadoAvalistaStatus == true){
+            sacadorAvalista = new SacadorAvalista(this.nomeSacadoAvalista, this.CPRFSacadoAvalista);
 
             // Informando o endereço do sacador avalista.
             Endereco enderecoSacAval = new Endereco();
-            enderecoSacAval.setUF(this.ufSacadoAval);//janela.ufSacadoAvalista
+            enderecoSacAval.setUF(this.ufSacadoAval);
             enderecoSacAval.setLocalidade(this.localidadeSacadoAvalista);
-            enderecoSacAval.setCep(new CEP(this.cepSacadoAvalista));
+            enderecoSacAval.setCep(CEPSacadoAvalista); //Se funfar depois
             enderecoSacAval.setBairro(this.bairroSacadoAvalista);
             enderecoSacAval.setLogradouro(this.logradouroSacadoAvalista);
             enderecoSacAval.setNumero(this.numeroSacadoAvalista);
             sacadorAvalista.addEndereco(enderecoSacAval);
+        }
+        
+        
+        Boolean erro1 = false, erro2 = false;
+        
+        try{
+            contaBancaria.setAgencia(agencia);
+        }catch (IllegalArgumentException ex){
+                erro1 = true;
+                Aviso.avisoExcecao(ex, jLabel62,jTextField22);
+                Aviso.avisoExcecao(ex, jLabel62,jTextField23);
+                return;
+        }
+        
+        if(!erro1){
+                Aviso.resetarAviso(jLabel62,jTextField22);
+                Aviso.resetarAviso(jLabel62,jTextField23);
+        }
+        
+        if (SacadoAvalistaStatus == false){
+            try{
+                titulo = new Titulo(contaBancaria, sacado, cedente);
+            }catch (NotSupportedBancoException ex){
+                Aviso.avisoExcecao(ex, jComboBox4);
+                erro2 = true;
+                return;
+            }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (CampoLivreException ex){          
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else{
+            try{
+              titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+            }catch (NotSupportedBancoException ex){
+                    
+                    Aviso.avisoExcecao(ex, jComboBox4);
+                    return;
+             }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (CampoLivreException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
+        }
+            
 
-            /*
-             * INFORMANDO OS DADOS SOBRE O TÍTULO.
-             */
-
-            // Informando dados sobre a conta bancária do título.
-            contaBancaria.setNumeroDaConta(new NumeroDaConta(123456, "0"));
-            contaBancaria.setCarteira(new Carteira(30));
-            contaBancaria.setAgencia(new Agencia(1234, "1"));
-
-            Titulo titulo = new Titulo(contaBancaria, sacado, cedente, sacadorAvalista);
+        //Colocar no try
+        try{
             titulo.setNumeroDoDocumento(this.numeroDocumento);
             titulo.setNossoNumero(this.nossoNumero);
             titulo.setDigitoDoNossoNumero(this.digitoNossoNumero);
-            titulo.setValor(new BigDecimal (Double.parseDouble(this.valor)));
+            titulo.setValor(new BigDecimal(Double.parseDouble(this.valor)));
             titulo.setTipoDeDocumento(this.tipoDocumento);
-            titulo.setAceite(titulo.getAceite().A);
             titulo.setDesconto(new BigDecimal(Double.parseDouble(this.desconto)));
-            titulo.setDeducao(BigDecimal.ZERO);
+            titulo.setDeducao(new BigDecimal(Double.parseDouble(this.deducao)));
             titulo.setMora(new BigDecimal(Double.parseDouble(this.mora)));
             titulo.setAcrecimo(new BigDecimal(Double.parseDouble(this.acrescimo)));
             titulo.setValorCobrado(new BigDecimal(Double.parseDouble(this.valorCobrado)));
+        }catch (CampoLivreException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+        }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+        }catch(NullPointerException ex){
+           JOptionPane.showMessageDialog(null,"Possui algum campo do titulo em branco","Erro", JOptionPane.ERROR_MESSAGE);
+           return;
+        }
+        
+        //formato de data
+       
+        erro3 = false;
+        //entender essa exceção
+        try {
+            titulo.setDataDoDocumento(pagamento);
+        } catch (IllegalArgumentException ex) {
+            erro3 = true;
+            Aviso.avisoExcecao(ex, jTextField27);
+        }
 
-            
-            //formato de data
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            //entender essa exceção
-            try {
-                titulo.setDataDoDocumento(new Date(format.parse(this.dataDocumento).getTime()));
-            } catch (ParseException ex) {
-                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            try {
-                titulo.setDataDoVencimento(new Date(format.parse(this.dataVencimento).getTime()));
-            } catch (ParseException ex) {
-                Logger.getLogger(janela.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            /*
+        if (erro3 == false)
+            Aviso.resetarAviso(jTextField27);
+        
+        erro4 = false;
+        try {
+            titulo.setDataDoVencimento(vencimento);
+        } catch (IllegalArgumentException ex) {
+            Aviso.avisoExcecao(ex, jTextField28);
+        }
+        
+        if (erro4 == false)
+            Aviso.resetarAviso(jTextField28);
+        
+        
+        
+        /*
              * INFORMANDO OS DADOS SOBRE O BOLETO.
-             */
+         */
+        try{
             Boleto boleto = new Boleto(titulo);
-
+            
+            try{
             boleto.setLocalPagamento(localPagamento);
             boleto.setInstrucaoAoSacado(instrucaoSacado);
             boleto.setInstrucao1(instrucao1);
@@ -1331,52 +1459,469 @@ public class janela extends javax.swing.JFrame {
             boleto.setInstrucao6(instrucao6);
             boleto.setInstrucao7(instrucao7);
             boleto.setInstrucao8(instrucao8);
-            
-            /*
-             * GERANDO O BOLETO BANCÁRIO.
-             */
-            // Instanciando um objeto "BoletoViewer", classe responsável pela
-            // geração do boleto bancário.
-            BoletoViewer boletoViewer = new BoletoViewer(boleto);
+        }catch(LinhaDigitavelException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }catch(IllegalArgumentException ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }catch(NullPointerException ex){
+           JOptionPane.showMessageDialog(null,"Possui alguma linha da aba boleto em branco","Erro", JOptionPane.ERROR_MESSAGE);
+           return;
+        }
+   
+        BoletoViewer boletoViewer = new BoletoViewer(boleto);
+        // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
+        // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
+        File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
+        mostreBoletoNaTela(arquivoPdf);
+        
+        }catch (NotSupportedBancoException ex){
+                Aviso.avisoExcecao(ex, jComboBox4);
+                erro2 = true;
+                return;
+            }catch (NotSupportedCampoLivreException ex){ //Entao e no bancario 
+                JOptionPane.showMessageDialog(null,ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (CampoLivreException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException ex){
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+           }catch(NullPointerException ex){
+           JOptionPane.showMessageDialog(null,"Possui algum campo em branco","Erro", JOptionPane.ERROR_MESSAGE);
+           return;
+        }
+        
+        
 
-            // Gerando o arquivo. No caso o arquivo mencionado será salvo na mesma
-            // pasta do projeto. Outros exemplos:
-            // WINDOWS: boletoViewer.getAsPDF("C:/Temp/MeuBoleto.pdf");
-            // LINUX: boletoViewer.getAsPDF("/home/temp/MeuBoleto.pdf");
-            File arquivoPdf = boletoViewer.getPdfAsFile("MeuPrimeiroBoleto.pdf");
 
-            // Mostrando o boleto gerado na tela.
-            mostreBoletoNaTela(arquivoPdf);
-            
-            
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+
+    public void jTextField1KeyFromFile() {//GEN-FIRST:event_jTextField1KeyFromFile
+        nomeCedente = jTextField1.getText();
+    }//GEN-LAST:event_jTextField1KeyFromFile
+
+    public void jTextField2KeyFromFile() {//GEN-FIRST:event_jTextField2KeyFromFile
+        cnpjCedente = jTextField2.getText();
+    }//GEN-LAST:event_jTextField2KeyFromFile
+
+    public void jTextField3KeyFromFile() {//GEN-FIRST:event_jTextField3KeyFromFile
+        nomeSacado = jTextField3.getText();
+    }//GEN-LAST:event_jTextField3KeyFromFile
+
+    public void jTextField4KeyFromFile() {//GEN-FIRST:event_jTextField4KeyFromFile
+        cpfSacado = jTextField4.getText();
+    }//GEN-LAST:event_jTextField4KeyFromFile
+
+    public void jTextField6KeyFromFile() {//GEN-FIRST:event_jTextField6KeyFromFile
+        cepSacado = jTextField6.getText();
+    }//GEN-LAST:event_jTextField6KeyFromFile
+
+    public void jTextField7KeyFromFile() {//GEN-FIRST:event_jTextField7KeyFromFile
+        numeroSacado = jTextField7.getText();
+    }//GEN-LAST:event_jTextField7KeyFromFile
+
+    public void jTextField9KeyFromFile() {//GEN-FIRST:event_jTextField9KeyFromFile
+        localidadeSacado = jTextField9.getText();
+    }//GEN-LAST:event_jTextField9KeyFromFile
+
+    public void jTextField8KeyFromFile() {//GEN-FIRST:event_jTextField8KeyFromFile
+        logradouroSacado = jTextField8.getText();
+    }//GEN-LAST:event_jTextField8KeyFromFile
+
+    public void jTextField10KeyFromFile() {//GEN-FIRST:event_jTextField10KeyFromFile
+        bairroSacado = jTextField10.getText();
+    }//GEN-LAST:event_jTextField10KeyFromFile
+
+    public void jTextField11KeyFromFile() {//GEN-FIRST:event_jTextField11KeyFromFile
+        nomeSacadoAvalista = jTextField11.getText();
+    }//GEN-LAST:event_jTextField11KeyFromFile
+
+    public void jTextField12KeyFromFile() {//GEN-FIRST:event_jTextField12KeyFromFile
+        cpfSacadoAvalista = jTextField12.getText();
+    }//GEN-LAST:event_jTextField12KeyFromFile
+
+    public void jTextField14KeyFromFile() {//GEN-FIRST:event_jTextField14KeyFromFile
+        cepSacadoAvalista = jTextField14.getText();
+    }//GEN-LAST:event_jTextField14KeyFromFile
+
+    public void jTextField18KeyFromFile() {//GEN-FIRST:event_jTextField18KeyFromFile
+        bairroSacadoAvalista = jTextField18.getText();
+    }//GEN-LAST:event_jTextField18KeyFromFile
+
+    public void jTextField16KeyFromFile() {//GEN-FIRST:event_jTextField16KeyFromFile
+        logradouroSacadoAvalista = jTextField16.getText();
+    }//GEN-LAST:event_jTextField16KeyFromFile
+
+    public void jTextField17KeyFromFile() {//GEN-FIRST:event_jTextField17KeyFromFile
+        localidadeSacadoAvalista = jTextField17.getText();
+    }//GEN-LAST:event_jTextField17KeyFromFile
+
+    public void jTextField15KeyFromFile() {//GEN-FIRST:event_jTextField15KeyFromFile
+        numeroSacadoAvalista = jTextField15.getText();
+    }//GEN-LAST:event_jTextField15KeyFromFile
+
+    public void jTextField24KeyFromFile() {//GEN-FIRST:event_jTextField24KeyFromFile
+        numeroDocumento = jTextField24.getText();
+    }//GEN-LAST:event_jTextField24KeyFromFile
+
+    public void jTextField25KeyFromFile() {//GEN-FIRST:event_jTextField25KeyFromFile
+        nossoNumero = jTextField25.getText();
+    }//GEN-LAST:event_jTextField25KeyFromFile
+
+    public void jTextField31KeyFromFile() {//GEN-FIRST:event_jTextField31KeyFromFile
+        valor = jTextField31.getText();
+    }//GEN-LAST:event_jTextField31KeyFromFile
+
+    public void jTextField32KeyFromFile() {//GEN-FIRST:event_jTextField32KeyFromFile
+        desconto = jTextField32.getText();
+    }//GEN-LAST:event_jTextField32KeyFromFile
+
+    public void jTextField33KeyFromFile() {//GEN-FIRST:event_jTextField33KeyFromFile
+        mora = jTextField33.getText();
+    }//GEN-LAST:event_jTextField33KeyFromFile
+
+    public void jTextField34KeyFromFile() {//GEN-FIRST:event_jTextField34KeyFromFile
+        acrescimo = jTextField34.getText();
+    }//GEN-LAST:event_jTextField34KeyFromFile
+
+    public void jTextField35KeyFromFile() {//GEN-FIRST:event_jTextField35KeyFromFile
+        valorCobrado = jTextField35.getText();
+    }//GEN-LAST:event_jTextField35KeyFromFile
+
+    public void jTextField27KeyFromFile() {//GEN-FIRST:event_jTextField27KeyFromFile
+        dataDocumento = jTextField27.getText();
+    }//GEN-LAST:event_jTextField27KeyFromFile
+
+    public void jTextField28KeyFromFile() {//GEN-FIRST:event_jTextField28KeyFromFile
+        dataVencimento = jTextField28.getText();
+    }//GEN-LAST:event_jTextField28KeyFromFile
+
+    public void jComboBox1FromFile() {                                           
+        if (jComboBox1.getSelectedItem() == "AC") {
+            ufSacado = UnidadeFederativa.AC;
+        } else if (jComboBox1.getSelectedItem() == "AL") {
+            ufSacado = UnidadeFederativa.AL;
+        } else if (jComboBox1.getSelectedItem() == "AP") {
+            ufSacado = UnidadeFederativa.AP;
+        } else if (jComboBox1.getSelectedItem() == "AM") {
+            ufSacado = UnidadeFederativa.AM;
+        } else if (jComboBox1.getSelectedItem() == "BA") {
+            ufSacado = UnidadeFederativa.BA;
+        } else if (jComboBox1.getSelectedItem() == "CE") {
+            ufSacado = UnidadeFederativa.CE;
+        } else if (jComboBox1.getSelectedItem() == "DF") {
+            ufSacado = UnidadeFederativa.DF;
+        } else if (jComboBox1.getSelectedItem() == "ES") {
+            ufSacado = UnidadeFederativa.ES;
+        } else if (jComboBox1.getSelectedItem() == "GO") {
+            ufSacado = UnidadeFederativa.GO;
+        } else if (jComboBox1.getSelectedItem() == "MA") {
+            ufSacado = UnidadeFederativa.MA;
+        } else if (jComboBox1.getSelectedItem() == "MT") {
+            ufSacado = UnidadeFederativa.MT;
+        } else if (jComboBox1.getSelectedItem() == "MS") {
+            ufSacado = UnidadeFederativa.MS;
+        } else if (jComboBox1.getSelectedItem() == "MG") {
+            ufSacado = UnidadeFederativa.MG;
+        } else if (jComboBox1.getSelectedItem() == "PA") {
+            ufSacado = UnidadeFederativa.PA;
+        } else if (jComboBox1.getSelectedItem() == "PR") {
+            ufSacado = UnidadeFederativa.PR;
+        } else if (jComboBox1.getSelectedItem() == "PE") {
+            ufSacado = UnidadeFederativa.PE;
+        } else if (jComboBox1.getSelectedItem() == "PI") {
+            ufSacado = UnidadeFederativa.PI;
+        } else if (jComboBox1.getSelectedItem() == "CE") {
+            ufSacado = UnidadeFederativa.CE;
+        } else if (jComboBox1.getSelectedItem() == "RJ") {
+            ufSacado = UnidadeFederativa.RJ;
+        } else if (jComboBox1.getSelectedItem() == "RN") {
+            ufSacado = UnidadeFederativa.RN;
+        } else if (jComboBox1.getSelectedItem() == "RS") {
+            ufSacado = UnidadeFederativa.RS;
+        } else if (jComboBox1.getSelectedItem() == "RO") {
+            ufSacado = UnidadeFederativa.RO;
+        } else if (jComboBox1.getSelectedItem() == "RR") {
+            ufSacado = UnidadeFederativa.RR;
+        } else if (jComboBox1.getSelectedItem() == "SC") {
+            ufSacado = UnidadeFederativa.SC;
+        } else if (jComboBox1.getSelectedItem() == "SP") {
+            ufSacado = UnidadeFederativa.SP;
+        } else if (jComboBox1.getSelectedItem() == "SE") {
+            ufSacado = UnidadeFederativa.SE;
+        } else if (jComboBox1.getSelectedItem() == "TO") {
+            ufSacado = UnidadeFederativa.TO;
+        }
+    }                                          
+
+    public void jComboBox2FromFile() {                                           
+        if (jComboBox2.getSelectedItem() == "AC") {
+            ufSacadoAval = UnidadeFederativa.AC;
+        } else if (jComboBox2.getSelectedItem() == "AL") {
+            ufSacadoAval = UnidadeFederativa.AL;
+        } else if (jComboBox2.getSelectedItem() == "AP") {
+            ufSacadoAval = UnidadeFederativa.AP;
+        } else if (jComboBox2.getSelectedItem() == "AM") {
+            ufSacadoAval = UnidadeFederativa.AM;
+        } else if (jComboBox2.getSelectedItem() == "BA") {
+            ufSacadoAval = UnidadeFederativa.BA;
+        } else if (jComboBox2.getSelectedItem() == "CE") {
+            ufSacadoAval = UnidadeFederativa.CE;
+        } else if (jComboBox2.getSelectedItem() == "DF") {
+            ufSacadoAval = UnidadeFederativa.DF;
+        } else if (jComboBox2.getSelectedItem() == "ES") {
+            ufSacadoAval = UnidadeFederativa.ES;
+        } else if (jComboBox2.getSelectedItem() == "GO") {
+            ufSacadoAval = UnidadeFederativa.GO;
+        } else if (jComboBox2.getSelectedItem() == "MA") {
+            ufSacadoAval = UnidadeFederativa.MA;
+        } else if (jComboBox2.getSelectedItem() == "MT") {
+            ufSacadoAval = UnidadeFederativa.MT;
+        } else if (jComboBox2.getSelectedItem() == "MS") {
+            ufSacadoAval = UnidadeFederativa.MS;
+        } else if (jComboBox2.getSelectedItem() == "MG") {
+            ufSacadoAval = UnidadeFederativa.MG;
+        } else if (jComboBox2.getSelectedItem() == "PA") {
+            ufSacadoAval = UnidadeFederativa.PA;
+        } else if (jComboBox2.getSelectedItem() == "PR") {
+            ufSacadoAval = UnidadeFederativa.PR;
+        } else if (jComboBox2.getSelectedItem() == "PE") {
+            ufSacadoAval = UnidadeFederativa.PE;
+        } else if (jComboBox2.getSelectedItem() == "PI") {
+            ufSacadoAval = UnidadeFederativa.PI;
+        } else if (jComboBox2.getSelectedItem() == "CE") {
+            ufSacadoAval = UnidadeFederativa.CE;
+        } else if (jComboBox2.getSelectedItem() == "RJ") {
+            ufSacadoAval = UnidadeFederativa.RJ;
+        } else if (jComboBox2.getSelectedItem() == "RN") {
+            ufSacadoAval = UnidadeFederativa.RN;
+        } else if (jComboBox2.getSelectedItem() == "RS") {
+            ufSacadoAval = UnidadeFederativa.RS;
+        } else if (jComboBox2.getSelectedItem() == "RO") {
+            ufSacadoAval = UnidadeFederativa.RO;
+        } else if (jComboBox2.getSelectedItem() == "RR") {
+            ufSacadoAval = UnidadeFederativa.RR;
+        } else if (jComboBox2.getSelectedItem() == "SC") {
+            ufSacadoAval = UnidadeFederativa.SC;
+        } else if (jComboBox2.getSelectedItem() == "SP") {
+            ufSacadoAval = UnidadeFederativa.SP;
+        } else if (jComboBox2.getSelectedItem() == "SE") {
+            ufSacadoAval = UnidadeFederativa.SE;
+        } else if (jComboBox2.getSelectedItem() == "TO") {
+            ufSacadoAval = UnidadeFederativa.TO;
+        }
+    }                                          
+
+    public void jTextField36KeyFromFile() {//GEN-FIRST:event_jTextField36KeyFromFile
+        localPagamento = jTextField36.getText();
+    }//GEN-LAST:event_jTextField36KeyFromFile
+
+    public void jTextField37KeyFromFile() {//GEN-FIRST:event_jTextField37KeyFromFile
+        instrucaoSacado = jTextField37.getText();
+    }//GEN-LAST:event_jTextField37KeyFromFile
+
+    public void jTextField38KeyFromFile() {//GEN-FIRST:event_jTextField38KeyFromFile
+        instrucao1 = jTextField38.getText();
+    }//GEN-LAST:event_jTextField38KeyFromFile
+
+    public void jTextField39KeyFromFile() {//GEN-FIRST:event_jTextField39KeyFromFile
+        instrucao2 = jTextField39.getText();
+    }//GEN-LAST:event_jTextField39KeyFromFile
+
+    public void jTextField40KeyFromFile() {//GEN-FIRST:event_jTextField40KeyFromFile
+        instrucao3 = jTextField40.getText();
+    }//GEN-LAST:event_jTextField40KeyFromFile
+
+    public void jTextField41KeyFromFile() {//GEN-FIRST:event_jTextField41KeyFromFile
+        instrucao4 = jTextField41.getText();
+    }//GEN-LAST:event_jTextField41KeyFromFile
+
+    public void jTextField42KeyFromFile() {//GEN-FIRST:event_jTextField42KeyFromFile
+        instrucao5 = jTextField42.getText();
+    }//GEN-LAST:event_jTextField42KeyFromFile
+
+    public void jTextField43KeyFromFile() {//GEN-FIRST:event_jTextField43KeyFromFile
+        instrucao6 = jTextField43.getText();
+    }//GEN-LAST:event_jTextField43KeyFromFile
+
+    public void jTextField44KeyFromFile() {//GEN-FIRST:event_jTextField44KeyFromFile
+        instrucao7 = jTextField44.getText();
+    }//GEN-LAST:event_jTextField44KeyFromFile
+
+    public void jTextField45KeyFromFile() {//GEN-FIRST:event_jTextField45KeyFromFile
+        instrucao8 = jTextField45.getText();
+    }//GEN-LAST:event_jTextField45KeyFromFile
+
+    public void jComboBox3ActionFromFile() {                                           
+        if (jComboBox3.getSelectedItem() == "Cheque") {
+            tipoDocumento = TipoDeTitulo.CH_CHEQUE;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil") {
+            tipoDocumento = TipoDeTitulo.DM_DUPLICATA_MERCANTIL;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação") {
+            tipoDocumento = TipoDeTitulo.DMI_DUPLICATA_MERCANTIL_PARA_INDICACAO;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço") {
+            tipoDocumento = TipoDeTitulo.DS_DUPLICATA_DE_SERVICO;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação") {
+            tipoDocumento = TipoDeTitulo.DSI_DUPLICATA_DE_SERVICO_PARA_INDICACAO;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Rural") {
+            tipoDocumento = TipoDeTitulo.DR_DUPLICATA_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Letra de Câmbio") {
+            tipoDocumento = TipoDeTitulo.LC_LETRA_DE_CAMBIO;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial") {
+            tipoDocumento = TipoDeTitulo.NCC_NOTA_DE_CREDITO_COMERCIAL;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação") {
+            tipoDocumento = TipoDeTitulo.NCE_NOTA_DE_CREDITO_A_EXPORTACAO;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial") {
+            tipoDocumento = TipoDeTitulo.NCI_NOTA_DE_CREDITO_INDUSTRIAL;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural") {
+            tipoDocumento = TipoDeTitulo.NCR_NOTA_DE_CREDITO_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria") {
+            tipoDocumento = TipoDeTitulo.NP_NOTA_PROMISSORIA;
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural") {
+            tipoDocumento = TipoDeTitulo.NPR_NOTA_PROMISSORIA_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil") {
+            tipoDocumento = TipoDeTitulo.TM_TRIPLICATA_MERCANTIL;
+        } else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço") {
+            tipoDocumento = TipoDeTitulo.TS_TRIPLICATA_DE_SERVICO;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Seguro") {
+            tipoDocumento = TipoDeTitulo.NS_NOTA_DE_SEGURO;
+        } else if (jComboBox3.getSelectedItem() == "Recibo") {
+            tipoDocumento = TipoDeTitulo.RC_RECIBO;
+        } else if (jComboBox3.getSelectedItem() == "Fatura") {
+            tipoDocumento = TipoDeTitulo.FAT_FATURA;
+        } else if (jComboBox3.getSelectedItem() == "Nota de Débito") {
+            tipoDocumento = TipoDeTitulo.ND_NOTA_DE_DEBITO;
+        } else if (jComboBox3.getSelectedItem() == "Apólice de Seguro") {
+            tipoDocumento = TipoDeTitulo.AP_APOLICE_DE_SEGURO;
+        } else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar") {
+            tipoDocumento = TipoDeTitulo.ME_MENSALIDADE_ESCOLAR;
+        } else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio") {
+            tipoDocumento = TipoDeTitulo.PC_PARCELA_DE_CONSORCIO;
+        } else if (jComboBox3.getSelectedItem() == "Nota Fiscal") {
+            tipoDocumento = TipoDeTitulo.NF_NOTA_FISCAL;
+        } else if (jComboBox3.getSelectedItem() == "Documento de Dívida") {
+            tipoDocumento = TipoDeTitulo.DD_DOCUMENTO_DE_DIVIDA;
+        } else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural") {
+            tipoDocumento = TipoDeTitulo.CEDULA_DE_PRODUTO_RURAL;
+        } else if (jComboBox3.getSelectedItem() == "Warrant") {
+            tipoDocumento = TipoDeTitulo.WARRANT;
+        } else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado") {
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_ESTADO;
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município") {
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_MUNICIPIO;
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa da União") {
+            tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DA_UNIAO;
+        } else if (jComboBox3.getSelectedItem() == "Cota Condominial") {
+            tipoDocumento = TipoDeTitulo.COTA_CONDOMINIAL;
+        } else if (jComboBox3.getSelectedItem() == "Outros") {
+            tipoDocumento = TipoDeTitulo.OUTROS;
+        }
+    }                                          
+
+    public void jComboBox4ActionFromFile() {                                           
+        if (jComboBox4.getSelectedItem() == "Banco do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Santander") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Intermedium") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
+        } else if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal") {
+            contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
+        }
+        else if (jComboBox4.getSelectedItem() == "Banco Bradesco") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Itaú") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco ABN AMRO") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil") {
+            contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "HSBC") {
+            contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
+        } else if (jComboBox4.getSelectedItem() == "Unibanco") {
+            contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Safra") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Rural") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Sicredi") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
+        } else if (jComboBox4.getSelectedItem() == "Bancoob") {
+            contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+        }
+    }                                          
+
+    public void jTextField4ActionFromFile() {//GEN-FIRST:event_jTextField4ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionFromFile
+
+    public void jTextField28ActionFromFile() {//GEN-FIRST:event_jTextField28ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField28ActionFromFile
+
+    public void jTextField41ActionFromFile() {//GEN-FIRST:event_jTextField41ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField41ActionFromFile
+
+    public void jTextField44ActionFromFile() {//GEN-FIRST:event_jTextField44ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField44ActionFromFile
+
+    public void jComboBox5ActionFromFile() {//GEN-FIRST:event_jComboBox5ActionFromFile
+        if (jComboBox5.getSelectedItem() == "A") {
+            this.AceiteStatus = true;
+        } else if (jComboBox5.getSelectedItem() == "N") {
+            this.AceiteStatus = false;
+        }
+    }//GEN-LAST:event_jComboBox5ActionFromFile
+
+    public void jTextField20KeyFromFile() {//GEN-FIRST:event_jTextField20KeyFromFile
+        numeroConta = jTextField20.getText();
+    }//GEN-LAST:event_jTextField20KeyFromFile
+
+    public void jTextField21KeyFromFile() {//GEN-FIRST:event_jTextField21KeyFromFile
+        tipoCarteira = jTextField21.getText();
+    }//GEN-LAST:event_jTextField21KeyFromFile
+
+    public void jTextField22KeyFromFile() {//GEN-FIRST:event_jTextField22KeyFromFile
+        digitoAgenciaBanco = jTextField22.getText();
+    }//GEN-LAST:event_jTextField22KeyFromFile
+
+    public void jTextField23KeyFromFile() {//GEN-FIRST:event_jTextField23KeyFromFile
+        numeroAgenciaBanco = jTextField23.getText();
+    }//GEN-LAST:event_jTextField23KeyFromFile
+
+    public void jTextField20ActionFromFile() {//GEN-FIRST:event_jTextField20ActionFromFile
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField20ActionFromFile
+
+
+
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-       nomeCedente = jTextField1.getText();
+        nomeCedente = jTextField1.getText();
+        //JOptionPane.showMessageDialog(null,"Percebi");
     }//GEN-LAST:event_jTextField1KeyReleased
 
-    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
-       cnpjCedente = jTextField2.getText(); 
-    }//GEN-LAST:event_jTextField2KeyReleased
-
     private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
-       nomeSacado = jTextField3.getText();
+        nomeSacado = jTextField3.getText();
     }//GEN-LAST:event_jTextField3KeyReleased
 
-    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-         cpfSacado = jTextField4.getText();
-    }//GEN-LAST:event_jTextField4KeyReleased
-
-    private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
-        cepSacado = jTextField6.getText();
-    }//GEN-LAST:event_jTextField6KeyReleased
-
     private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
-       numeroSacado = jTextField7.getText();
+        numeroSacado = jTextField7.getText();
     }//GEN-LAST:event_jTextField7KeyReleased
 
     private void jTextField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField9KeyReleased
-         localidadeSacado = jTextField9.getText();
+        localidadeSacado = jTextField9.getText();
     }//GEN-LAST:event_jTextField9KeyReleased
 
     private void jTextField8KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyReleased
@@ -1391,16 +1936,8 @@ public class janela extends javax.swing.JFrame {
         nomeSacadoAvalista = jTextField11.getText();
     }//GEN-LAST:event_jTextField11KeyReleased
 
-    private void jTextField12KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField12KeyReleased
-        cpfSacadoAvalista = jTextField12.getText();
-    }//GEN-LAST:event_jTextField12KeyReleased
-
-    private void jTextField14KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField14KeyReleased
-        cepSacadoAvalista = jTextField14.getText();
-    }//GEN-LAST:event_jTextField14KeyReleased
-
     private void jTextField18KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField18KeyReleased
-         bairroSacadoAvalista = jTextField18.getText();
+        bairroSacadoAvalista = jTextField18.getText();
     }//GEN-LAST:event_jTextField18KeyReleased
 
     private void jTextField16KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField16KeyReleased
@@ -1416,19 +1953,19 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField15KeyReleased
 
     private void jTextField24KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField24KeyReleased
-         numeroDocumento = jTextField24.getText();
+        numeroDocumento = jTextField24.getText();
     }//GEN-LAST:event_jTextField24KeyReleased
 
     private void jTextField25KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField25KeyReleased
-         nossoNumero = jTextField25.getText();
+        nossoNumero = jTextField25.getText();
     }//GEN-LAST:event_jTextField25KeyReleased
 
     private void jTextField31KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField31KeyReleased
-         valor = jTextField31.getText();
+        valor = jTextField31.getText();
     }//GEN-LAST:event_jTextField31KeyReleased
 
     private void jTextField32KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField32KeyReleased
-         desconto = jTextField32.getText();
+        desconto = jTextField32.getText();
     }//GEN-LAST:event_jTextField32KeyReleased
 
     private void jTextField33KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField33KeyReleased
@@ -1444,133 +1981,137 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField35KeyReleased
 
     private void jTextField27KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField27KeyReleased
-       dataDocumento = jTextField27.getText();
+        dataDocumento = jTextField27.getText();
     }//GEN-LAST:event_jTextField27KeyReleased
 
     private void jTextField28KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField28KeyReleased
-       dataVencimento = jTextField28.getText();
+        dataVencimento = jTextField28.getText();
     }//GEN-LAST:event_jTextField28KeyReleased
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        if (jComboBox1.getSelectedItem() == "AC")
-            ufSacado = UnidadeFederativa.AC;
-        else if (jComboBox1.getSelectedItem() == "AL")
+        if (jComboBox1.getSelectedItem() == "AC") { 
+           ufSacado = UnidadeFederativa.AC;
+        } else if (jComboBox1.getSelectedItem() == "AL") {
             ufSacado = UnidadeFederativa.AL;
-        else if (jComboBox1.getSelectedItem() == "AP")
+        } else if (jComboBox1.getSelectedItem() == "AP") {
             ufSacado = UnidadeFederativa.AP;
-        else if (jComboBox1.getSelectedItem() == "AM")
+        } else if (jComboBox1.getSelectedItem() == "AM") {
             ufSacado = UnidadeFederativa.AM;
-        else if (jComboBox1.getSelectedItem() == "BA")
+        } else if (jComboBox1.getSelectedItem() == "BA") {
             ufSacado = UnidadeFederativa.BA;
-        else if (jComboBox1.getSelectedItem() == "CE")
+        } else if (jComboBox1.getSelectedItem() == "CE") {
             ufSacado = UnidadeFederativa.CE;
-        else if (jComboBox1.getSelectedItem() == "DF")
+        } else if (jComboBox1.getSelectedItem() == "DF") {
             ufSacado = UnidadeFederativa.DF;
-        else if (jComboBox1.getSelectedItem() == "ES")
+        } else if (jComboBox1.getSelectedItem() == "ES") {
             ufSacado = UnidadeFederativa.ES;
-        else if (jComboBox1.getSelectedItem() == "GO")
+        } else if (jComboBox1.getSelectedItem() == "GO") {
             ufSacado = UnidadeFederativa.GO;
-        else if (jComboBox1.getSelectedItem() == "MA")
+        } else if (jComboBox1.getSelectedItem() == "MA") {
             ufSacado = UnidadeFederativa.MA;
-        else if (jComboBox1.getSelectedItem() == "MT")
+        } else if (jComboBox1.getSelectedItem() == "MT") {
             ufSacado = UnidadeFederativa.MT;
-        else if (jComboBox1.getSelectedItem() == "MS")
+        } else if (jComboBox1.getSelectedItem() == "MS") {
             ufSacado = UnidadeFederativa.MS;
-        else if (jComboBox1.getSelectedItem() == "MG")
+        } else if (jComboBox1.getSelectedItem() == "MG") {
             ufSacado = UnidadeFederativa.MG;
-        else if (jComboBox1.getSelectedItem() == "PA")
+        } else if (jComboBox1.getSelectedItem() == "PA") {
             ufSacado = UnidadeFederativa.PA;
-        else if (jComboBox1.getSelectedItem() == "PR")
+        } else if (jComboBox1.getSelectedItem() == "PR") {
             ufSacado = UnidadeFederativa.PR;
-        else if (jComboBox1.getSelectedItem() == "PE")
+        } else if (jComboBox1.getSelectedItem() == "PE") {
             ufSacado = UnidadeFederativa.PE;
-        else if (jComboBox1.getSelectedItem() == "PI")
+        } else if (jComboBox1.getSelectedItem() == "PI") {
             ufSacado = UnidadeFederativa.PI;
-        else if (jComboBox1.getSelectedItem() == "CE")
+        } else if (jComboBox1.getSelectedItem() == "CE") {
             ufSacado = UnidadeFederativa.CE;
-        else if (jComboBox1.getSelectedItem() == "RJ")
+        } else if (jComboBox1.getSelectedItem() == "RJ") {
             ufSacado = UnidadeFederativa.RJ;
-        else if (jComboBox1.getSelectedItem() == "RN")
+        } else if (jComboBox1.getSelectedItem() == "RN") {
             ufSacado = UnidadeFederativa.RN;
-        else if (jComboBox1.getSelectedItem() == "RS")
+        } else if (jComboBox1.getSelectedItem() == "RS") {
             ufSacado = UnidadeFederativa.RS;
-        else if (jComboBox1.getSelectedItem() == "RO")
+        } else if (jComboBox1.getSelectedItem() == "RO") {
             ufSacado = UnidadeFederativa.RO;
-        else if (jComboBox1.getSelectedItem() == "RR")
+        } else if (jComboBox1.getSelectedItem() == "RR") {
             ufSacado = UnidadeFederativa.RR;
-        else if (jComboBox1.getSelectedItem() == "SC")
+        } else if (jComboBox1.getSelectedItem() == "SC") {
             ufSacado = UnidadeFederativa.SC;
-        else if (jComboBox1.getSelectedItem() == "SP")
+        } else if (jComboBox1.getSelectedItem() == "SP") {
             ufSacado = UnidadeFederativa.SP;
-        else if (jComboBox1.getSelectedItem() == "SE")
+        } else if (jComboBox1.getSelectedItem() == "SE") {
             ufSacado = UnidadeFederativa.SE;
-        else if (jComboBox1.getSelectedItem() == "TO")
+        } else if (jComboBox1.getSelectedItem() == "TO") {
             ufSacado = UnidadeFederativa.TO;
+        }
+        
+        enderecoSac.setUF(this.ufSacado);
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        if (jComboBox2.getSelectedItem() == "AC")
+        if (jComboBox2.getSelectedItem() == "AC") {
             ufSacadoAval = UnidadeFederativa.AC;
-        else if (jComboBox2.getSelectedItem() == "AL")
+        } else if (jComboBox2.getSelectedItem() == "AL") {
             ufSacadoAval = UnidadeFederativa.AL;
-        else if (jComboBox2.getSelectedItem() == "AP")
+        } else if (jComboBox2.getSelectedItem() == "AP") {
             ufSacadoAval = UnidadeFederativa.AP;
-        else if (jComboBox2.getSelectedItem() == "AM")
+        } else if (jComboBox2.getSelectedItem() == "AM") {
             ufSacadoAval = UnidadeFederativa.AM;
-        else if (jComboBox2.getSelectedItem() == "BA")
+        } else if (jComboBox2.getSelectedItem() == "BA") {
             ufSacadoAval = UnidadeFederativa.BA;
-        else if (jComboBox2.getSelectedItem() == "CE")
+        } else if (jComboBox2.getSelectedItem() == "CE") {
             ufSacadoAval = UnidadeFederativa.CE;
-        else if (jComboBox2.getSelectedItem() == "DF")
+        } else if (jComboBox2.getSelectedItem() == "DF") {
             ufSacadoAval = UnidadeFederativa.DF;
-        else if (jComboBox2.getSelectedItem() == "ES")
+        } else if (jComboBox2.getSelectedItem() == "ES") {
             ufSacadoAval = UnidadeFederativa.ES;
-        else if (jComboBox2.getSelectedItem() == "GO")
+        } else if (jComboBox2.getSelectedItem() == "GO") {
             ufSacadoAval = UnidadeFederativa.GO;
-        else if (jComboBox2.getSelectedItem() == "MA")
+        } else if (jComboBox2.getSelectedItem() == "MA") {
             ufSacadoAval = UnidadeFederativa.MA;
-        else if (jComboBox2.getSelectedItem() == "MT")
+        } else if (jComboBox2.getSelectedItem() == "MT") {
             ufSacadoAval = UnidadeFederativa.MT;
-        else if (jComboBox2.getSelectedItem() == "MS")
+        } else if (jComboBox2.getSelectedItem() == "MS") {
             ufSacadoAval = UnidadeFederativa.MS;
-        else if (jComboBox2.getSelectedItem() == "MG")
+        } else if (jComboBox2.getSelectedItem() == "MG") {
             ufSacadoAval = UnidadeFederativa.MG;
-        else if (jComboBox2.getSelectedItem() == "PA")
+        } else if (jComboBox2.getSelectedItem() == "PA") {
             ufSacadoAval = UnidadeFederativa.PA;
-        else if (jComboBox2.getSelectedItem() == "PR")
+        } else if (jComboBox2.getSelectedItem() == "PR") {
             ufSacadoAval = UnidadeFederativa.PR;
-        else if (jComboBox2.getSelectedItem() == "PE")
+        } else if (jComboBox2.getSelectedItem() == "PE") {
             ufSacadoAval = UnidadeFederativa.PE;
-        else if (jComboBox2.getSelectedItem() == "PI")
+        } else if (jComboBox2.getSelectedItem() == "PI") {
             ufSacadoAval = UnidadeFederativa.PI;
-        else if (jComboBox2.getSelectedItem() == "CE")
+        } else if (jComboBox2.getSelectedItem() == "CE") {
             ufSacadoAval = UnidadeFederativa.CE;
-        else if (jComboBox2.getSelectedItem() == "RJ")
+        } else if (jComboBox2.getSelectedItem() == "RJ") {
             ufSacadoAval = UnidadeFederativa.RJ;
-        else if (jComboBox2.getSelectedItem() == "RN")
+        } else if (jComboBox2.getSelectedItem() == "RN") {
             ufSacadoAval = UnidadeFederativa.RN;
-        else if (jComboBox2.getSelectedItem() == "RS")
+        } else if (jComboBox2.getSelectedItem() == "RS") {
             ufSacadoAval = UnidadeFederativa.RS;
-        else if (jComboBox2.getSelectedItem() == "RO")
+        } else if (jComboBox2.getSelectedItem() == "RO") {
             ufSacadoAval = UnidadeFederativa.RO;
-        else if (jComboBox2.getSelectedItem() == "RR")
+        } else if (jComboBox2.getSelectedItem() == "RR") {
             ufSacadoAval = UnidadeFederativa.RR;
-        else if (jComboBox2.getSelectedItem() == "SC")
+        } else if (jComboBox2.getSelectedItem() == "SC") {
             ufSacadoAval = UnidadeFederativa.SC;
-        else if (jComboBox2.getSelectedItem() == "SP")
+        } else if (jComboBox2.getSelectedItem() == "SP") {
             ufSacadoAval = UnidadeFederativa.SP;
-        else if (jComboBox2.getSelectedItem() == "SE")
+        } else if (jComboBox2.getSelectedItem() == "SE") {
             ufSacadoAval = UnidadeFederativa.SE;
-        else if (jComboBox2.getSelectedItem() == "TO")
+        } else if (jComboBox2.getSelectedItem() == "TO") {
             ufSacadoAval = UnidadeFederativa.TO;
+        }
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jTextField36KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField36KeyReleased
-       localPagamento = jTextField36.getText();
+        localPagamento = jTextField36.getText();
     }//GEN-LAST:event_jTextField36KeyReleased
 
     private void jTextField37KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField37KeyReleased
-       instrucaoSacado = jTextField37.getText();
+        instrucaoSacado = jTextField37.getText();
     }//GEN-LAST:event_jTextField37KeyReleased
 
     private void jTextField38KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField38KeyReleased
@@ -1578,15 +2119,15 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField38KeyReleased
 
     private void jTextField39KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField39KeyReleased
-       instrucao2 = jTextField39.getText();
+        instrucao2 = jTextField39.getText();
     }//GEN-LAST:event_jTextField39KeyReleased
 
     private void jTextField40KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField40KeyReleased
-       instrucao3 = jTextField40.getText();
+        instrucao3 = jTextField40.getText();
     }//GEN-LAST:event_jTextField40KeyReleased
 
     private void jTextField41KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField41KeyReleased
-       instrucao4 = jTextField41.getText();
+        instrucao4 = jTextField41.getText();
     }//GEN-LAST:event_jTextField41KeyReleased
 
     private void jTextField42KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField42KeyReleased
@@ -1602,173 +2143,363 @@ public class janela extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField44KeyReleased
 
     private void jTextField45KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField45KeyReleased
-       instrucao8 = jTextField45.getText();
+        instrucao8 = jTextField45.getText();
     }//GEN-LAST:event_jTextField45KeyReleased
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-         if (jComboBox3.getSelectedItem() == "Cheque")
-             tipoDocumento = TipoDeTitulo.CH_CHEQUE;
-         else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil")
+        if (jComboBox3.getSelectedItem() == "Cheque") {
+            tipoDocumento = TipoDeTitulo.CH_CHEQUE;
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil") {
             tipoDocumento = TipoDeTitulo.DM_DUPLICATA_MERCANTIL;
-         else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Mercantil para Indicação") {
             tipoDocumento = TipoDeTitulo.DMI_DUPLICATA_MERCANTIL_PARA_INDICACAO;
-         else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço") {
             tipoDocumento = TipoDeTitulo.DS_DUPLICATA_DE_SERVICO;
-         else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata de Serviço para Indicação") {
             tipoDocumento = TipoDeTitulo.DSI_DUPLICATA_DE_SERVICO_PARA_INDICACAO;
-         else if (jComboBox3.getSelectedItem() == "Duplicata Rural")
+        } else if (jComboBox3.getSelectedItem() == "Duplicata Rural") {
             tipoDocumento = TipoDeTitulo.DR_DUPLICATA_RURAL;
-         else if (jComboBox3.getSelectedItem() == "Letra de Câmbio")
+        } else if (jComboBox3.getSelectedItem() == "Letra de Câmbio") {
             tipoDocumento = TipoDeTitulo.LC_LETRA_DE_CAMBIO;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Comercial") {
             tipoDocumento = TipoDeTitulo.NCC_NOTA_DE_CREDITO_COMERCIAL;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito a Exportação") {
             tipoDocumento = TipoDeTitulo.NCE_NOTA_DE_CREDITO_A_EXPORTACAO;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Industrial") {
             tipoDocumento = TipoDeTitulo.NCI_NOTA_DE_CREDITO_INDUSTRIAL;
-         else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Crédito Rural") {
             tipoDocumento = TipoDeTitulo.NCR_NOTA_DE_CREDITO_RURAL;
-         else if (jComboBox3.getSelectedItem() == "Nota Promissoria")
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria") {
             tipoDocumento = TipoDeTitulo.NP_NOTA_PROMISSORIA;
-         else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural")
+        } else if (jComboBox3.getSelectedItem() == "Nota Promissoria Rural") {
             tipoDocumento = TipoDeTitulo.NPR_NOTA_PROMISSORIA_RURAL;
-         
-         else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil")
+        } else if (jComboBox3.getSelectedItem() == "Triplicata Mercantil") {
             tipoDocumento = TipoDeTitulo.TM_TRIPLICATA_MERCANTIL;
-         else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço")
+        } else if (jComboBox3.getSelectedItem() == "Triplicata de Serviço") {
             tipoDocumento = TipoDeTitulo.TS_TRIPLICATA_DE_SERVICO;
-         else if (jComboBox3.getSelectedItem() == "Nota de Seguro")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Seguro") {
             tipoDocumento = TipoDeTitulo.NS_NOTA_DE_SEGURO;
-         else if (jComboBox3.getSelectedItem() == "Recibo")
+        } else if (jComboBox3.getSelectedItem() == "Recibo") {
             tipoDocumento = TipoDeTitulo.RC_RECIBO;
-         else if (jComboBox3.getSelectedItem() == "Fatura")
+        } else if (jComboBox3.getSelectedItem() == "Fatura") {
             tipoDocumento = TipoDeTitulo.FAT_FATURA;
-         else if (jComboBox3.getSelectedItem() == "Nota de Débito")
+        } else if (jComboBox3.getSelectedItem() == "Nota de Débito") {
             tipoDocumento = TipoDeTitulo.ND_NOTA_DE_DEBITO;
-         else if (jComboBox3.getSelectedItem() == "Apólice de Seguro")
+        } else if (jComboBox3.getSelectedItem() == "Apólice de Seguro") {
             tipoDocumento = TipoDeTitulo.AP_APOLICE_DE_SEGURO;
-         else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar")
+        } else if (jComboBox3.getSelectedItem() == "Mensalidade Escolar") {
             tipoDocumento = TipoDeTitulo.ME_MENSALIDADE_ESCOLAR;
-         else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio")
+        } else if (jComboBox3.getSelectedItem() == "Parcela de Consórcio") {
             tipoDocumento = TipoDeTitulo.PC_PARCELA_DE_CONSORCIO;
-         else if (jComboBox3.getSelectedItem() == "Nota Fiscal")
+        } else if (jComboBox3.getSelectedItem() == "Nota Fiscal") {
             tipoDocumento = TipoDeTitulo.NF_NOTA_FISCAL;
-         else if (jComboBox3.getSelectedItem() == "Documento de Dívida")
+        } else if (jComboBox3.getSelectedItem() == "Documento de Dívida") {
             tipoDocumento = TipoDeTitulo.DD_DOCUMENTO_DE_DIVIDA;
-         
-         else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural")
+        } else if (jComboBox3.getSelectedItem() == "Célula de Produto Rural") {
             tipoDocumento = TipoDeTitulo.CEDULA_DE_PRODUTO_RURAL;
-         else if (jComboBox3.getSelectedItem() == "Warrant")
+        } else if (jComboBox3.getSelectedItem() == "Warrant") {
             tipoDocumento = TipoDeTitulo.WARRANT;
-         else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado")
+        } else if (jComboBox3.getSelectedItem() == "Dívida Ativa de Estado") {
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_ESTADO;
-         else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município")
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa de Município") {
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DE_MUNICIPIO;
-         else if (jComboBox3.getSelectedItem() == "Divida Ativa da União")
+        } else if (jComboBox3.getSelectedItem() == "Divida Ativa da União") {
             tipoDocumento = TipoDeTitulo.DIVIDA_ATIVA_DA_UNIAO;
-         else if (jComboBox3.getSelectedItem() == "Cota Condominial")
+        } else if (jComboBox3.getSelectedItem() == "Cota Condominial") {
             tipoDocumento = TipoDeTitulo.COTA_CONDOMINIAL;
-         else if (jComboBox3.getSelectedItem() == "Outros")
-            tipoDocumento = TipoDeTitulo.OUTROS;      
+        } else if (jComboBox3.getSelectedItem() == "Outros") {
+            tipoDocumento = TipoDeTitulo.OUTROS;
+        }
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
-        if (jComboBox4.getSelectedItem() == "Banco do Brasil"){
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_BRASIL.create());
-        }else  if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Santander")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SANTANDER.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Intermedium")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_INTEMEDIUM.create());
-        else  if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal")
-                contaBancaria = new ContaBancaria(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
-//        else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
-//                contaBancaria = new ContaBancaria(BancosSuportados.NOSSA_CAIXA.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Bradesco")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_BRADESCO.create());
-        
-        else  if (jComboBox4.getSelectedItem() == "Banco Itaú")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ITAU.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco ABN AMRO")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil")
-                 contaBancaria = new ContaBancaria(BancosSuportados.MERCANTIL_DO_BRASIL.create());
-        else  if (jComboBox4.getSelectedItem() == "HSBC")
-                  contaBancaria = new ContaBancaria(BancosSuportados.HSBC.create());
-        else  if (jComboBox4.getSelectedItem() == "Unibanco")
-                 contaBancaria = new ContaBancaria(BancosSuportados.UNIBANCO.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Safra")
-                contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SAFRA.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Rural")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_RURAL.create());
-        else  if (jComboBox4.getSelectedItem() == "Banco Sicredi")
-                 contaBancaria = new ContaBancaria(BancosSuportados.BANCO_SICREDI.create());
-        else  if (jComboBox4.getSelectedItem() == "Bancoob")
-               contaBancaria = new ContaBancaria(BancosSuportados.BANCOOB.create());
+        if (jComboBox4.getSelectedItem() == "Banco do Brasil") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Nordeste do Brasil") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_NORDESTE_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Espírito Santo") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_ESTADO_DO_ESPIRITO_SANTO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Santander") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_SANTANDER.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco do Estado do Rio Grande do Sul") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_DO_ESTADO_DO_RIO_GRANDE_DO_SUL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Intermedium") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_INTEMEDIUM.create());
+        } else if (jComboBox4.getSelectedItem() == "Caixa Econômica Federal") {
+            contaBancaria.setBanco(BancosSuportados.CAIXA_ECONOMICA_FEDERAL.create());
+        }//else  if (jComboBox4.getSelectedItem() == "Nossa Caixa")
+            //contaBancaria.setBanco(BancosSuportados.NOSSA_CAIXA.create());
+        else if (jComboBox4.getSelectedItem() == "Banco Bradesco") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_BRADESCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Itaú") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_ITAU.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco ABN AMRO") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_ABN_AMRO_REAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Mercantil do Brasil") {
+            contaBancaria.setBanco(BancosSuportados.MERCANTIL_DO_BRASIL.create());
+        } else if (jComboBox4.getSelectedItem() == "HSBC") {
+            contaBancaria.setBanco(BancosSuportados.HSBC.create());
+        } else if (jComboBox4.getSelectedItem() == "Unibanco") {
+            contaBancaria.setBanco(BancosSuportados.UNIBANCO.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Safra") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_SAFRA.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Rural") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_RURAL.create());
+        } else if (jComboBox4.getSelectedItem() == "Banco Sicredi") {
+            contaBancaria.setBanco(BancosSuportados.BANCO_SICREDI.create());
+        } else if (jComboBox4.getSelectedItem() == "Bancoob") {
+            contaBancaria.setBanco(BancosSuportados.BANCOOB.create());
+        }
     }//GEN-LAST:event_jComboBox4ActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
-
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
-
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
-
-    private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField16ActionPerformed
-
-    private void jTextField22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField22ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField22ActionPerformed
-
-    private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField28ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField28ActionPerformed
-
-    private void jTextField37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField37ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField37ActionPerformed
-
-    private void jTextField39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField39ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField39ActionPerformed
-
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
-       if (jComboBox5.getSelectedItem() == "A")
+        if (jComboBox5.getSelectedItem() == "A") {
             this.AceiteStatus = true;
-        else if (jComboBox2.getSelectedItem() == "N")
-            this.AceiteStatus = false;        
+        } else if (jComboBox5.getSelectedItem() == "N") {
+            this.AceiteStatus = false;
+        }
     }//GEN-LAST:event_jComboBox5ActionPerformed
 
-    
+    private void jTextField21KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField21KeyReleased
+        tipoCarteira = jTextField21.getText();
+    }//GEN-LAST:event_jTextField21KeyReleased
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
+       deducao = jTextField5.getText();
+    }//GEN-LAST:event_jTextField5KeyReleased
+
+    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox6ActionPerformed
+        if (jComboBox6.getSelectedItem() == "sim") {
+            this.SacadoAvalistaStatus = true;
+        } else if (jComboBox6.getSelectedItem() == "não") {
+            this.SacadoAvalistaStatus = false;
+        }
+    }//GEN-LAST:event_jComboBox6ActionPerformed
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+        boolean erro = false;
+        
+        try{
+            CPRFCedente = CPRFCedente.create(jTextField2.getText());
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            Aviso.avisoExcecao(entrada,jLabel17,jTextField2);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jLabel17,jTextField2);
+        }
+    }//GEN-LAST:event_jTextField2FocusLost
+
+    private void jTextField4FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField4FocusLost
+        boolean erro = false;
+        
+        try{
+            CPRFSacado = CPRFSacado.create(jTextField4.getText());
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            Aviso.avisoExcecao(entrada,jLabel18,jTextField4);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jLabel18,jTextField4);
+        }
+    }//GEN-LAST:event_jTextField4FocusLost
+
+    private void jTextField12FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField12FocusLost
+        boolean erro = false;
+        
+        try{
+            CPRFSacadoAvalista = CPRFSacadoAvalista.create(jTextField12.getText());
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            
+            Aviso.avisoExcecao(entrada,jLabel61,jTextField12);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jLabel61,jTextField12);
+        }
+    }//GEN-LAST:event_jTextField12FocusLost
+
+    private void jTextField14FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField14FocusLost
+        boolean erro = false;
+        
+        try{
+            Integer.parseInt(jTextField14.getText());
+            if(jTextField14.getText().length() != 9) throw new IllegalArgumentException("Número de dígitos incorreto");
+        }catch(NumberFormatException entrada){
+            erro = true;
+            Aviso.avisoExcecao(entrada,jTextField14);
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            Aviso.avisoExcecao(entrada,jTextField14);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jTextField14);
+           CEPSacadoAvalista.setCep(jTextField14.getText());
+        }
+    }//GEN-LAST:event_jTextField14FocusLost
+
+    private void jTextField6FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField6FocusLost
+       boolean erro = false;
+        
+        try{
+            Integer.parseInt(jTextField6.getText());
+            if(jTextField6.getText().length() != 9) throw new IllegalArgumentException("Número de dígitos incorreto");
+        }catch(NumberFormatException entrada){
+            erro = true;
+            Aviso.avisoExcecao(entrada,jTextField6);
+        }catch(IllegalArgumentException entrada){
+            erro = true;
+            Aviso.avisoExcecao(entrada,jTextField6);
+        }
+        
+        if (erro == false){
+           Aviso.resetarAviso(jTextField6);
+           CEPSacado.setCep(jTextField6.getText());
+        }
+    }//GEN-LAST:event_jTextField6FocusLost
+
+    private void jTextField22FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField22FocusLost
+       boolean erro = false;
+       
+       digitoAgenciaBanco = jTextField22.getText();
+       
+        if(numeroAgenciaBanco != null){
+            try{
+                agencia = new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco);
+            }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jLabel62,jTextField22);
+                Aviso.avisoExcecao(ex, jLabel62,jTextField23);
+            }
+            
+            if(!erro){
+                Aviso.resetarAviso(jLabel62,jTextField22);
+                Aviso.resetarAviso(jLabel62,jTextField23);
+            }
+        }
+           
+    }//GEN-LAST:event_jTextField22FocusLost
+
+    private void jTextField23FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField23FocusLost
+        numeroAgenciaBanco = jTextField23.getText();
+        
+        boolean erro = false;
+       
+        if(digitoAgenciaBanco != null){
+            try{
+                agencia = new Agencia(Integer.parseInt(numeroAgenciaBanco), digitoAgenciaBanco);
+            }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jLabel62,jTextField22);
+                Aviso.avisoExcecao(ex, jLabel62,jTextField23);
+            }
+            
+            if(!erro){
+                Aviso.resetarAviso(jLabel62,jTextField22);
+                Aviso.resetarAviso(jLabel62,jTextField23);
+            }
+        }
+    }//GEN-LAST:event_jTextField23FocusLost
+
+    private void jTextField26KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField26KeyReleased
+        digitoNossoNumero = jTextField26.getText();
+    }//GEN-LAST:event_jTextField26KeyReleased
+
+    private void jTextField20FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField20FocusLost
+       numeroConta = jTextField20.getText();
+       Boolean erro = false;
+       
+        try{
+            contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(numeroConta)));
+        }catch (IllegalArgumentException ex){
+            erro = true;
+            Aviso.avisoExcecao(ex, jLabel63,jTextField20);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jLabel63,jTextField20);
+        }
+    }//GEN-LAST:event_jTextField20FocusLost
+
+    private void jTextField21FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField21FocusLost
+        Boolean erro = false;
+        tipoCarteira = jTextField21.getText();
+        
+        try{
+           contaBancaria.setCarteira(new Carteira(Integer.parseInt(tipoCarteira)));
+        }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex, jLabel63,jTextField21);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jLabel63,jTextField21);
+        }
+    }//GEN-LAST:event_jTextField21FocusLost
+
+    private void jTextField27FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField27FocusLost
+     Boolean erro = false;    
+        try {
+            pagamento = new Date(format.parse(this.dataDocumento).getTime());
+        } catch (ParseException ex) {
+            erro = true;
+            Aviso.avisoExcecao(ex,jTextField27);
+        }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex,jTextField27);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jTextField27);
+        }
+    }//GEN-LAST:event_jTextField27FocusLost
+
+    private void jTextField28FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField28FocusLost
+        Boolean erro = false;    
+        try {
+            vencimento = new Date(format.parse(this.dataVencimento).getTime());
+        } catch (ParseException ex) {
+            erro = true;
+            Aviso.avisoExcecao(ex,jTextField28);
+        }catch (IllegalArgumentException ex){
+                erro = true;
+                Aviso.avisoExcecao(ex,jTextField28);
+        }
+        
+        if (!erro){
+            Aviso.resetarAviso(jTextField28);
+        }
+    }//GEN-LAST:event_jTextField28FocusLost
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
+    public javax.swing.JComboBox<String> jComboBox1;
+    public javax.swing.JComboBox<String> jComboBox2;
+    public javax.swing.JComboBox<String> jComboBox3;
+    public javax.swing.JComboBox<String> jComboBox4;
+    public javax.swing.JComboBox<String> jComboBox5;
+    public javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1816,12 +2547,14 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
@@ -1869,6 +2602,7 @@ public class janela extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField43;
     private javax.swing.JTextField jTextField44;
     private javax.swing.JTextField jTextField45;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
